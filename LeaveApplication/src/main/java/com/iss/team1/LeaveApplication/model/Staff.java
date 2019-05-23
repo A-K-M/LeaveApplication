@@ -20,19 +20,19 @@ public class Staff {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
-	@NotEmpty
+
 	private String staffName;
 	@Length(max=60)
-	@NotEmpty
+
 	private String userName;
-	@NotEmpty
+
 	private String password;
-	@NotEmpty
+
 	@DateTimeFormat(pattern = "dd-MM-yyyy")
 	private LocalDate joinDate;
-	@NotEmpty
+
 	private String emailId;
-	@NotEmpty
+
 	@ManyToOne
 	@JoinColumn(name = "roleId")
 	private Role role;

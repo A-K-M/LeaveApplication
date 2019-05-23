@@ -1,9 +1,13 @@
 package com.iss.team1.LeaveApplication.controller;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -12,6 +16,7 @@ import com.iss.team1.LeaveApplication.model.Role;
 import com.iss.team1.LeaveApplication.model.Staff;
 import com.iss.team1.LeaveApplication.repo.RoleRepository;
 import com.iss.team1.LeaveApplication.repo.StaffRepository;
+import com.iss.team1.LeaveApplication.validator.StaffValidator;
 
 
 
@@ -27,8 +32,13 @@ public class LoginController {
 	@Autowired
    public void setRolerepo(RoleRepository rolerepo) {
 		this.rolerepo = rolerepo;
+		
 	}
 
+	@InitBinder
+	protected void initBinder(WebDataBinder binder) {
+		binder.addValidators(new StaffValidator());
+	}
 @RequestMapping(path="/loginForm", method = RequestMethod.GET)
    public String Login (Model model)
        {
@@ -38,12 +48,13 @@ public class LoginController {
        }
    
    @RequestMapping(path="/loginForm", method = RequestMethod.POST)
-   public String postLogin (@ModelAttribute("login")  Staff login, BindingResult bindingResult,Model model)
+   public String postLogin (@ModelAttribute("login") @Valid Staff login, BindingResult bindingResult,Model model)
        {
 	   System.out.println("entered");
 	   if(bindingResult.hasErrors()) {
 	   		System.out.println("HELLO THERE2");
 			model.addAttribute("login", login);
+			
 		   return "login";
 	   }
 	   System.out.println("no error"+login.getUserName());
@@ -55,7 +66,7 @@ public class LoginController {
 	   		if(login.getPassword().equals(getStaff.getPassword()))
 	   		{
 				 model.addAttribute("staff", new Staff());
-	   			 System.out.println("@@2"+getStaff.getRole().getId());
+	   			 
 	   			// Role role = rolerepo.findById(login..getId()).orElse(null);
              Role role = getStaff.getRole();
          
