@@ -1,5 +1,7 @@
 package com.iss.team1.LeaveApplication.controller;
 
+import java.util.List;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,8 +16,9 @@ import com.iss.team1.LeaveApplication.model.Role;
 import com.iss.team1.LeaveApplication.model.Staff;
 import com.iss.team1.LeaveApplication.repo.RoleRepository;
 import com.iss.team1.LeaveApplication.repo.StaffRepository;
-import com.iss.team1.LeaveApplication.repo.roleRepository;
-import com.iss.team1.LeaveApplication.repo.staffRepository;
+
+
+
 @Controller
 public class LoginController {
 	
@@ -39,18 +42,19 @@ public class LoginController {
        }
    
    @RequestMapping(path="/loginForm", method = RequestMethod.POST)
-   public String postLogin (@ModelAttribute("login") @Valid Staff login, BindingResult bindingResult,Model model)
+   public String postLogin (@ModelAttribute("login")  Staff login, BindingResult bindingResult,Model model)
        {
-	   
+	   System.out.println("entered");
 	   if(bindingResult.hasErrors()) {
 	   		System.out.println("HELLO THERE2");
 			model.addAttribute("login", login);
 		   return "login";
 	   }
-
-	   		Staff getStaff = staffrepo.findById(login.getUserName()).orElse(null);         	   		
+	   System.out.println("no error"+login.getUserName());
+   		Staff getStaff = staffrepo.findByuserName(login.getUserName());     
+	  // List<Staff> getStaff = staffrepo.findByuserName(login.getUserName());         
 	   	if(getStaff != null)	{
-
+	   		System.out.println("no error1");
 	   		if(login.getPassword().equals(getStaff.getPassword()))
 	   		{
 				 model.addAttribute("staff", new Staff());
@@ -70,6 +74,9 @@ public class LoginController {
 				  }
 
 	   		}
+	   		else {
+	   			System.out.println("no staff");
+			}
 
 	   	}
 	   	

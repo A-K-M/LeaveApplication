@@ -8,5 +8,5 @@ import com.iss.team1.LeaveApplication.model.Role;
 
 @Repository
 public interface RoleRepository extends JpaRepository<Role, Integer>{
-
+	Role findByRoleName(String roleName);
 }
