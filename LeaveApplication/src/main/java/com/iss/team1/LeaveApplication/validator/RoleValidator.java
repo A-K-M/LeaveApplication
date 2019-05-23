@@ -20,5 +20,7 @@ public class RoleValidator implements Validator {
 		if (r.getRoleName().isEmpty()) {
 			errors.rejectValue("roleName", "RoleName", "Role Name cannot be empty.");
 		}
+		
+		
 	}
 }
