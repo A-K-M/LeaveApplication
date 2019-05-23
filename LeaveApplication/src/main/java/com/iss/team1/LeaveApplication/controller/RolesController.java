@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.iss.team1.LeaveApplication.model.Roles;
+import com.iss.team1.LeaveApplication.model.Role;
 import com.iss.team1.LeaveApplication.repo.RoleRepo;
 import com.iss.team1.LeaveApplication.validator.RoleValidator;
 
@@ -50,12 +50,12 @@ public class RolesController {
 	
 	@GetMapping (path = "/roles/new")
 	public String createRole (Model model) {
-		model.addAttribute("roles", new Roles());
+		model.addAttribute("roles", new Role());
 		return role_form;
 	}
 	
 	@PostMapping(path = "/roles/new")
-	public String createRoleForm(@Valid Roles m, BindingResult bindingResult, Model model) {
+	public String createRoleForm(@Valid Role m, BindingResult bindingResult, Model model) {
 		if (bindingResult.hasErrors()) {
 			model.addAttribute("roles", m);
 			return role_form;
@@ -68,14 +68,14 @@ public class RolesController {
 	@GetMapping (path = "/roles/{id}/edit" )
 	public String editRoleFrom (Model model ,@PathVariable(value = "id") String id) {
 		Integer rid = Integer.valueOf(id); 
-		Optional<Roles> r = rRepo.findById(rid);
+		Optional<Role> r = rRepo.findById(rid);
 		System.out.println(r);
 		model.addAttribute("roles", r);
 		return role_form;
 	}
 	
 	@PostMapping(path = "/roles/{id}/edit")
-	public String editRoleForm(@Valid Roles updatedRole, BindingResult bilnding, Model model) {
+	public String editRoleForm(@Valid Role updatedRole, BindingResult bilnding, Model model) {
 		if (bilnding.hasErrors()) {
 			model.addAttribute("roles", updatedRole);
 			return role_form;

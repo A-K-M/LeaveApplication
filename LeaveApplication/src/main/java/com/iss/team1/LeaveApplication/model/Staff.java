@@ -1,95 +1,122 @@
 package com.iss.team1.LeaveApplication.model;
 
+import java.time.LocalDate;
 import java.util.Collection;
-import java.util.Date;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.validation.constraints.NotEmpty;
 
 import org.hibernate.validator.constraints.Length;
-
-
+import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
 public class Staff {
-	private int staffId;
-	private String staffName;
 	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private int id;
+	@NotEmpty
+	private String staffName;
 	@Length(max=60)
-	@Column(name = "UserName")
 	private String userName;
+	@NotEmpty
 	private String password;
-	private Date joiningDate;
+	@NotEmpty
+	@DateTimeFormat(pattern = "dd-MM-yyyy")
+	private LocalDate joinDate;
+	@NotEmpty
 	private String emailId;
-	private String roleId;
-	private int reportsTo;
-	
+	@NotEmpty
+	@ManyToOne
+	@JoinColumn(name = "roleId")
+	private Role role;
+	private int reportsTo;	
 	@OneToMany(targetEntity = LeaveHistory.class, mappedBy = "staff")
 	private Collection<LeaveHistory> leaveHistories;
+	@OneToMany(targetEntity = LeaveBalance.class, mappedBy = "staff")
+	private Collection<LeaveBalance> leaveBalances;
+	@OneToMany(targetEntity = CompensationLeaveClaim.class, mappedBy = "staff")
+	private Collection<CompensationLeaveClaim> compensationLeaveClaims;
 	
 	public Staff() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-	public Staff(int staffId, String staffName, String userName, String password, Date joiningDate, String emailId,
-			String roleId, int reportsTo) {
+	
+	public Staff(int id, String staffName, String userName, String password, LocalDate joiningDate, String emailId,
+			Role role, int reportsTo) {
 		super();
-		this.staffId = staffId;
+		this.id = id;
 		this.staffName = staffName;
 		this.userName = userName;
 		this.password = password;
-		this.joiningDate = joiningDate;
+		this.joinDate = joiningDate;
 		this.emailId = emailId;
-		this.roleId = roleId;
+		this.role = role;
 		this.reportsTo = reportsTo;
 	}
-	public int getStaffId() {
-		return staffId;
+	
+	public int getId() {
+		return id;
 	}
-	public void setStaffId(int staffId) {
-		this.staffId = staffId;
-	}
+
 	public String getStaffName() {
 		return staffName;
 	}
+	
 	public void setStaffName(String staffName) {
 		this.staffName = staffName;
 	}
+	
 	public String getUserName() {
 		return userName;
 	}
+	
 	public void setUserName(String userName) {
 		this.userName = userName;
 	}
+	
 	public String getPassword() {
 		return password;
 	}
+	
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	public Date getJoiningDate() {
-		return joiningDate;
+	
+	public LocalDate getJoinDate() {
+		return joinDate;
 	}
-	public void setJoiningDate(Date joiningDate) {
-		this.joiningDate = joiningDate;
+	
+	public void setJoinDate(LocalDate joiningDate) {
+		this.joinDate = joiningDate;
 	}
+	
 	public String getEmailId() {
 		return emailId;
 	}
+	
 	public void setEmailId(String emailId) {
 		this.emailId = emailId;
 	}
-	public String getRoleId() {
-		return roleId;
+	
+	public Role getrole() {
+		return role;
 	}
-	public void setRoleId(String roleId) {
-		this.roleId = roleId;
+	
+	public void setrole(Role role) {
+		this.role = role;
 	}
+	
 	public int getReportsTo() {
 		return reportsTo;
 	}
+	
 	public void setReportsTo(int reportsTo) {
 		this.reportsTo = reportsTo;
 	}
@@ -100,10 +127,11 @@ public class Staff {
 	public void setLeaveHistories(Collection<LeaveHistory> leaveHistories) {
 		this.leaveHistories = leaveHistories;
 	}
+	
 	@Override
 	public String toString() {
-		return "Staff [staffId=" + staffId + ", staffName=" + staffName + ", userName=" + userName + ", password="
-				+ password + ", joiningDate=" + joiningDate + ", emailId=" + emailId + ", roleId=" + roleId
+		return "Staff [id=" + id + ", staffName=" + staffName + ", userName=" + userName + ", password="
+				+ password + ", joiningDate=" + joinDate + ", emailId=" + emailId + ", role=" + role.getId()
 				+ ", reportsTo=" + reportsTo + "]";
 	}
 }

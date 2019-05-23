@@ -9,36 +9,36 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotEmpty;
 
 
 @Entity
-@Table(name = "LeaveType")
 public class LeaveType {
-	@Id @GeneratedValue(strategy=GenerationType.AUTO)
-	@Column(name = "LeaveTypeID")
-	private Integer leaveTypeId;
-	@Column(name = "LeaveType")
-	private String leaveType;
-	
+	@Id 
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Integer id;
+	@NotEmpty
+	private String leaveType;	
 	@OneToMany(targetEntity = LeaveHistory.class, mappedBy = "leaveType")
 	private Collection<LeaveHistory> leaveHistories;
+	@OneToMany(targetEntity = LeaveBalance.class, mappedBy = "leaveType")
+	private Collection<LeaveBalance> leaveBalances;
+	@OneToMany(targetEntity = RoleLeaveType.class, mappedBy = "leaveType")
+	private Collection<RoleLeaveType> roleLeaveType;
 	
 	public LeaveType() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 
-	public LeaveType(String leaveType) {
+	public LeaveType(Integer id, String leaveType, Collection<LeaveHistory> leaveHistories,
+			Collection<LeaveBalance> leaveBalances, Collection<RoleLeaveType> roleLeaveType) {
 		super();
+		this.id = id;
 		this.leaveType = leaveType;
-	}
-
-	public Integer getLeaveTypeId() {
-		return leaveTypeId;
-	}
-
-	public void setLeaveTypeId(Integer leaveTypeId) {
-		this.leaveTypeId = leaveTypeId;
+		this.leaveHistories = leaveHistories;
+		this.leaveBalances = leaveBalances;
+		this.roleLeaveType = roleLeaveType;
 	}
 
 	public String getLeaveType() {
@@ -57,46 +57,33 @@ public class LeaveType {
 		this.leaveHistories = leaveHistories;
 	}
 
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((leaveHistories == null) ? 0 : leaveHistories.hashCode());
-		result = prime * result + ((leaveType == null) ? 0 : leaveType.hashCode());
-		result = prime * result + ((leaveTypeId == null) ? 0 : leaveTypeId.hashCode());
-		return result;
+	public Collection<LeaveBalance> getLeaveBalances() {
+		return leaveBalances;
 	}
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		LeaveType other = (LeaveType) obj;
-		if (leaveHistories == null) {
-			if (other.leaveHistories != null)
-				return false;
-		} else if (!leaveHistories.equals(other.leaveHistories))
-			return false;
-		if (leaveType == null) {
-			if (other.leaveType != null)
-				return false;
-		} else if (!leaveType.equals(other.leaveType))
-			return false;
-		if (leaveTypeId == null) {
-			if (other.leaveTypeId != null)
-				return false;
-		} else if (!leaveTypeId.equals(other.leaveTypeId))
-			return false;
-		return true;
+	public void setLeaveBalances(Collection<LeaveBalance> leaveBalances) {
+		this.leaveBalances = leaveBalances;
+	}
+
+	public Collection<RoleLeaveType> getRoleLeaveType() {
+		return roleLeaveType;
+	}
+
+	public void setRoleLeaveType(Collection<RoleLeaveType> roleLeaveType) {
+		this.roleLeaveType = roleLeaveType;
+	}
+
+	public Integer getId() {
+		return id;
 	}
 
 	@Override
 	public String toString() {
-		return "LeaveType [leaveTypeId=" + leaveTypeId + ", leaveType=" + leaveType + ", leaveHistories="
-				+ leaveHistories + "]";
+		return "LeaveType [id=" + id + ", leaveType=" + leaveType + ", leaveHistories=" + leaveHistories
+				+ ", leaveBalances=" + leaveBalances + ", roleLeaveType=" + roleLeaveType + "]";
 	}
+	
+	
+	
+	
 }
