@@ -12,19 +12,21 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.iss.team1.LeaveApplication.model.Role;
 import com.iss.team1.LeaveApplication.model.Staff;
+import com.iss.team1.LeaveApplication.repo.RoleRepository;
+import com.iss.team1.LeaveApplication.repo.StaffRepository;
 import com.iss.team1.LeaveApplication.repo.roleRepository;
 import com.iss.team1.LeaveApplication.repo.staffRepository;
 @Controller
 public class LoginController {
 	
-	private staffRepository staffrepo;
+	private StaffRepository staffrepo;
 	@Autowired
-	public void setStaffrepo(staffRepository staffrepo) {
+	public void setStaffrepo(StaffRepository staffrepo) {
 		this.staffrepo = staffrepo;
 	}
-	private roleRepository rolerepo;
+	private RoleRepository rolerepo;
 	@Autowired
-   public void setRolerepo(roleRepository rolerepo) {
+   public void setRolerepo(RoleRepository rolerepo) {
 		this.rolerepo = rolerepo;
 	}
 

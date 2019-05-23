@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 import com.iss.team1.LeaveApplication.model.Staff;
 
 @Repository
-public interface StaffRepo extends JpaRepository<Staff, Integer>{
+public interface StaffRepository extends JpaRepository<Staff, String>{
 
 }

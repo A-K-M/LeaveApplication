@@ -16,18 +16,18 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.iss.team1.LeaveApplication.model.Role;
-import com.iss.team1.LeaveApplication.repo.RoleRepo;
+import com.iss.team1.LeaveApplication.repo.RoleRepository;
 import com.iss.team1.LeaveApplication.validator.RoleValidator;
 
 @Controller
 public class RolesController {
 	
-	private RoleRepo rRepo;
+	private RoleRepository rRepo;
 	private static final String roles_list = "roles";
 	private static final String role_form = "role_form";
 
 	@Autowired
-	public void setRoleRepo(RoleRepo rRepo) {
+	public void setRoleRepo(RoleRepository rRepo) {
 		this.rRepo = rRepo;
 	}
 	
