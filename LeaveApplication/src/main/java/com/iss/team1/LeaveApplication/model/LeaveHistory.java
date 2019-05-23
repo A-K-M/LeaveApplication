@@ -153,7 +153,7 @@ public class LeaveHistory {
 
 	@Override
 	public String toString() {
-		return "LeaveHistory [id=" + id + ", staff=" + staff.getStaffName() + ", leaveType=" + leaveType.getLeaveType() + ", fromDate="
+		return "LeaveHistory [id=" + id + ", staff=" + staff.getStaffName() + ", leaveType=" + leaveType.getLeaveTypeName() + ", fromDate="
 				+ fromDate + ", toDate=" + toDate + ", description=" + description + ", status=" + status
 				+ ", noOfDays=" + noOfDays + ", managerComment=" + managerComment + ", additionalReason=" + additionalReason
 				+ ", workDissemination=" + workDissemination + ", contactDetails=" + contactDetails + "]";
