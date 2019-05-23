@@ -1,9 +1,5 @@
 package com.iss.team1.LeaveApplication.controller;
 
-import java.util.List;
-
-import javax.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -37,7 +33,7 @@ public class LoginController {
    public String Login (Model model)
        {
         // model.containsAttribute("password");
-	    model.addAttribute("login", new Staff());
+	   	model.addAttribute("login", new Staff());
          return "login";
        }
    
@@ -51,26 +47,30 @@ public class LoginController {
 		   return "login";
 	   }
 	   System.out.println("no error"+login.getUserName());
-   		Staff getStaff = staffrepo.findByuserName(login.getUserName());     
+   		Staff getStaff = staffrepo.findByuserName(login.getUserName());    
+   		System.out.println("inside");
 	  // List<Staff> getStaff = staffrepo.findByuserName(login.getUserName());         
 	   	if(getStaff != null)	{
 	   		System.out.println("no error1");
 	   		if(login.getPassword().equals(getStaff.getPassword()))
 	   		{
 				 model.addAttribute("staff", new Staff());
-	   			 Role role = rolerepo.findByRoleName(login.getrole().getRoleName());
+	   			 System.out.println("@@2"+getStaff.getRole().getId());
+	   			// Role role = rolerepo.findById(login..getId()).orElse(null);
+             Role role = getStaff.getRole();
+         
+             System.out.println("no error" + role.getId());
+				  if(role.getRoleName().equals("Staff")) { 
 
-				  if(role.getRoleName().equals("staff")) { 
-
-					  return "staffLandingPage";
+					  return "stafflandingpage";
 				  
-				  } else if(role.getRoleName().equals("admin")) { 
+				  } else if(role.getRoleName().equals("Admin")) { 
 
 					  return "adminview";
 				  
-				  } else if(role.getRoleName().equals("manager")) { 
+				  } else if(role.getRoleName().equals("Manager")) { 
 
-					  return "managerLandingPage";
+					  return "managerlandingpage";
 				  }
 
 	   		}
