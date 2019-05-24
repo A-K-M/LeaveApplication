@@ -15,17 +15,17 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import com.iss.team1.LeaveApplication.model.Role;
 import com.iss.team1.LeaveApplication.model.Staff;
-import com.iss.team1.LeaveApplication.repo.RoleRepo;
-import com.iss.team1.LeaveApplication.repo.StaffRepo;
+import com.iss.team1.LeaveApplication.repo.RoleRepository;
+import com.iss.team1.LeaveApplication.repo.StaffRepository;
 import com.iss.team1.LeaveApplication.validator.StaffValidator;
 
 @Controller
 public class StaffController {
 	
-	private StaffRepo staffRepo;
-	private RoleRepo roleRepo;
+	private StaffRepository staffRepo;
+	private RoleRepository roleRepo;
 	
-	public StaffController(StaffRepo staffRepo, RoleRepo roleRepo) {
+	public StaffController(StaffRepository staffRepo, RoleRepository roleRepo) {
 		this.staffRepo = staffRepo;
 		this.roleRepo = roleRepo;
     }
