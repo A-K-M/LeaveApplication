@@ -66,10 +66,8 @@ public class LeaveTypeController {
 	}
 	
 	@GetMapping (path = "/leaveTypes/{id}/edit" )
-	public String editLeaveTypeForm (Model model ,@PathVariable(value = "id") String id) {
-		Integer lId = Integer.valueOf(id); 
-		Optional<LeaveType> l = repo.findById(lId);
-		System.out.println(l);
+	public String editLeaveTypeForm (Model model ,@PathVariable(value = "id") int id) {
+		LeaveType l = repo.findById(id).orElse(null);
 		model.addAttribute("leaveType", l);
 		return leaveType_form;
 	}
