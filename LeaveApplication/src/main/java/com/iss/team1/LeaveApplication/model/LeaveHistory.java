@@ -39,7 +39,8 @@ public class LeaveHistory {
 	@Column(name = "FromDate")
 	private LocalDate fromDate;
 	
-//	@Temporal(TemporalType.DATE)
+
+	//@Temporal(TemporalType.DATE)
 	@DateTimeFormat(pattern = "dd/MM/yyyy")
 	@Column(name = "ToDate")
 	private LocalDate toDate;

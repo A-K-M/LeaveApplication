@@ -85,7 +85,7 @@ public class LeaveDetailsController {
 		
 		LeaveHistory l=ldRepo.findById(Integer.valueOf(id)).orElseGet(null);
 		model.addAttribute("ldetails", l);
-		model.addAttribute("leaveList", ldRepo.findLeaveHistoriesByStaff(l.getStaff().getId()));
+		//model.addAttribute("leaveList", ldRepo.findLeaveHistoriesByStaff(l.getStaff().getId()));
 		System.out.println("found");
 		
 		return "leavedetails";
@@ -105,7 +105,7 @@ public class LeaveDetailsController {
 			return "leavedetails";
 		}
 		else {
-			LeaveHistory leave=ldRepo.findById(Integer.valueOf(l.getid())).get();
+			LeaveHistory leave=ldRepo.findById(Integer.valueOf(l.getId())).get();
 			leave.setStatus(LeaveStatus.REJECTED);
 			leave.setmanagerComment(l.getmanagerComment());
 			this.ldRepo.save(leave);
