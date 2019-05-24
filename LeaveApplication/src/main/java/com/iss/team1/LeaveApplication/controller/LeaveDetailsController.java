@@ -1,5 +1,8 @@
 package com.iss.team1.LeaveApplication.controller;
 
+import java.lang.ProcessBuilder.Redirect;
+import java.time.LocalDate;
+import java.time.temporal.TemporalAmount;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -16,8 +19,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.iss.team1.LeaveApplication.model.LeaveHistory;
 import com.iss.team1.LeaveApplication.model.LeaveHistory.LeaveStatus;
+import com.iss.team1.LeaveApplication.model.LeaveType;
+import com.iss.team1.LeaveApplication.model.Role;
+import com.iss.team1.LeaveApplication.model.Staff;
 import com.iss.team1.LeaveApplication.repo.LeaveDetailsRepository;
 import com.iss.team1.LeaveApplication.repo.LeaveTypeRepository;
+import com.iss.team1.LeaveApplication.repo.RoleRepository;
 import com.iss.team1.LeaveApplication.repo.StaffRepository;
 
 
@@ -30,6 +37,7 @@ public class LeaveDetailsController {
 	private LeaveDetailsRepository ldRepo;
 	private LeaveTypeRepository ltRepo;
 	private StaffRepository sRepo;
+	private RoleRepository rRepo;
 	
 	@Autowired
 	public void setldRepo(LeaveDetailsRepository ldRepo) {
@@ -43,14 +51,33 @@ public class LeaveDetailsController {
 	public void setsRepo(StaffRepository sRepo) {
 		this.sRepo=sRepo;
 	}
+	@Autowired
+	public void setrRepo(RoleRepository rRepo) {
+		this.rRepo=rRepo;
+	}
 	
 //	@RequestMapping(path="/leavelist")
 //	public String listMethod(Model model) {
+//		LeaveType lt=new LeaveType(1, "Annual", null, null, null);
+//		ltRepo.save(lt);
+//		lt=new LeaveType(2, "Medical", null, null, null);
+//		ltRepo.save(lt);
+//		lt=new LeaveType(3, "Compensation", null, null, null);
+//		ltRepo.save(lt);
+//		
+//		Role r=new Role("Employee");
+//		rRepo.save(r);
+//		Staff s=new Staff(1, "aye", "aye", "aye", LocalDate.now(), "athin@gamil.com", r, 1);
+//		sRepo.save(s);
+//		LeaveHistory l=new LeaveHistory(s,lt,LocalDate.now(), LocalDate.now().plusDays(1L), "leave", LeaveStatus.PENDING, 1, null, null , null, null);
+//		ldRepo.save(l);
+//		
 //		List<LeaveHistory> leaveHistories=ldRepo.findAll();
 //		model.addAttribute("leaves", leaveHistories);
 //		
 //		System.out.println("saved");
-//		return "list";
+//		return "redirect:/leavedetails/"+l.getid();
+//		//return "list";
 //	}
 	
 	@GetMapping(path = "/leavedetails/{id}")

@@ -92,16 +92,16 @@
 						<button type="submit" class="btn btn-danger">Reject</button>
 					</div>
 					<div th:if="${ldetails.status!=2 && ldetails.status!=3}" class="col-sm-2">
-						<a th:href="${'/leavehistory/'+ldetails.leaveId+'/APPROVED'}" class="btn btn-success">Approve</a>
+						<a th:href="${'/leavehistory/'+ldetails.id+'/APPROVED'}" class="btn btn-success">Approve</a>
 					</div>
 					<div class="col-sm-2">
 						<a th:href="${'/leavelist'}" class="btn btn-primary">Update</a>
 					</div>
 					<div class="col-sm-2">
-						<a th:href="${'/leavehistory/'+ldetails.leaveId+'/CANCELLED'}" type="button" class="btn btn-warning">Cancel</a>
+						<a th:href="${'/leavehistory/'+ldetails.id+'/CANCELLED'}" type="button" class="btn btn-warning">Cancel</a>
 					</div>
 					<div class="col-sm-2">
-						<a th:href="${'/leavehistory/'+ldetails.leaveId+'/DELETED'}" class="btn btn-danger">Delete</a>
+						<a th:href="${'/leavehistory/'+ldetails.id+'/DELETED'}" class="btn btn-danger">Delete</a>
 					</div>
 				</div>
 

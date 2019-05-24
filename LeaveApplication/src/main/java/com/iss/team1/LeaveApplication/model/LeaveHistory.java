@@ -34,12 +34,12 @@ public class LeaveHistory {
 	private LeaveType leaveType;
 	
 	@NotEmpty
-	@Temporal(TemporalType.DATE)
+	//@Temporal(TemporalType.DATE)
 	@DateTimeFormat(pattern = "dd/MM/yyyy")
 	@Column(name = "FromDate")
 	private LocalDate fromDate;
 	
-	@Temporal(TemporalType.DATE)
+//	@Temporal(TemporalType.DATE)
 	@DateTimeFormat(pattern = "dd/MM/yyyy")
 	@Column(name = "ToDate")
 	private LocalDate toDate;
@@ -102,12 +102,23 @@ public class LeaveHistory {
 		this.contactDetails = contactDetails;
 	}
 
-	public Integer getid() {
+	
+	public Integer getId() {
 		return id;
 	}
-	public void setid(Integer id) {
+
+	public void setId(Integer id) {
 		this.id = id;
 	}
+
+	public String getManagerComment() {
+		return managerComment;
+	}
+
+	public void setManagerComment(String managerComment) {
+		this.managerComment = managerComment;
+	}
+
 	public Staff getStaff() {
 		return staff;
 	}
