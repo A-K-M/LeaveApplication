@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head lang="en">
+<title>Leave Application </title>
+</head>
+<body>
+	<div class="container">
+		<h2>Leave Application </h2>
+		<div>
+		
+			<form class="form-horizontal" th:object="${leave}" th:action="@{/leaveapply}" method="post">
+				<div class="form-group">
+					<div class="col-sm-10">
+ 						<input type="hidden" class="form-control" th:field="*{staff}" /> 
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-2 control-label">Leave Type:</label>
+					<div class="col-sm-10">
+					
+						<select th:field="*{leaveType}">
+							<option th:each="leaveType : ${leavetypes}"
+								th:value="${leaveType.id}"
+								th:text="${leaveType.leaveTypeName}">List</option>
+						</select>
+						<p th:if="${#fields.hasErrors('leaveType')}" th:errors="*{leaveType}"></p>
+					
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-2 control-label">From:</label>
+					<div class="col-sm-10">
+					
+						<input type="date" class="form-control" th:field="*{fromDate}" />
+						<p th:if="${#fields.hasErrors('fromDate')}" th:errors="*{fromDate}"></p>
+			
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-2 control-label">To:</label>
+					<div class="col-sm-10">
+					
+						<input type="date" class="form-control" th:field="*{toDate}" />
+						<p th:if="${#fields.hasErrors('toDate')}" th:errors="*{toDate}"></p>
+					
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-2 control-label">Description:</label>
+					<div class="col-sm-10">
+					
+						<input type="text" class="form-control" th:field="*{description}" />
+						<p th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></p>
+					
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-2 control-label">Additional Reasons:</label>
+					<div class="col-sm-10">
+					
+						<input type="text" class="form-control" th:field="*{additionalReason}" />
+						<p th:if="${#fields.hasErrors('additionalReason')}" th:errors="*{additionalReason}"></p>
+					
+					</div>
+				</div>
+				
+				<div class="form-group">
+					<label class="col-sm-2 control-label">Work Dissemination:</label>
+					<div class="col-sm-10">
+						<input type="text" class="form-control" th:field="*{workDissemination}" />
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-2 control-label">Contact Details):</label>
+					<div class="col-sm-10">
+						<input type="text" class="form-control" th:field="*{contactDetails}" />
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-sm-2">
+						<button type="submit" class="btn btn-primary">Submit</button>
+					</div>
+				</div>
+
+			</form>
+		</div>
+	</div>
+
+</body>
+</html>

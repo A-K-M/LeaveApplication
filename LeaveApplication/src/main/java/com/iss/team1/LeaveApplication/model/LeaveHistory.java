@@ -39,12 +39,13 @@ public class LeaveHistory {
 	@Column(name = "FromDate")
 	private LocalDate fromDate;
 	
-
+	@NotEmpty
 	//@Temporal(TemporalType.DATE)
 	@DateTimeFormat(pattern = "dd/MM/yyyy")
 	@Column(name = "ToDate")
 	private LocalDate toDate;
 	
+	@NotEmpty
 	@Length(max=200)
 	@Column(name = "Description")
 	private String description;
@@ -53,7 +54,7 @@ public class LeaveHistory {
 	@Column(name = "Status")
 	private LeaveStatus status;
 	
-	@NotEmpty
+	//@NotEmpty
 	@Column(name = "NoOfDays")
 	private Integer noOfDays;
 	

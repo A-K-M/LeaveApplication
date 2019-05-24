@@ -1,8 +1,12 @@
 package com.iss.team1.LeaveApplication.controller;
 
+import java.time.LocalDate;
+import java.util.List;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -13,6 +17,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import com.iss.team1.LeaveApplication.model.LeaveBalance;
 import com.iss.team1.LeaveApplication.model.LeaveHistory;
 import com.iss.team1.LeaveApplication.model.LeaveHistory.LeaveStatus;
+import com.iss.team1.LeaveApplication.model.LeaveType;
+import com.iss.team1.LeaveApplication.model.Staff;
 import com.iss.team1.LeaveApplication.repo.LeaveBalanceRepository;
 import com.iss.team1.LeaveApplication.repo.LeaveDetailsRepository;
 import com.iss.team1.LeaveApplication.repo.LeaveTypeRepository;
@@ -31,6 +37,7 @@ public class LeaveDetailsController {
 	private StaffRepository sRepo;
 	private RoleRepository rRepo;
 	private LeaveBalanceRepository lbRepo;
+	
 	
 	@Autowired
 	public void setldRepo(LeaveDetailsRepository ldRepo) {
@@ -121,7 +128,7 @@ public class LeaveDetailsController {
 		System.out.println("got leave details");
 		
 		LeaveBalance lb=lbRepo.findLeaveBalanceByStaffAndLeaveType(l.getStaff().getId(), l.getLeaveType().getId());
-		Integer leaveleft=lb.getBalanceLeave();
+		Integer leaveleft=0;
 		//-------check status change to update leave left
 		if (LeaveStatus.valueOf(status).equals(LeaveStatus.APPROVED)) {
 				//.equals(LeaveStatus.APPROVED)) {
@@ -132,19 +139,56 @@ public class LeaveDetailsController {
 			leaveleft=l.getNoOfDays();
 		}
 		
-		System.out.println("No of Days left = 10 + ("+leaveleft.toString()+") = (("+ (10+leaveleft) +"))" );
+		//System.out.println("No of Days left = 10 + ("+leaveleft.toString()+") = (("+ (10+leaveleft) +"))" );
 		
 		l.setStatus(LeaveStatus.valueOf(status.toString()));
 		System.out.println("updated");
 		ldRepo.save(l);
 		
-		System.out.println("updated1");
-		lb.setBalanceLeave(lb.getBalanceLeave()+leaveleft);
-		System.out.println("updated2");
-		lbRepo.save(lb);
+		if ((l.getStatus().equals(LeaveStatus.APPROVED) || l.getStatus().equals(LeaveStatus.CANCELLED))
+				&& !leaveleft.equals(0)) {
+			
+			lb.setBalanceLeave(lb.getBalanceLeave()+leaveleft);
+			System.out.println("updated2");
+			lbRepo.save(lb);
+		}
+		
 		
 		System.out.println("saved as status = "+l.getStatus() +" and leave status = "+lb.getBalanceLeave());
 		return "redirect:/"+leaveList;
 		
+	}
+	
+	@GetMapping(path = "/leaveapply")
+	public String leaveApplyMethod(Model model) {
+		LeaveHistory l=new LeaveHistory();
+		l.setFromDate(LocalDate.now());
+		l.setToDate(LocalDate.now().plusDays(1));
+		Staff s=sRepo.findById(1).get();
+		System.out.println(s.toString());
+		l.setStaff(s);
+		
+		List<LeaveType> leaveTypes=ltRepo.findAll();
+		
+		model.addAttribute("leave", l);
+		model.addAttribute("leavetypes", leaveTypes);
+		return "leave";
+	}
+	
+	@PostMapping(path = "/leavesubmit")
+	public String leaveApplyMethod(@Valid LeaveHistory l, BindingResult bindingResult, Model model) {
+		if (bindingResult.hasErrors()) {
+			List<LeaveType> leaveTypes=ltRepo.findAll();			
+			model.addAttribute("leave", l);
+			model.addAttribute("leavetypes", leaveTypes);
+			return "leave";
+		}else {
+			l.setNoOfDays(1);
+			System.out.println(l.getStaff().toString());
+			System.out.println(l.getLeaveType().toString());
+			ldRepo.save(l);
+			model.addAttribute("ldetails", l);
+			return "leavedetails";
+		}
 	}
 }
