@@ -22,10 +22,12 @@ public class LeaveHistory {
 	@Id 
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;	
+	
 	@ManyToOne
     @JoinColumn(name="staffId")
 	@NotEmpty
 	private Staff staff;
+	
 	@ManyToOne
     @JoinColumn(name="LeaveTypeID")
 	@NotEmpty
