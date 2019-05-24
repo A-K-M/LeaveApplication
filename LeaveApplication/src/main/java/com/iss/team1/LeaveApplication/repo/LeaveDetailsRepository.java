@@ -12,7 +12,7 @@ import com.iss.team1.LeaveApplication.model.LeaveHistory;
 @Repository
 public interface LeaveDetailsRepository extends JpaRepository<LeaveHistory, Integer> {
 	
-	@Query("SELECT l FROM LeaveHistory l where l.staff.staffId = :staffid")
-	List<LeaveHistory> findLeaveHistoriesByStaff(@Param("staffid") Integer staffid);
+	@Query("SELECT l FROM LeaveHistory l where l.staff.id = :staffid")
+	List<LeaveHistory> findLeaveHistoriesByStaff(@Param("id") Integer staffid);
 
 }

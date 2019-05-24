@@ -17,7 +17,7 @@
 				<div class="form-group">
 					<label class="col-sm-2 control-label">Leave ID:</label>
 					<div class="col-sm-10">
-						<input type="text" class="form-control" th:field="*{leaveId}" readonly />
+						<input type="text" class="form-control" th:field="*{id}" readonly />
 					</div>
 				</div>
 				<div class="form-group">
@@ -35,7 +35,7 @@
 				<div class="form-group">
 					<label class="col-sm-2 control-label">Leave Type:</label>
 					<div class="col-sm-10">
-						<input type="text" class="form-control" th:field="*{leaveType.leaveType}" readonly/>
+						<input type="text" class="form-control" th:field="*{leaveType.leaveTypeName}" readonly/>
 					</div>
 				</div>
 				<div class="form-group">
@@ -83,7 +83,7 @@
 				<div class="form-group">
 					<label class="col-sm-2 control-label">Comment:</label>
 					<div class="col-sm-10">
-						<input type="text" class="form-control" th:field="*{comment}" row=3 />
+						<input type="text" class="form-control" th:field="*{managerComment}" row=3 />
 					</div>
 				</div>
 				<div class="form-group">
@@ -119,8 +119,8 @@
                 
             </tr>
             <tr th:each="leave : ${leaveList}">
-                <td th:text="${leave.leaveId}">Leave ID</td>
-                <td th:text="${leave.leaveType.leaveType}">Leave Type</td>
+                <td th:text="${leave.id}">Leave ID</td>
+                <td th:text="${leave.leaveType.leaveTypeName}">Leave Type</td>
                 <td th:text="${leave.fromDate}">From Date</td>
                 <td th:text="${leave.toDate}">To Date</td>
                 <td th:text="${leave.noOfDays}">No of Days</td>
