@@ -1,10 +1,5 @@
 package com.iss.team1.LeaveApplication.controller;
 
-import java.lang.ProcessBuilder.Redirect;
-import java.time.LocalDate;
-import java.time.temporal.TemporalAmount;
-import java.util.List;
-
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,14 +9,11 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+
 
 
 import com.iss.team1.LeaveApplication.model.LeaveHistory;
 import com.iss.team1.LeaveApplication.model.LeaveHistory.LeaveStatus;
-import com.iss.team1.LeaveApplication.model.LeaveType;
-import com.iss.team1.LeaveApplication.model.Role;
-import com.iss.team1.LeaveApplication.model.Staff;
 import com.iss.team1.LeaveApplication.repo.LeaveDetailsRepository;
 import com.iss.team1.LeaveApplication.repo.LeaveTypeRepository;
 import com.iss.team1.LeaveApplication.repo.RoleRepository;
