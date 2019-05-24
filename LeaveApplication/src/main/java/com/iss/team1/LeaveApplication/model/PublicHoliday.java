@@ -25,7 +25,7 @@ public class PublicHoliday {
 		Id = id;
 	}
 
-	@NotEmpty
+	
 	private String name;
 	
 	private String date;
