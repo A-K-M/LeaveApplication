@@ -8,34 +8,36 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.validation.constraints.NotEmpty;
 
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.format.annotation.DateTimeFormat.ISO;
+
 @Entity
 public class PublicHoliday {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int id;
+	private int Id;
+	public int getId() {
+		return Id;
+	}
+
+	public void setId(int id) {
+		Id = id;
+	}
+
 	@NotEmpty
 	private String name;
-	@NotEmpty
-	private LocalDate date;
+	
+	private String date;
 	
 	public PublicHoliday() {
 		// TODO Auto-generated constructor stub
 	}
 
-	public PublicHoliday(int id, String name, LocalDate date) {
+	public PublicHoliday( String name, String date) {
 		super();
-		this.id = id;
 		this.name = name;
 		this.date = date;
-	}
-
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
 	}
 
 	public String getName() {
@@ -46,17 +48,14 @@ public class PublicHoliday {
 		this.name = name;
 	}
 
-	public LocalDate getDate() {
+	public String getDate() {
 		return date;
 	}
 
-	public void setDate(LocalDate date) {
+	public void setDate(String date) {
 		this.date = date;
 	}
 
-	@Override
-	public String toString() {
-		return "PublicHoliday [id=" + id + ", name=" + name + ", date=" + date + "]";
-	}
+	
 	
 }

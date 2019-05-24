@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.iss.team1.LeaveApplication.model.Role;
 import com.iss.team1.LeaveApplication.model.Staff;
@@ -39,10 +40,12 @@ public class LoginController {
 	protected void initBinder(WebDataBinder binder) {
 		binder.addValidators(new StaffValidator());
 	}
-@RequestMapping(path="/loginForm", method = RequestMethod.GET)
-   public String Login (Model model)
+	
+	@RequestMapping(path="/loginForm", method = RequestMethod.GET)
+   public String Login (  Model model)
        {
-        // model.containsAttribute("password");
+//         model.containsAttribute("password");
+//		model.addAttribute("error", message);
 	   	model.addAttribute("login", new Staff());
          return "login";
        }
@@ -54,7 +57,6 @@ public class LoginController {
 	   if(bindingResult.hasErrors()) {
 	   		System.out.println("HELLO THERE2");
 			model.addAttribute("login", login);
-			
 		   return "login";
 	   }
 	   System.out.println("no error"+login.getUserName());
@@ -87,12 +89,18 @@ public class LoginController {
 	   		}
 	   		else {
 	   			System.out.println("no staff");
+//	   			redirectAttributes.addFlashAttribute("message", "invalid password");
+	   			// error =invalid password
+	   			return "redirect:/loginForm";
+	   			
 			}
 
 	   	}
 	   	
 	   	model.addAttribute("login", login);
-         return "login";
+//	   	redirectAttributes.addFlashAttribute("message", "ivalid username");
+	   	//error = invalid user
+	   	return "redirect:/loginForm";
        }
 
 

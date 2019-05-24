@@ -6,6 +6,8 @@
 </head>
 <body>
 <form th:object ="${login}" th:action="@{/loginForm}" method="post">
+<div>
+<label th:text="${error}"></label></div>
    <table>
    <tr>
       <th>UserName</th>
@@ -23,6 +25,7 @@
    </table>
          <p th:if="${#fields.hasErrors('userName')}" th:errors="*{userName}"></p>
                <p th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></p>
+               
 </form>
 </body>
 </html>
