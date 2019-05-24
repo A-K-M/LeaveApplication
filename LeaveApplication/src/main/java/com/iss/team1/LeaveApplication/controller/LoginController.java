@@ -88,18 +88,19 @@ public class LoginController {
 	   		}
 	   		else {
 	   			System.out.println("no staff");
+	   			
 //	   			redirectAttributes.addFlashAttribute("message", "invalid password");
 	   			// error =invalid password
-	   			return "redirect:/loginForm";
+	   			return "login";
 	   			
 			}
 
 	   	}
 	   	
 	   	model.addAttribute("login", login);
-//	   	redirectAttributes.addFlashAttribute("message", "ivalid username");
+    	model.addAttribute("Error", "error");
 	   	//error = invalid user
-	   	return "redirect:/loginForm";
+	   	return "login";
        }
 
 

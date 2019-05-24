@@ -25,7 +25,7 @@
    </table>
          <p th:if="${#fields.hasErrors('userName')}" th:errors="*{userName}"></p>
                <p th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></p>
-               
+               <p style="color:red;" th:if="${Error=='error'}" >Invalid UserId and Password</p>
 </form>
 </body>
 </html>
