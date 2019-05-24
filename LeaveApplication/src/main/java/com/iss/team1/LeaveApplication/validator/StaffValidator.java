@@ -17,9 +17,13 @@ public class StaffValidator implements Validator{
 	public void validate(Object target, Errors errors) {
 		// TODO Auto-generated method stub
 		Staff s = (Staff) target;
-		if (s.getStaffName().isEmpty()) {
-			errors.rejectValue("staffName", "StaffName", "Staff Name cannot be empty.");
-		}
+		if (s.getUserName().isEmpty()) {
+			errors.rejectValue("userName", "userName", "user Name cannot be empty.");
+			if(s.getPassword().isEmpty()) {
+				errors.rejectValue("password", "password" , "Password cannot be empty");
+			}
+	}
+
 	}
 
 }
