@@ -13,6 +13,6 @@ import com.iss.team1.LeaveApplication.model.LeaveBalance;
 @Repository
 public interface LeaveBalanceRepository extends JpaRepository<LeaveBalance, Integer> {
 
-	@Query("SELECT l.balanceLeave FROM LeaveBalance l where l.staff.id = :staffid and l.leaveType.id= :leavetypeid")
-	Integer findLeaveBalanceByStaffAndLeaveType(@Param("staffid") Integer staffid,@Param("leavetypeid") Integer leavetypeid);
+	@Query("SELECT l FROM LeaveBalance l where l.staff.id = :staffid and l.leaveType.id= :leavetypeid")
+	LeaveBalance findLeaveBalanceByStaffAndLeaveType(@Param("staffid") Integer staffid,@Param("leavetypeid") Integer leavetypeid);
 }

@@ -10,10 +10,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
-
-
+import com.iss.team1.LeaveApplication.model.LeaveBalance;
 import com.iss.team1.LeaveApplication.model.LeaveHistory;
 import com.iss.team1.LeaveApplication.model.LeaveHistory.LeaveStatus;
+import com.iss.team1.LeaveApplication.repo.LeaveBalanceRepository;
 import com.iss.team1.LeaveApplication.repo.LeaveDetailsRepository;
 import com.iss.team1.LeaveApplication.repo.LeaveTypeRepository;
 import com.iss.team1.LeaveApplication.repo.RoleRepository;
@@ -30,6 +30,7 @@ public class LeaveDetailsController {
 	private LeaveTypeRepository ltRepo;
 	private StaffRepository sRepo;
 	private RoleRepository rRepo;
+	private LeaveBalanceRepository lbRepo;
 	
 	@Autowired
 	public void setldRepo(LeaveDetailsRepository ldRepo) {
@@ -46,6 +47,10 @@ public class LeaveDetailsController {
 	@Autowired
 	public void setrRepo(RoleRepository rRepo) {
 		this.rRepo=rRepo;
+	}
+	@Autowired
+	public void setlbRepo(LeaveBalanceRepository lbRepo) {
+		this.lbRepo=lbRepo;
 	}
 	
 //	@RequestMapping(path="/leavelist")
@@ -115,7 +120,8 @@ public class LeaveDetailsController {
 		LeaveHistory l=ldRepo.findById(Integer.valueOf(id)).get();
 		System.out.println("got leave details");
 		
-		Integer leaveleft=0;
+		LeaveBalance lb=lbRepo.findLeaveBalanceByStaffAndLeaveType(l.getStaff().getId(), l.getLeaveType().getId());
+		Integer leaveleft=lb.getBalanceLeave();
 		//-------check status change to update leave left
 		if (LeaveStatus.valueOf(status).equals(LeaveStatus.APPROVED)) {
 				//.equals(LeaveStatus.APPROVED)) {
@@ -127,13 +133,17 @@ public class LeaveDetailsController {
 		}
 		
 		System.out.println("No of Days left = 10 + ("+leaveleft.toString()+") = (("+ (10+leaveleft) +"))" );
+		
 		l.setStatus(LeaveStatus.valueOf(status.toString()));
-		
 		System.out.println("updated");
-		
-		
 		ldRepo.save(l);
-		System.out.println("saved as status = "+l.getStatus());
+		
+		System.out.println("updated1");
+		lb.setBalanceLeave(lb.getBalanceLeave()+leaveleft);
+		System.out.println("updated2");
+		lbRepo.save(lb);
+		
+		System.out.println("saved as status = "+l.getStatus() +" and leave status = "+lb.getBalanceLeave());
 		return "redirect:/"+leaveList;
 		
 	}
