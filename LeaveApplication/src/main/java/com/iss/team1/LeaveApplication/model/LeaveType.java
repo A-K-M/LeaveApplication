@@ -72,7 +72,9 @@ public class LeaveType {
 	public void setRoleLeaveType(Collection<RoleLeaveType> roleLeaveType) {
 		this.roleLeaveType = roleLeaveType;
 	}
-
+	public void setId(int id) {
+		this.id= id;
+	}
 	public Integer getId() {
 		return id;
 	}
