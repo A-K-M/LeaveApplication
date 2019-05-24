@@ -25,32 +25,34 @@ public class LeaveHistory {
 	
 	@ManyToOne
     @JoinColumn(name="staffId")
-	@NotEmpty
+	//@NotEmpty
 	private Staff staff;
 	
 	@ManyToOne
     @JoinColumn(name="LeaveTypeID")
-	@NotEmpty
+	//@NotEmpty
 	private LeaveType leaveType;
 	
-	@NotEmpty
+	//@NotEmpty
 	//@Temporal(TemporalType.DATE)
-	@DateTimeFormat(pattern = "dd/MM/yyyy")
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	//@DateTimeFormat(pattern = "dd/MM/yyyy")
 	@Column(name = "FromDate")
 	private LocalDate fromDate;
 	
-	@NotEmpty
+	//@NotEmpty
 	//@Temporal(TemporalType.DATE)
-	@DateTimeFormat(pattern = "dd/MM/yyyy")
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	//@DateTimeFormat(pattern = "dd/MM/yyyy")
 	@Column(name = "ToDate")
 	private LocalDate toDate;
 	
-	@NotEmpty
+	//@NotEmpty
 	@Length(max=200)
 	@Column(name = "Description")
 	private String description;
 	
-	@NotEmpty
+	//@NotEmpty
 	@Column(name = "Status")
 	private LeaveStatus status;
 	

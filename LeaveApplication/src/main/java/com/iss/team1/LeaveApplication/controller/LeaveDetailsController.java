@@ -1,16 +1,22 @@
 package com.iss.team1.LeaveApplication.controller;
 
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
@@ -24,6 +30,8 @@ import com.iss.team1.LeaveApplication.repo.LeaveDetailsRepository;
 import com.iss.team1.LeaveApplication.repo.LeaveTypeRepository;
 import com.iss.team1.LeaveApplication.repo.RoleRepository;
 import com.iss.team1.LeaveApplication.repo.StaffRepository;
+import com.iss.team1.LeaveApplication.validator.LeaveHistoryValidator;
+import com.iss.team1.LeaveApplication.validator.RoleValidator;
 
 
 @Controller
@@ -38,6 +46,11 @@ public class LeaveDetailsController {
 	private RoleRepository rRepo;
 	private LeaveBalanceRepository lbRepo;
 	
+	@InitBinder
+	protected void initBinder(WebDataBinder binder) {
+		binder.addValidators(new LeaveHistoryValidator());
+		
+	}
 	
 	@Autowired
 	public void setldRepo(LeaveDetailsRepository ldRepo) {
@@ -164,10 +177,11 @@ public class LeaveDetailsController {
 		LeaveHistory l=new LeaveHistory();
 		l.setFromDate(LocalDate.now());
 		l.setToDate(LocalDate.now().plusDays(1));
+		//l.setId(1);
 		Staff s=sRepo.findById(1).get();
 		System.out.println(s.toString());
 		l.setStaff(s);
-		
+		l.setStatus(LeaveStatus.PENDING);
 		List<LeaveType> leaveTypes=ltRepo.findAll();
 		
 		model.addAttribute("leave", l);
@@ -178,17 +192,21 @@ public class LeaveDetailsController {
 	@PostMapping(path = "/leavesubmit")
 	public String leaveApplyMethod(@Valid LeaveHistory l, BindingResult bindingResult, Model model) {
 		if (bindingResult.hasErrors()) {
+			System.out.println("got error");
+			System.out.println(l.getStaff().toString());
+			System.out.println(l.getLeaveType().toString());
+			System.out.println(bindingResult.toString());
 			List<LeaveType> leaveTypes=ltRepo.findAll();			
 			model.addAttribute("leave", l);
 			model.addAttribute("leavetypes", leaveTypes);
 			return "leave";
 		}else {
-			l.setNoOfDays(1);
-			System.out.println(l.getStaff().toString());
-			System.out.println(l.getLeaveType().toString());
+			System.out.println("no error");
+			l.setNoOfDays(l.getToDate().compareTo(l.getFromDate()));
+
 			ldRepo.save(l);
 			model.addAttribute("ldetails", l);
-			return "leavedetails";
+			return "redirect:/"+leaveDetails+"/"+l.getId();
 		}
 	}
 }
