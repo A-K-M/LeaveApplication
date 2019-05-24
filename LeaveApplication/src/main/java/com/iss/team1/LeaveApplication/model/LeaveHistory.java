@@ -2,40 +2,81 @@ package com.iss.team1.LeaveApplication.model;
 
 import java.time.LocalDate;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.validation.constraints.NotEmpty;
+
+import org.hibernate.validator.constraints.Length;
+import org.springframework.format.annotation.DateTimeFormat;
 
 
 @Entity
 public class LeaveHistory {
 	@Id 
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;	
+	private Integer id;	
 	@ManyToOne
     @JoinColumn(name="staffId")
 	@NotEmpty
 	private Staff staff;
 	@ManyToOne
-    @JoinColumn(name="leaveId")
+    @JoinColumn(name="LeaveTypeID")
 	@NotEmpty
 	private LeaveType leaveType;
+	
 	@NotEmpty
+	@Temporal(TemporalType.DATE)
+	@DateTimeFormat(pattern = "dd/MM/yyyy")
+	@Column(name = "FromDate")
 	private LocalDate fromDate;
+	
+	@Temporal(TemporalType.DATE)
+	@DateTimeFormat(pattern = "dd/MM/yyyy")
+	@Column(name = "ToDate")
 	private LocalDate toDate;
+	
+	@Length(max=200)
+	@Column(name = "Description")
 	private String description;
+	
 	@NotEmpty
-	private Integer status;
+	@Column(name = "Status")
+	private LeaveStatus status;
+	
 	@NotEmpty
+	@Column(name = "NoOfDays")
 	private Integer noOfDays;
+	
+	@Length(max=200)
+	@Column(name = "Comment")
 	private String managerComment;
+	
+	@Length(max=200)
+	@Column(name = "AdditionalReason")
 	private String additionalReason;
+	
+	@Length(max=100)
+	@Column(name = "WorkDissemination")
 	private String workDissemination;
+	
+	@Length(max=200)
+	@Column(name = "ContactDetails")
 	private String contactDetails;
+	
+	public enum LeaveStatus {
+		PENDING,
+		APPROVED,
+		REJECTED,
+		CANCELLED,
+		DELETED;
+	}
 	
 	public LeaveHistory() {
 		super();
@@ -43,7 +84,7 @@ public class LeaveHistory {
 	}
 	
 	public LeaveHistory(Staff staff, LeaveType leaveType, LocalDate fromDate, LocalDate toDate, String description,
-			Integer status, Integer noOfDays, String managerComment, String additionalReason, String workDissemination,
+			LeaveStatus status, Integer noOfDays, String managerComment, String additionalReason, String workDissemination,
 			String contactDetails) {
 		super();
 		this.staff = staff;
@@ -59,10 +100,12 @@ public class LeaveHistory {
 		this.contactDetails = contactDetails;
 	}
 
-	public Long getid() {
+	public Integer getid() {
 		return id;
 	}
-	
+	public void setid(Integer id) {
+		this.id = id;
+	}
 	public Staff getStaff() {
 		return staff;
 	}
@@ -103,11 +146,11 @@ public class LeaveHistory {
 		this.description = description;
 	}
 	
-	public Integer getStatus() {
+	public LeaveStatus getStatus() {
 		return status;
 	}
 	
-	public void setStatus(Integer status) {
+	public void setStatus(LeaveStatus status) {
 		this.status = status;
 	}
 	
