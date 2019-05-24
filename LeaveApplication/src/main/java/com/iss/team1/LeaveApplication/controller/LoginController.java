@@ -67,15 +67,17 @@ public class LoginController {
 	   		if(login.getPassword().equals(getStaff.getPassword()))
 	   		{
 				 model.addAttribute("staff", new Staff());
+
 	   			 
 	   			// Role role = rolerepo.findById(login..getId()).orElse(null);
              Role role = getStaff.getRole();
          
              System.out.println("no error" + role.getId());
+             role = rolerepo.findByRoleName(getStaff.getRole().getRoleName());
 				  if(role.getRoleName().equals("Staff")) { 
-
+					  
+	   			 role = rolerepo.findByRoleName(getStaff.getRole().getRoleName());
 					  return "stafflandingpage";
-				  
 				  } else if(role.getRoleName().equals("Admin")) { 
 
 					  return "adminview";
