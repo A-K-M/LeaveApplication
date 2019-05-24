@@ -28,6 +28,7 @@ public class Staff {
 	@NotEmpty
 	private String staffName;
 	@Length(max=60)
+	@NotEmpty
 	private String userName;
 	@NotEmpty
 	private String password;

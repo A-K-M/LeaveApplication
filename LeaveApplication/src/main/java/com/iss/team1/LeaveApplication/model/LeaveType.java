@@ -17,8 +17,8 @@ public class LeaveType {
 	@Id 
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
-	@NotEmpty
-	private String leaveType;	
+	
+	private String leaveTypeName;	
 	@OneToMany(targetEntity = LeaveHistory.class, mappedBy = "leaveType")
 	private Collection<LeaveHistory> leaveHistories;
 	@OneToMany(targetEntity = LeaveBalance.class, mappedBy = "leaveType")
@@ -31,22 +31,22 @@ public class LeaveType {
 		// TODO Auto-generated constructor stub
 	}
 
-	public LeaveType(Integer id, String leaveType, Collection<LeaveHistory> leaveHistories,
+	public LeaveType(Integer id, String leaveTypeName, Collection<LeaveHistory> leaveHistories,
 			Collection<LeaveBalance> leaveBalances, Collection<RoleLeaveType> roleLeaveType) {
 		super();
 		this.id = id;
-		this.leaveType = leaveType;
+		this.leaveTypeName = leaveTypeName;
 		this.leaveHistories = leaveHistories;
 		this.leaveBalances = leaveBalances;
 		this.roleLeaveType = roleLeaveType;
 	}
 
-	public String getLeaveType() {
-		return leaveType;
+	public String getLeaveTypeName() {
+		return leaveTypeName;
 	}
 
-	public void setLeaveType(String leaveType) {
-		this.leaveType = leaveType;
+	public void setLeaveTypeName(String leaveTypeName) {
+		this.leaveTypeName = leaveTypeName;
 	}
 
 	public Collection<LeaveHistory> getLeaveHistories() {
@@ -79,7 +79,7 @@ public class LeaveType {
 
 	@Override
 	public String toString() {
-		return "LeaveType [id=" + id + ", leaveType=" + leaveType + ", leaveHistories=" + leaveHistories
+		return "LeaveType [id=" + id + ", leaveTypeName=" + leaveTypeName + ", leaveHistories=" + leaveHistories
 				+ ", leaveBalances=" + leaveBalances + ", roleLeaveType=" + roleLeaveType + "]";
 	}
 	

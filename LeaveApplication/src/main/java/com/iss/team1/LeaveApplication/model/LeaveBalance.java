@@ -69,7 +69,7 @@ public class LeaveBalance {
 
 	@Override
 	public String toString() {
-		return "LeaveBalance [id=" + id + ", staff=" + staff.getStaffName() + ", leaveType=" + leaveType.getLeaveType() + ", balanceLeave="
+		return "LeaveBalance [id=" + id + ", staff=" + staff.getStaffName() + ", leaveType=" + leaveType.getLeaveTypeName() + ", balanceLeave="
 				+ balanceLeave + "]";
 	}
 	

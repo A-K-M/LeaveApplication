@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html xmlns:th="http://thymeleaf.org">
+<head lang="en">
+<meta charset="ISO-8859-1">
+<title>Leave Details</title>
+</head>
+<body>
+
+
+<div class="container">
+		<h2>Leave Details</h2>
+		<div th:if="${not #lists.isEmpty(errMsg)}">
+		<label th:text="${errMsg}" class="col-sm-2 control-label lbl-error"></label>
+		</div>
+<form class="form-horizontal" th:object="${ldetails}" th:action="@{/leavedetails}" method="post">
+			
+				<div class="form-group">
+					<label class="col-sm-2 control-label">Leave ID:</label>
+					<div class="col-sm-10">
+						<input type="text" class="form-control" th:field="*{id}" readonly />
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-2 control-label">Status:</label>
+					<div class="col-sm-10">
+						<input type="text" class="form-control" th:field="*{status}" readonly/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-2 control-label">Employee:</label>
+					<div class="col-sm-10">
+						<input type="text" class="form-control" th:field="*{staff.staffName}" readonly/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-2 control-label">Leave Type:</label>
+					<div class="col-sm-10">
+						<input type="text" class="form-control" th:field="*{leaveType.leaveTypeName}" readonly/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-2 control-label">From Date:</label>
+					<div class="col-sm-10">
+						<input type="text" class="form-control" th:field="*{fromDate}" readonly/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-2 control-label">To Date:</label>
+					<div class="col-sm-10">
+						<input type="text" class="form-control" th:field="*{toDate}" readonly/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-2 control-label">No of Days:</label>
+					<div class="col-sm-10">
+						<input type="text" class="form-control" th:field="*{noOfDays}" readonly/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-2 control-label">Description:</label>
+					<div class="col-sm-10">
+						<input type="text" class="form-control" th:field="*{description}" readonly/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-2 control-label">Additional Reason:</label>
+					<div class="col-sm-10">
+						<input type="text" class="form-control" th:field="*{additionalReason}" readonly/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-2 control-label">Work Dissemination:</label>
+					<div class="col-sm-10">
+						<input type="text" class="form-control" th:field="*{workDissemination}" readonly/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-2 control-label">Contact Details:</label>
+					<div class="col-sm-10">
+						<input type="text" class="form-control" th:field="*{contactDetails}" readonly/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-2 control-label">Comment:</label>
+					<div class="col-sm-10">
+						<input type="text" class="form-control" th:field="*{managerComment}" row=3 />
+					</div>
+				</div>
+				<div class="form-group">
+
+					<div th:if="${ldetails.status!=2 && ldetails.status!=3}" class="col-sm-2">
+						<button type="submit" class="btn btn-danger">Reject</button>
+					</div>
+					<div th:if="${ldetails.status!=2 && ldetails.status!=3}" class="col-sm-2">
+						<a th:href="${'/leavehistory/'+ldetails.leaveId+'/APPROVED'}" class="btn btn-success">Approve</a>
+					</div>
+					<div class="col-sm-2">
+						<a th:href="${'/leavelist'}" class="btn btn-primary">Update</a>
+					</div>
+					<div class="col-sm-2">
+						<a th:href="${'/leavehistory/'+ldetails.leaveId+'/CANCELLED'}" type="button" class="btn btn-warning">Cancel</a>
+					</div>
+					<div class="col-sm-2">
+						<a th:href="${'/leavehistory/'+ldetails.leaveId+'/DELETED'}" class="btn btn-danger">Delete</a>
+					</div>
+				</div>
+
+			</form>
+      <div name="relatedleaves" th:if="${not #lists.isEmpty(leaveList)}">
+        <h2>Leaves taken by this employee within the same date</h2>
+        <table class="table table-striped">
+            <tr>
+                <th>Leave ID</th>
+                <th>Leave Type</th>
+                <th>From Date</th>
+                <th>To Date</th>
+                <th>No of Days</th>
+                <th>Status</th>
+                
+            </tr>
+            <tr th:each="leave : ${leaveList}">
+                <td th:text="${leave.id}">Leave ID</td>
+                <td th:text="${leave.leaveType.leaveTypeName}">Leave Type</td>
+                <td th:text="${leave.fromDate}">From Date</td>
+                <td th:text="${leave.toDate}">To Date</td>
+                <td th:text="${leave.noOfDays}">No of Days</td>
+                <td th:text="${leave.status}">Status</td>
+                
+            </tr>
+        </table>
+    </div>
+<div name="relatedleaves" th:if="${#lists.isEmpty(leaveList)}">
+<h2>There is no leave taken by this employee within the same date</h2>
+</div>
+	</div>
+	
+</body>
+</html>
