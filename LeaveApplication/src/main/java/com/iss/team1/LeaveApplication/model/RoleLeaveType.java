@@ -22,17 +22,20 @@ public class RoleLeaveType {
 	@JoinColumn(name="leaveTypeId")
 	@NotEmpty
 	private LeaveType leaveType;
+	private int noOfDays;
 	
+
 	public RoleLeaveType() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 
-	public RoleLeaveType(Integer id, Role role, LeaveType leaveType) {
+	public RoleLeaveType(Integer id, Role role, LeaveType leaveType, int noOfDays) {
 		super();
 		this.id = id;
 		this.role = role;
 		this.leaveType = leaveType;
+		this.noOfDays = noOfDays;
 	}
 
 	public Role getRole() {
@@ -55,11 +58,18 @@ public class RoleLeaveType {
 		return id;
 	}
 
+	public int getNoOfDays() {
+		return noOfDays;
+	}
+
+	public void setNoOfDays(int noOfDays) {
+		this.noOfDays = noOfDays;
+	}
+
 	@Override
 	public String toString() {
-		return "RoleLeaveType [id=" + id + ", role=" + role.getRoleName() + ", leaveType=" + leaveType + "]";
-	}
-	
-	
+		return "RoleLeaveType [id=" + id + ", role=" + role + ", leaveType=" + leaveType + ", noOfDays=" + noOfDays
+				+ "]";
+	}	
 	
 }
