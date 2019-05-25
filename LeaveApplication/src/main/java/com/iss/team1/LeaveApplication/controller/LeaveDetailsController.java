@@ -9,6 +9,7 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import org.hibernate.type.IntegerType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.data.convert.JodaTimeConverters.LocalDateTimeToDateConverter;
@@ -197,6 +198,20 @@ public class LeaveDetailsController {
 		return "leave";
 	}
 	
+	@GetMapping(path = "/leaveupdate/{id}")
+	public String leaveUpdateMethod(Model model ,@PathVariable(value = "id") String id) {
+		Integer lID=Integer.valueOf(id);
+		LeaveHistory l=ldRepo.findById(lID).get();
+		if (l!=null) {
+			List<LeaveType> leaveTypes=ltRepo.findAll();
+			
+			model.addAttribute("leave", l);
+			model.addAttribute("leavetypes", leaveTypes);
+			return "leave";
+		}
+		return "redirect:/"+leaveList;
+	}
+	
 	@PostMapping(path = "/leavesubmit")
 	public String leaveApplyMethod(@Valid LeaveHistory l, BindingResult bindingResult, Model model) {
 		if (bindingResult.hasErrors()) {
@@ -221,14 +236,22 @@ public class LeaveDetailsController {
 			}
 			//check if there is other leaves within this date range
 			List<LeaveHistory> existingLeaves=ldRepo.findExistingByStaffAndDateRange(l.getStaff().getId(),l.getFromDate(),l.getToDate());
-			System.out.println(existingLeaves.size());
+						
 			if (existingLeaves.size()>0) {
-				System.out.println("other leave exist");
-				List<LeaveType> leaveTypes=ltRepo.findAll();	
-				model.addAttribute("leave", l);
-				model.addAttribute("leavetypes", leaveTypes);
-				model.addAttribute("errMsg", "There is another leave during this date range.");
-				return "leave";
+				Long isexisting=0L;
+				if (l.getId()!=null && l.getId()>0) {// check if the existing records includes current on (for update leave)
+					isexisting= existingLeaves.stream().filter(x->x.getId()== l.getId()).count();
+					//System.out.println("existing after minus :"+ (existingLeaves.size()-isexisting));
+				}
+				if (existingLeaves.size()-isexisting >0) {
+					System.out.println("other leave exist");
+					List<LeaveType> leaveTypes=ltRepo.findAll();	
+					model.addAttribute("leave", l);
+					model.addAttribute("leavetypes", leaveTypes);
+					model.addAttribute("errMsg", "There is another leave during this date range.");
+					return "leave";
+				}
+				
 			}
 			
 			Integer noOfDays=(l.getToDate().getDayOfYear()-l.getFromDate().getDayOfYear())+1;

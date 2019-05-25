@@ -43,6 +43,7 @@ public class LeaveHistory {
 	@Column(name = "ToDate")
 	private LocalDate toDate;
 	
+	@NotEmpty
 	@Length(max=200)
 	@Column(name = "Description")
 	private String description;

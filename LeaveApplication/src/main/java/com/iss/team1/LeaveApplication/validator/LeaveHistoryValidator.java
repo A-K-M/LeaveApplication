@@ -19,7 +19,7 @@ public class LeaveHistoryValidator implements Validator{
 		// TODO Auto-generated method stub
 		LeaveHistory l=(LeaveHistory) target;
 		if (l.getDescription().isEmpty()) {
-			errors.rejectValue("description", "Description", "Description cannot be empty.");
+			errors.rejectValue("description", "description", "Description cannot be empty.");
 		}
 //		if (l.getStaff().equals(null)) {
 //			errors.rejectValue("staff", "error.staff", "Staff cannot be empty.");
