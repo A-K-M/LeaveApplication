@@ -46,7 +46,12 @@ public class StaffController {
 	
 	@ModelAttribute("roles")
     public Collection<Role> getRoles() {
-        return this.roleRepo.findAll();
+        return roleRepo.findAll();
+    }
+	
+	@ModelAttribute("managers")
+    public Collection<Staff> getManagers() {
+        return staffRepo.findManagers();
     }
 
 //    @ModelAttribute("staff")
