@@ -17,7 +17,7 @@ public class PublicHoliday {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	private String name;
-	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	@DateTimeFormat(pattern = "dd-MM-yyyy")
 	private LocalDate date;
 	
 	public PublicHoliday() {

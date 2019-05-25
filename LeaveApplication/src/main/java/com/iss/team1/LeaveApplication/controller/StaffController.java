@@ -1,5 +1,7 @@
 package com.iss.team1.LeaveApplication.controller;
 
+import java.util.Collection;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +12,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
@@ -40,6 +43,16 @@ public class StaffController {
 //	public void setRoleRepo(RoleRepo roleRepo) {
 //		this.roleRepo = roleRepo;
 //	}
+	
+	@ModelAttribute("roles")
+    public Collection<Role> getRoles() {
+        return this.roleRepo.findAll();
+    }
+
+//    @ModelAttribute("staff")
+//    public Owner findOwner(@PathVariable("ownerId") int ownerId) {
+//        return this.owners.findById(ownerId);
+//    }
 
 	@InitBinder
 	protected void initBinder(WebDataBinder binder) {
@@ -49,12 +62,12 @@ public class StaffController {
 	@GetMapping(path = "/staff/add")
 	public String createStaff(Model model) {
 		model.addAttribute("staff", new Staff());
-		model.addAttribute("roles", roleRepo.findAll());
+//		model.addAttribute("roles", roleRepo.findAll());
 		return "editStaff";
 	}
 
 	@PostMapping(path = "staff")
-	public String saveStaff(@Valid Staff staff, BindingResult bindingResult, Role role, ModelMap model) {
+	public String saveStaff(@Valid Staff staff, BindingResult bindingResult, ModelMap model) {
 		if (bindingResult.hasErrors()) {
 			model.addAttribute("staff", staff);
             return "editStaff";
@@ -62,6 +75,8 @@ public class StaffController {
 		//System.out.println(staff.getRole());
 	
 //		System.out.println("Manager:" + staff.getManager().);
+//		role = roleRepo.findByRoleName(role.getRoleName());
+//		staff.setRole(role);
 		staffRepo.save(staff);
 		return "redirect:/staff";
 	}
@@ -78,12 +93,12 @@ public class StaffController {
 		//System.out.println(s);
 		//System.out.println("Manager:" + s.getManager().getId());
 		model.addAttribute("staff", s);
-		model.addAttribute("roles", roleRepo.findAll());
+//		model.addAttribute("roles", roleRepo.findAll());
 		return "editStaff";
 	}
 
 	@GetMapping(path = "/staff/delete/{id}")
-	public String deleteProduct(@PathVariable(name = "id") int id) {
+	public String deleteStaff(@PathVariable(name = "id") int id) {
 		staffRepo.delete(staffRepo.findById(id).orElse(null));
 		return "redirect:/staff";
 	}

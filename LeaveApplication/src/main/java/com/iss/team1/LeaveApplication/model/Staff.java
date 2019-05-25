@@ -25,7 +25,7 @@ public class Staff {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
-
+	@NotEmpty(message = "Name may not be empty")
 	private String staffName;
 	@Length(max=60)
 
@@ -36,10 +36,10 @@ public class Staff {
 	private LocalDate joinDate;
 
 	private String emailId;
-	@ManyToOne (cascade = CascadeType.ALL)
+	@ManyToOne
 	@JoinColumn(name = "roleId")
 	private Role role;	
-	@ManyToOne (cascade = CascadeType.ALL)
+	@ManyToOne
 	@JoinColumn(name="reportsTo")
 	private Staff manager;
 	@OneToMany(mappedBy="manager")

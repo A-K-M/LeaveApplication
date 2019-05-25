@@ -5,87 +5,56 @@
 </head>
 <body>
 	<div class="container">
-		<span><a th:href="@{/staff}">Staff List</a></span>
+		<span><a th:href="@{/staff}">Staff List</a></span> 
 		<span><a th:href="@{/staff/add}">Add New Staff</a></span>
 		<h2>Edit Staff Details</h2>
 		<div>
-			<form class="form-horizontal" th:action="@{/staff}" method="post">
+			<form th:object="${staff}" class="form-horizontal" th:action="@{/staff}" method="post">
 				<div class="form-group">
 					<div class="col-sm-10">
-						<input type="hidden" class="form-control" th:field="*{staff.id}" />
+						<input type="hidden" class="form-control" th:field="*{id}" />
 					</div>
 				</div>
 				<div class="form-group">
 					<label class="col-sm-2 control-label">Name:</label>
 					<div class="col-sm-10">
-						<input type="text" class="form-control"
-							th:field="*{staff.staffName}" />
+						<input type="text" class="form-control"	th:field="*{staffName}" />
 					</div>
 				</div>
 				<div class="form-group">
 					<label class="col-sm-2 control-label">Username:</label>
 					<div class="col-sm-10">
-						<input type="text" class="form-control"
-							th:field="*{staff.userName}" />
-						<p th:if="${#fields.hasErrors('staff.userName')}"
-							th:errors="*{userName}"></p>
+						<input type="text" class="form-control"	th:field="*{userName}" />
+						<span style="color:red" th:if="${#fields.hasErrors('userName')}" th:errors="*{userName}">
 					</div>
 				</div>
 				<div class="form-group">
 					<label class="col-sm-2 control-label">Password:</label>
 					<div class="col-sm-10">
-						<input type="text" class="form-control"
-							th:field="*{staff.password}" />
-					</div>
-				</div>
-				<div class="form-group">
-					<label class="col-sm-2 control-label">Role:</label>
-					<div class="col-sm-10">
-						<input type="text" class="form-control"
-							th:field="*{staff.role.roleName}" /> <input type="hidden"
-							class="form-control" th:field="*{staff.role.id}" />
-					</div>
-				</div>
-				<!-- <div class="form-group">
-					<label class="col-sm-2 control-label">Manager:</label>
-					<div class="col-sm-10">
-						<input type="text" class="form-control" th:field="*{staff.manager.id}" />
-					</div>
-				</div> -->
-
-				<div class="form-group">
-					<label class="col-sm-2 control-label">Test Role:</label>
-					<div class="col-sm-10">
-						<tr th:each="role : ${roles}">
-							<td th:text="${role.roleName}">Id</td>
-						</tr>							
+						<input type="text" class="form-control"	th:field="*{password}" />
 					</div>
 				</div>
 
 				<div class="form-group">
 					<label class="col-sm-2 control-label">Role:</label>
 					<div>
-						<select class="form-control" th:field="${roles}"
-							id="id">
-							<option value="0">Select Role</option>
-							<option th:each="role : ${roles}"
-								th:value="${role.id}" th:text="${role.roleName}"></option>
+						<select class="form-control" th:field="*{role}" id="id">
+							<option th:each="role : ${roles}" th:value="${role.id}"
+								th:text="${role.roleName}"></option>
 						</select>
-					</div>		
+					</div>
 				</div>
 
 				<div class="form-group">
 					<label class="col-sm-2 control-label">Date of joining:</label>
 					<div class="col-sm-10">
-						<input type="text" class="form-control"
-							th:field="*{staff.joinDate}" />
+						<input type="text" class="form-control"	th:field="*{joinDate}" />
 					</div>
 				</div>
 				<div class="form-group">
 					<label class="col-sm-2 control-label">Email:</label>
 					<div class="col-sm-10">
-						<input type="email" class="form-control"
-							th:field="*{staff.emailId}" />
+						<input type="email" class="form-control" th:field="*{emailId}" />
 					</div>
 				</div>
 				<div class="form-group">
