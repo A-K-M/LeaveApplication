@@ -25,6 +25,7 @@ public class StaffController {
 	private StaffRepository staffRepo;
 	private RoleRepository roleRepo;
 	
+	@Autowired
 	public StaffController(StaffRepository staffRepo, RoleRepository roleRepo) {
 		this.staffRepo = staffRepo;
 		this.roleRepo = roleRepo;

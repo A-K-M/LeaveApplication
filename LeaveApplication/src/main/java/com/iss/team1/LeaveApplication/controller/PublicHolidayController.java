@@ -20,53 +20,50 @@ import com.iss.team1.LeaveApplication.validator.PublicHolidayValidator;
 @Controller
 
 public class PublicHolidayController {
-	
+
 	private PublicHolidayRepository publicHolidayRepo;
-    @Autowired
+
+	@Autowired
 	public void setPublicHolidayRepo(PublicHolidayRepository publicHolidayRepo) {
 		this.publicHolidayRepo = publicHolidayRepo;
 	}
-	
-    @InitBinder
+
+	@InitBinder
 	protected void initBinder(WebDataBinder binder) {
 		binder.addValidators(new PublicHolidayValidator());
 	}
-    
-    @RequestMapping(path="/createpublicholiday", method = RequestMethod.GET)
-    public String createHoliday (Model model)
-        {
- 	    model.addAttribute("PublicHoliday", new PublicHoliday());
-          return "createHolidayForm";
-        }
-    @RequestMapping(path="/createpublicholiday", method = RequestMethod.POST)
-    public String createholiday(@ModelAttribute("PublicHoliday") @Valid PublicHoliday PublicHoliday, BindingResult bindingResult, Model model)
-    
-    //public String createholiday(PublicHoliday PublicHoliday,Model model) 
-    		  { 
-    	{
-    		   System.out.println("entered");
-    		   if(bindingResult.hasErrors()) {
-    		   		System.out.println("HELLO THERE2");
-    				model.addAttribute("${PublicHoliday}",PublicHoliday);
-    			   return "createHolidayForm";
-    		   }
-    			  publicHolidayRepo.save(PublicHoliday);
-    		      return "redirect:/listpublicholiday";}
-    		  }
-	
-    @RequestMapping(path="/listpublicholiday", method = RequestMethod.GET)
-    public String saveStaff (Model model)
-        {
- 	   	  model.addAttribute("PublicHoliday",publicHolidayRepo.findAll() );
- 	   	 
-          return "publicHolidayList";
-        }
-    
-	  @RequestMapping(path="/DeleteHoliday/{Id}",method=RequestMethod.GET)
-		public String deleteHoliday(@PathVariable(value="Id") Integer Id,Model model)
+
+	@RequestMapping(path = "/createpublicholiday", method = RequestMethod.GET)
+	public String createHoliday(Model model) {
+		model.addAttribute("PublicHoliday", new PublicHoliday());
+		return "createHolidayForm";
+	}
+
+	@RequestMapping(path = "/createpublicholiday", method = RequestMethod.POST)
+	public String createholiday(@ModelAttribute("PublicHoliday") @Valid PublicHoliday PublicHoliday,
+			BindingResult bindingResult, Model model) {
 		{
-			model.addAttribute("PublicHoliday", publicHolidayRepo.findById(Id).orElse(null));
-			publicHolidayRepo.deleteById(Id);
+			System.out.println("entered");
+			if (bindingResult.hasErrors()) {
+				System.out.println("HELLO THERE2");
+				model.addAttribute("${PublicHoliday}", PublicHoliday);
+				return "createHolidayForm";
+			}
+			publicHolidayRepo.save(PublicHoliday);
 			return "redirect:/listpublicholiday";
 		}
+	}
+
+	@RequestMapping(path = "/listpublicholiday", method = RequestMethod.GET)
+	public String saveStaff(Model model) {
+		model.addAttribute("PublicHoliday", publicHolidayRepo.findAll());
+		return "publicHolidayList";
+	}
+
+	@RequestMapping(path = "/DeleteHoliday/{Id}", method = RequestMethod.GET)
+	public String deleteHoliday(@PathVariable(value = "Id") Integer Id, Model model) {
+		model.addAttribute("PublicHoliday", publicHolidayRepo.findById(Id).orElse(null));
+		publicHolidayRepo.deleteById(Id);
+		return "redirect:/listpublicholiday";
+	}
 }

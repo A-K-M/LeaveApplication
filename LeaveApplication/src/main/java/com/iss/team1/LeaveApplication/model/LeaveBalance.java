@@ -64,6 +64,10 @@ public class LeaveBalance {
 		return id;
 	}
 
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
 	@Override
 	public String toString() {
 		return "LeaveBalance [id=" + id + ", staff=" + staff.getStaffName() + ", leaveType=" + leaveType.getLeaveTypeName() + ", balanceLeave="

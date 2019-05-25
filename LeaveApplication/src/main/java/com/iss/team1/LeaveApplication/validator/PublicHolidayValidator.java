@@ -18,10 +18,10 @@ public class PublicHolidayValidator implements Validator{
 		PublicHoliday P = (PublicHoliday) target;
 		if (P.getName().isEmpty()) {
 			errors.rejectValue("name", "name", "Holiday Name cannot be empty.");
+		}
 		if(P.getDate()==null) {
 			errors.rejectValue("date", "date" , "date cannot be empty");
-	}
+		}
 
-}
 	}
 }
