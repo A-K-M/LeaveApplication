@@ -1,6 +1,7 @@
 package com.iss.team1.LeaveApplication.controller;
 
 import java.text.SimpleDateFormat;
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
@@ -10,6 +11,7 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
+import org.springframework.data.convert.JodaTimeConverters.LocalDateTimeToDateConverter;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -28,10 +30,11 @@ import com.iss.team1.LeaveApplication.model.Staff;
 import com.iss.team1.LeaveApplication.repo.LeaveBalanceRepository;
 import com.iss.team1.LeaveApplication.repo.LeaveDetailsRepository;
 import com.iss.team1.LeaveApplication.repo.LeaveTypeRepository;
+import com.iss.team1.LeaveApplication.repo.PublicHolidayRepository;
 import com.iss.team1.LeaveApplication.repo.RoleRepository;
 import com.iss.team1.LeaveApplication.repo.StaffRepository;
 import com.iss.team1.LeaveApplication.validator.LeaveHistoryValidator;
-import com.iss.team1.LeaveApplication.validator.RoleValidator;
+
 
 
 @Controller
@@ -45,6 +48,7 @@ public class LeaveDetailsController {
 	private StaffRepository sRepo;
 	private RoleRepository rRepo;
 	private LeaveBalanceRepository lbRepo;
+	private PublicHolidayRepository phRepo;
 	
 	@InitBinder
 	protected void initBinder(WebDataBinder binder) {
@@ -72,7 +76,10 @@ public class LeaveDetailsController {
 	public void setlbRepo(LeaveBalanceRepository lbRepo) {
 		this.lbRepo=lbRepo;
 	}
-	
+	@Autowired
+	public void setphRepo(PublicHolidayRepository phRepo) {
+		this.phRepo=phRepo;
+	}
 //	@RequestMapping(path="/leavelist")
 //	public String listMethod(Model model) {
 //		LeaveType lt=new LeaveType(1, "Annual", null, null, null);
@@ -202,11 +209,50 @@ public class LeaveDetailsController {
 			return "leave";
 		}else {
 			System.out.println("no error");
-			l.setNoOfDays(l.getToDate().compareTo(l.getFromDate()));
-
-			ldRepo.save(l);
-			model.addAttribute("ldetails", l);
-			return "redirect:/"+leaveDetails+"/"+l.getId();
+			
+			//check if there is other leaves within this date range
+			List<LeaveHistory> existingLeaves=ldRepo.findExistingByStaffAndDateRange(l.getStaff().getId(),l.getFromDate(),l.getToDate());
+			System.out.println(existingLeaves.size());
+			if (existingLeaves.size()>0) {
+				System.out.println("other leave exist");
+				List<LeaveType> leaveTypes=ltRepo.findAll();	
+				model.addAttribute("leave", l);
+				model.addAttribute("leavetypes", leaveTypes);
+				model.addAttribute("errMsg", "There is another leave during this date range.");
+				return "leave";
+			}
+			
+			Integer noOfDays=(l.getToDate().getDayOfYear()-l.getFromDate().getDayOfYear())+1;
+			l.setNoOfDays(noOfDays);
+			//System.out.println("original days="+noOfDays);
+			
+			if (l.getLeaveType().getId()==1) {
+				Integer totalweekends=0;
+				//calculate no of leave days for annual
+				if (l.getNoOfDays()<=14) {//exclude weenkends
+					for (int i = 0; i < l.getNoOfDays(); i++) {
+						//check if weekends
+						
+						System.out.println(l.getFromDate().plusDays(i));
+						//System.out.println("public holidays ="+phRepo.findPublicHolidaysByDate(l.getFromDate().plusDays(i)).size());
+						if(l.getFromDate().plusDays(i).getDayOfWeek()== DayOfWeek.SATURDAY
+						|| l.getFromDate().plusDays(i).getDayOfWeek()== DayOfWeek.SUNDAY
+						//|| phRepo.findPublicHolidaysByDate(l.getFromDate().plusDays(i)).size()>0 // check public holiday
+						) {
+							totalweekends+=1;
+							System.out.println("reduce day="+totalweekends);
+						}
+					}
+				}
+				l.setNoOfDays(l.getNoOfDays()-totalweekends);
+			}
+			System.out.println("no of day="+l.getNoOfDays());
+			
+			
+//			ldRepo.save(l);
+//			model.addAttribute("ldetails", l);
+//			return "redirect:/"+leaveDetails+"/"+l.getId();
+			return "leaveapply";
 		}
 	}
 }
