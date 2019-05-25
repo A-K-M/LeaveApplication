@@ -4,8 +4,10 @@ import java.text.SimpleDateFormat;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
@@ -111,7 +113,7 @@ public class LeaveDetailsController {
 		
 		LeaveHistory l=ldRepo.findById(Integer.valueOf(id)).orElseGet(null);
 		model.addAttribute("ldetails", l);
-		//model.addAttribute("leaveList", ldRepo.findLeaveHistoriesByStaff(l.getStaff().getId()));
+		model.addAttribute("leaveList", ldRepo.findAllByStaffAndDateRange(l.getStaff().getId(),l.getFromDate(),l.getToDate()).stream().sorted(Comparator.comparing(LeaveHistory::getFromDate).reversed()).collect(Collectors.toList()));
 		System.out.println("found");
 		
 		return "leavedetails";
@@ -235,7 +237,7 @@ public class LeaveDetailsController {
 				return "leave";
 			}
 			//check if there is other leaves within this date range
-			List<LeaveHistory> existingLeaves=ldRepo.findExistingByStaffAndDateRange(l.getStaff().getId(),l.getFromDate(),l.getToDate());
+			List<LeaveHistory> existingLeaves=ldRepo.findExistingByStaffAndDateRangeAndStatus(l.getStaff().getId(),l.getFromDate(),l.getToDate());
 						
 			if (existingLeaves.size()>0) {
 				Long isexisting=0L;
