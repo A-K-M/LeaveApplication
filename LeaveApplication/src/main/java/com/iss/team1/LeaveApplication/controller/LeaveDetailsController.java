@@ -209,33 +209,46 @@ public class LeaveDetailsController {
 			return "leave";
 		}else {
 			System.out.println("no error");
-			System.out.println(l.getToDate().getDayOfYear());
-			System.out.println(l.getFromDate().getDayOfYear());
+			
+			//check if there is other leaves within this date range
+			List<LeaveHistory> existingLeaves=ldRepo.findExistingByStaffAndDateRange(l.getStaff().getId(),l.getFromDate(),l.getToDate());
+			System.out.println(existingLeaves.size());
+			if (existingLeaves.size()>0) {
+				System.out.println("other leave exist");
+				List<LeaveType> leaveTypes=ltRepo.findAll();	
+				model.addAttribute("leave", l);
+				model.addAttribute("leavetypes", leaveTypes);
+				model.addAttribute("errMsg", "There is another leave during this date range.");
+				return "leave";
+			}
 			
 			Integer noOfDays=(l.getToDate().getDayOfYear()-l.getFromDate().getDayOfYear())+1;
 			l.setNoOfDays(noOfDays);
+			//System.out.println("original days="+noOfDays);
 			
-			System.out.println("original days="+noOfDays);
-			Integer totalweekends=0;
-			//calculate no of leave days
-			if (l.getNoOfDays()<=14) {//exclude weenkends
-				for (int i = 0; i < l.getNoOfDays(); i++) {
-					//check if weekends
-					
-					System.out.println(l.getFromDate().plusDays(i));
-					//System.out.println("public holidays ="+phRepo.findPublicHolidaysByDate(l.getFromDate().plusDays(i)).size());
-					if(l.getFromDate().plusDays(i).getDayOfWeek()== DayOfWeek.SATURDAY
-					|| l.getFromDate().plusDays(i).getDayOfWeek()== DayOfWeek.SUNDAY
-					//|| phRepo.findPublicHolidaysByDate(l.getFromDate().plusDays(i)).size()>0 // check public holiday
-					) {
-						totalweekends+=1;
-						System.out.println("reduce day="+totalweekends);
+			if (l.getLeaveType().getId()==1) {
+				Integer totalweekends=0;
+				//calculate no of leave days for annual
+				if (l.getNoOfDays()<=14) {//exclude weenkends
+					for (int i = 0; i < l.getNoOfDays(); i++) {
+						//check if weekends
+						
+						System.out.println(l.getFromDate().plusDays(i));
+						//System.out.println("public holidays ="+phRepo.findPublicHolidaysByDate(l.getFromDate().plusDays(i)).size());
+						if(l.getFromDate().plusDays(i).getDayOfWeek()== DayOfWeek.SATURDAY
+						|| l.getFromDate().plusDays(i).getDayOfWeek()== DayOfWeek.SUNDAY
+						//|| phRepo.findPublicHolidaysByDate(l.getFromDate().plusDays(i)).size()>0 // check public holiday
+						) {
+							totalweekends+=1;
+							System.out.println("reduce day="+totalweekends);
+						}
 					}
 				}
+				l.setNoOfDays(l.getNoOfDays()-totalweekends);
 			}
-			
-			l.setNoOfDays(l.getNoOfDays()-totalweekends);
 			System.out.println("no of day="+l.getNoOfDays());
+			
+			
 //			ldRepo.save(l);
 //			model.addAttribute("ldetails", l);
 //			return "redirect:/"+leaveDetails+"/"+l.getId();

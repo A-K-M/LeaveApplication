@@ -1,5 +1,6 @@
 package com.iss.team1.LeaveApplication.repo;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -13,7 +14,8 @@ import com.iss.team1.LeaveApplication.model.LeaveHistory;
 public interface LeaveDetailsRepository extends JpaRepository<LeaveHistory, Integer> {
 
 	@Query("SELECT l FROM LeaveHistory l where l.staff.id = :staffid")
-	List<LeaveHistory> findLeaveHistoriesByStaff(@Param("staffid") Integer staffid);
+	List<LeaveHistory> findByStaff(@Param("staffid") Integer staffid);
 
-
+	@Query("SELECT l FROM LeaveHistory l where l.staff.id = :staffid and l.status in (0,1) and ((l.fromDate >=:fromDate and l.fromDate <= :toDate) or (l.toDate >= :fromDate and l.toDate<= :toDate) )")
+	List<LeaveHistory> findExistingByStaffAndDateRange(@Param("staffid") Integer staffid,@Param("fromDate") LocalDate fromDate,@Param("toDate") LocalDate toDate);
 }
