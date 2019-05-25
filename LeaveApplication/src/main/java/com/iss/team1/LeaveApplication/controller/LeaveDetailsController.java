@@ -50,6 +50,7 @@ public class LeaveDetailsController {
 	private LeaveBalanceRepository lbRepo;
 	private PublicHolidayRepository phRepo;
 	
+	
 	@InitBinder
 	protected void initBinder(WebDataBinder binder) {
 		binder.addValidators(new LeaveHistoryValidator());
@@ -209,7 +210,15 @@ public class LeaveDetailsController {
 			return "leave";
 		}else {
 			System.out.println("no error");
-			
+			LeaveBalance lb=lbRepo.findLeaveBalanceByStaffAndLeaveType(l.getStaff().getId(), l.getLeaveType().getId());
+			if (lb == null || lb.getBalanceLeave()<=0) {
+				System.out.println("not enough leave balance");
+				List<LeaveType> leaveTypes=ltRepo.findAll();	
+				model.addAttribute("leave", l);
+				model.addAttribute("leavetypes", leaveTypes);
+				model.addAttribute("errMsg", "There is no enough leave balance.");
+				return "leave";
+			}
 			//check if there is other leaves within this date range
 			List<LeaveHistory> existingLeaves=ldRepo.findExistingByStaffAndDateRange(l.getStaff().getId(),l.getFromDate(),l.getToDate());
 			System.out.println(existingLeaves.size());
@@ -225,34 +234,53 @@ public class LeaveDetailsController {
 			Integer noOfDays=(l.getToDate().getDayOfYear()-l.getFromDate().getDayOfYear())+1;
 			l.setNoOfDays(noOfDays);
 			//System.out.println("original days="+noOfDays);
-			
+			Integer totalweekends=0;
 			if (l.getLeaveType().getId()==1) {
-				Integer totalweekends=0;
+				
 				//calculate no of leave days for annual
 				if (l.getNoOfDays()<=14) {//exclude weenkends
-					for (int i = 0; i < l.getNoOfDays(); i++) {
-						//check if weekends
-						
-						System.out.println(l.getFromDate().plusDays(i));
-						//System.out.println("public holidays ="+phRepo.findPublicHolidaysByDate(l.getFromDate().plusDays(i)).size());
-						if(l.getFromDate().plusDays(i).getDayOfWeek()== DayOfWeek.SATURDAY
-						|| l.getFromDate().plusDays(i).getDayOfWeek()== DayOfWeek.SUNDAY
-						//|| phRepo.findPublicHolidaysByDate(l.getFromDate().plusDays(i)).size()>0 // check public holiday
-						) {
-							totalweekends+=1;
-							System.out.println("reduce day="+totalweekends);
-						}
-					}
+					totalweekends=this.getNoOfHolidays(l.getFromDate(), l.getNoOfDays());
 				}
-				l.setNoOfDays(l.getNoOfDays()-totalweekends);
+				
 			}
+			else {
+				totalweekends=this.getNoOfHolidays(l.getFromDate(), l.getNoOfDays());
+			}
+			l.setNoOfDays(l.getNoOfDays()-totalweekends);
 			System.out.println("no of day="+l.getNoOfDays());
 			
+			//check leave balance
 			
-//			ldRepo.save(l);
-//			model.addAttribute("ldetails", l);
-//			return "redirect:/"+leaveDetails+"/"+l.getId();
-			return "leaveapply";
+			if (lb == null || lb.getBalanceLeave()<l.getNoOfDays()) {
+				System.out.println("not enough leave balance");
+				List<LeaveType> leaveTypes=ltRepo.findAll();	
+				model.addAttribute("leave", l);
+				model.addAttribute("leavetypes", leaveTypes);
+				model.addAttribute("errMsg", "There is no enough leave balance.");
+				return "leave";
+			}
+
+			ldRepo.save(l);
+			model.addAttribute("ldetails", l);
+			return "redirect:/"+leaveDetails+"/"+l.getId();
+			
 		}
+	}
+	
+	public Integer getNoOfHolidays(LocalDate startDate, Integer noOfDays) {
+		Integer totalHolidays=0;
+		for (int i = 0; i < noOfDays; i++) {
+			//check if weekends
+			
+			//System.out.println("public holidays ="+phRepo.findPublicHolidaysByDate(l.getFromDate().plusDays(i)).size());
+			if(startDate.plusDays(i).getDayOfWeek()== DayOfWeek.SATURDAY
+			|| startDate.plusDays(i).getDayOfWeek()== DayOfWeek.SUNDAY
+			//|| phRepo.findPublicHolidaysByDate(l.getFromDate().plusDays(i)).size()>0 // check public holiday
+			) {
+				totalHolidays+=1;
+				
+			}
+		}
+		return totalHolidays;
 	}
 }
