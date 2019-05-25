@@ -16,11 +16,9 @@ public class RoleLeaveType {
 	private Integer id;
 	@ManyToOne
 	@JoinColumn(name="roleId")
-	@NotEmpty
 	private Role role;
 	@ManyToOne
 	@JoinColumn(name="leaveTypeId")
-	@NotEmpty
 	private LeaveType leaveType;
 	private int noOfDays;
 	
@@ -56,6 +54,10 @@ public class RoleLeaveType {
 
 	public Integer getId() {
 		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
 	}
 
 	public int getNoOfDays() {

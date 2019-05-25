@@ -2,31 +2,26 @@
 <html xmlns:th="http://thymeleaf.org">
 <head>
 <meta charset="ISO-8859-1">
-<title>Insert title here</title>
+<title>Public Holidays</title>
 </head>
 <body>
-<h2>PublicHolidayList</h2>
-<table>
-<tr>
-    
-    <th>holidayName</th>
-    <th>holidayStartDate</th>
-    
- </tr>
- <tr th:each="totholz : ${PublicHoliday}">
-     
-     <td th:text = "${totholz.name}"> holidayName </td>
-     <td th:text = "${totholz.date}"> holidayStartDate </td>
-     <td ><a th:href= "${'/DeleteHoliday/'+ totholz.Id}">Remove</a></td>
-     
-<!--      <td><a th:href="${'/updateHoliday/'+ totholz.Id}">Edit</a></td> -->
-     
-
-     
-    </tr>
-</table>
-<div>
-<p>
-<a th:href= "${'/createpublicholiday'}">Add new </a></p></div>
+	<h2>Public Holidays</h2>
+	<table>
+		<tr>
+			<th>HolidayName</th>
+			<th>Holiday Date</th>
+		</tr>
+		<tr th:each="holiday : ${PublicHoliday}">
+			<td th:text="${holiday.name}">holidayName</td>
+			<td th:text="${holiday.date}">holidayStartDate</td>
+			<td><a th:href="${'/DeleteHoliday/'+ holiday.Id}">Remove</a></td>
+			<!--      <td><a th:href="${'/updateHoliday/'+ totholz.Id}">Edit</a></td> -->
+		</tr>
+	</table>
+	<div>
+		<p>
+			<a th:href="${'/createpublicholiday'}">Add New Holiday</a>
+		</p>
+	</div>
 </body>
 </html>

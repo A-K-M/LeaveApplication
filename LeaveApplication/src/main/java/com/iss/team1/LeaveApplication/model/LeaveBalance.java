@@ -17,13 +17,10 @@ public class LeaveBalance {
 	private Integer id;
 	@ManyToOne
 	@JoinColumn(name="staffId")
-	@NotEmpty
 	private Staff staff;
 	@ManyToOne
 	@JoinColumn(name="leaveTypeId")
-	@NotEmpty
 	private LeaveType leaveType;
-	@NotEmpty
 	private int balanceLeave;
 	
 	public LeaveBalance() {

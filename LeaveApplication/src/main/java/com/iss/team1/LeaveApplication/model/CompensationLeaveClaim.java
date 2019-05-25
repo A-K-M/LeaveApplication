@@ -18,11 +18,8 @@ public class CompensationLeaveClaim {
 	private Integer id;
 	@ManyToOne
 	@JoinColumn(name="staffId")
-	@NotEmpty
 	private Staff staff;
-	@NotEmpty
 	private LocalDate date;
-	@NotEmpty
 	private double noOfHours;
 	private String reasons;
 	

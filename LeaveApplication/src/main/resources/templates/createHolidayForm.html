@@ -1,32 +1,25 @@
 <!DOCTYPE html>
-<html  xmlns:th="http://thymeleaf.org">
+<html xmlns:th="http://thymeleaf.org">
 <head>
 <meta charset="ISO-8859-1">
-<title>Insert title here</title>
+<title>Add New Holiday Form</title>
 </head>
 <body>
-<h2>welcome to holiday form</h2>
-<form th:object ="${PublicHoliday}" th:action="@{/createpublicholiday}" method="post">
-      <fieldset>
-      holidayName : <input type = "text"  th:field = "${PublicHoliday.name}" >
-        <p th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></p>
-      </fieldset>
-      
-      <fieldset>
-      holidayStartDate : <input type = "date"  th:field = "${PublicHoliday.date}" >
-      <p th:if="${#fields.hasErrors('date')}" th:errors="*{date}"></p>
-      </fieldset>
-      
-       
-      
-      
-      <fieldset>
-      <input type = "submit" name="save" value="submit" >
-      </fieldset>
-      
-    
-        
-</form>
-
+	<h2>Add New Holiday Form</h2>
+	<form th:object="${PublicHoliday}" th:action="@{/createpublicholiday}"
+		method="post">
+		<fieldset>
+			Holiday Name : <input type="text" th:field="${PublicHoliday.name}">
+			<p th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></p>
+		</fieldset>
+		<fieldset>
+			Date : <input type="date"
+				th:field="${PublicHoliday.date}">
+			<p th:if="${#fields.hasErrors('date')}" th:errors="*{date}"></p>
+		</fieldset>
+		<fieldset>
+			<input type="submit" name="save" value="Submit">
+		</fieldset>
+	</form>
 </body>
 </html>

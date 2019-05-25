@@ -58,7 +58,7 @@ public class LoginController {
 	   		if(login.getPassword().equals(getStaff.getPassword()))
 	   		{
 				 model.addAttribute("staff", new Staff());
-	   			 Role role = rolerepo.findByRoleName(login.getrole().getRoleName());
+	   			 Role role = rolerepo.findByRoleName(login.getRole().getRoleName());
 
 				  if(role.getRoleName().equals("staff")) { 
 

@@ -25,38 +25,31 @@ public class LeaveHistory {
 	
 	@ManyToOne
     @JoinColumn(name="staffId")
-	//@NotEmpty
 	private Staff staff;
 	
 	@ManyToOne
     @JoinColumn(name="LeaveTypeID")
-	//@NotEmpty
 	private LeaveType leaveType;
-	
-	//@NotEmpty
+
 	//@Temporal(TemporalType.DATE)
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	//@DateTimeFormat(pattern = "dd/MM/yyyy")
 	@Column(name = "FromDate")
 	private LocalDate fromDate;
 	
-	//@NotEmpty
 	//@Temporal(TemporalType.DATE)
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	//@DateTimeFormat(pattern = "dd/MM/yyyy")
 	@Column(name = "ToDate")
 	private LocalDate toDate;
 	
-	//@NotEmpty
 	@Length(max=200)
 	@Column(name = "Description")
 	private String description;
 	
-	//@NotEmpty
 	@Column(name = "Status")
 	private LeaveStatus status;
 	
-	//@NotEmpty
 	@Column(name = "NoOfDays")
 	private Integer noOfDays;
 	
@@ -105,7 +98,6 @@ public class LeaveHistory {
 		this.workDissemination = workDissemination;
 		this.contactDetails = contactDetails;
 	}
-
 	
 	public Integer getId() {
 		return id;

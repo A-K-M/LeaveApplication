@@ -15,7 +15,6 @@ public class Role {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
-	@NotEmpty
 	private String roleName;
 	@OneToMany(targetEntity = Staff.class, mappedBy = "role")
 	private Collection<Staff> staff;	
