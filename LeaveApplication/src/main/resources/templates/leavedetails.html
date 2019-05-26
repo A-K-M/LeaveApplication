@@ -12,7 +12,7 @@
 		<div th:if="${not #lists.isEmpty(errMsg)}">
 		<label th:text="${errMsg}" class="col-sm-2 control-label lbl-error"></label>
 		</div>
-<form class="form-horizontal" th:object="${ldetails}" th:action="@{/leavedetails}" method="post">
+<form class="form-horizontal" th:object="${leavedetails}" th:action="@{/leavedetails}" method="post">
 			
 				<div class="form-group">
 					<label class="col-sm-2 control-label">Leave ID:</label>
@@ -84,27 +84,28 @@
 					<label class="col-sm-2 control-label">Comment:</label>
 					<div class="col-sm-10">
 						<input type="text" class="form-control" th:field="*{managerComment}" row=3 />
+						<p th:if="${#fields.hasErrors('managerComment')}" th:errors="*{managerComment}"></p>
 					</div>
 				</div>
 				
 				<div class="form-group">
-<div th:if="${ldetails.status != ldetails.status.APPROVED AND ldetails.status != ldetails.status.REJECTED}" class="col-sm-2">
+<div th:if="${leavedetails.status != leavedetails.status.APPROVED AND leavedetails.status != leavedetails.status.REJECTED}" class="col-sm-2">
 
 </div>
-					<div th:if="${ldetails.status != ldetails.status.APPROVED AND ldetails.status != ldetails.status.REJECTED}" class="col-sm-2">
+					<div th:if="${leavedetails.status == leavedetails.status.PENDING}" class="col-sm-2">
 						<button type="submit" class="btn btn-danger">Reject</button>
 					</div>
-					<div th:if="${ldetails.status != ldetails.status.APPROVED AND ldetails.status != ldetails.status.REJECTED}" class="col-sm-2">
-						<a th:href="${'/leavehistory/'+ldetails.id+'/APPROVED'}" class="btn btn-success">Approve</a>
+					<div th:if="${leavedetails.status == leavedetails.status.PENDING}" class="col-sm-2">
+						<a th:href="${'/leavehistory/'+leavedetails.id+'/APPROVED'}" class="btn btn-success">Approve</a>
 					</div>
-					<div th:if="${ldetails.status == ldetails.status.PENDING}" class="col-sm-2">
-						<a th:href="${'/leaveupdate/'+ldetails.id}" class="btn btn-primary">Update</a>
+					<div th:if="${leavedetails.status == leavedetails.status.PENDING}" class="col-sm-2">
+						<a th:href="${'/leaveupdate/'+leavedetails.id}" class="btn btn-primary">Update</a>
 					</div>
-					<div th:if="${ldetails.status == ldetails.status.PENDING OR ldetails.status == ldetails.status.APPROVED}" class="col-sm-2">
-						<a th:href="${'/leavehistory/'+ldetails.id+'/CANCELLED'}" type="button" class="btn btn-warning">Cancel</a>
+					<div th:if="${leavedetails.status == leavedetails.status.PENDING OR leavedetails.status == leavedetails.status.APPROVED}" class="col-sm-2">
+						<a th:href="${'/leavehistory/'+leavedetails.id+'/CANCELLED'}" type="button" class="btn btn-warning">Cancel</a>
 					</div>
-					<div th:if="${ldetails.status == ldetails.status.PENDING}" class="col-sm-2">
-						<a th:href="${'/leavehistory/'+ldetails.id+'/DELETED'}" class="btn btn-danger">Delete</a>
+					<div th:if="${leavedetails.status == leavedetails.status.PENDING}" class="col-sm-2">
+						<a th:href="${'/leavehistory/'+leavedetails.id+'/DELETED'}" class="btn btn-danger">Delete</a>
 					</div>
 				</div>
 
@@ -112,7 +113,7 @@
       <div name="relatedleaves" th:if="${not #lists.isEmpty(leaveList)}">
         <h3>Leaves taken by this employee within the same date</h3>
         <div class="col-sm-2">
-						<a th:href="${'/leavedetails/'+ldetails.id}" target="_blank" class="btn btn-danger">View All of this subordinate</a>
+						<a th:href="${'/leavedetails/'+leavedetails.id}" target="_blank" class="btn btn-danger">View All of this subordinate</a>
 		</div>
         <table class="table table-striped">
             <tr>

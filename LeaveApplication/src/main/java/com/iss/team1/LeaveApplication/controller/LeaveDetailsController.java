@@ -98,7 +98,7 @@ public class LeaveDetailsController {
 	public String viewLeaveDetailsMethod(Model model,@PathVariable(value = "id") String id) {
 		
 		LeaveHistory l=ldRepo.findById(Integer.valueOf(id)).orElseGet(null);
-		model.addAttribute("ldetails", l);
+		model.addAttribute("leavedetails", l);
 		model.addAttribute("leaveList", ldRepo.findAllByStaffAndDateRange(l.getStaff().getId(),l.getFromDate(),l.getToDate()).stream().sorted(Comparator.comparing(LeaveHistory::getFromDate).reversed()).collect(Collectors.toList()));
 		System.out.println("found");
 		
@@ -118,21 +118,21 @@ public class LeaveDetailsController {
 	}
 	
 	@PostMapping(path = "/leavedetails")
-	public String viewLeaveDetailsMethodForm(@Valid LeaveHistory l, BindingResult bindingResult, Model model) {
-		if (l.getmanagerComment().isEmpty()) {
-			model.addAttribute("ldetails", l);
+	public String viewLeaveDetailsMethodForm(@Valid LeaveHistory leavedetails, BindingResult bindingResult, Model model) {
+		if (leavedetails.getmanagerComment().isEmpty()) {
+			model.addAttribute("leavedetails", leavedetails);
 			model.addAttribute("errMsg","Please type in the comment box to reject!");
 			return "leavedetails";
 		}
 		else {
-			LeaveHistory leave=ldRepo.findById(Integer.valueOf(l.getId())).get();
+			LeaveHistory leave=ldRepo.findById(Integer.valueOf(leavedetails.getId())).get();
 			leave.setStatus(LeaveStatus.REJECTED);
-			leave.setmanagerComment(l.getmanagerComment());
+			leave.setmanagerComment(leavedetails.getmanagerComment());
 			this.ldRepo.save(leave);
 			System.out.println("rejected");
 			return "redirect:/"+leaveList;
 		}
-//		}
+//		
 	}
 	
 	@GetMapping(path = "/leavehistory/{id}/{status}")

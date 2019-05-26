@@ -12,6 +12,7 @@ import com.iss.team1.LeaveApplication.Service.LeaveHistoryService;
 import com.iss.team1.LeaveApplication.Service.StaffService;
 import com.iss.team1.LeaveApplication.model.LeaveHistory;
 import com.iss.team1.LeaveApplication.model.PublicHoliday;
+import com.iss.team1.LeaveApplication.model.LeaveHistory.LeaveStatus;
 import com.iss.team1.LeaveApplication.repo.PublicHolidayRepository;
 
 
@@ -60,8 +61,7 @@ public class LeaveHistoryValidator implements Validator {
 		if(lh.getToDate().isBefore(LocalDate.now()))
 		{
 			errors.rejectValue("toDate", "toDate", "To Date cannot be earlier than today");
-		}
-		
+		}		
 	}
 	
 	private Boolean isWeekend(LocalDate dateToCheck)
