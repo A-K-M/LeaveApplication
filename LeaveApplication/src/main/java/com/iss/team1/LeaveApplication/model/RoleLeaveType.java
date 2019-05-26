@@ -20,7 +20,7 @@ public class RoleLeaveType {
 	@ManyToOne
 	@JoinColumn(name="leaveTypeId")
 	private LeaveType leaveType;
-	private int noOfDays;
+	private double noOfDays;
 	
 
 	public RoleLeaveType() {
@@ -28,7 +28,7 @@ public class RoleLeaveType {
 		// TODO Auto-generated constructor stub
 	}
 
-	public RoleLeaveType(Integer id, Role role, LeaveType leaveType, int noOfDays) {
+	public RoleLeaveType(Integer id, Role role, LeaveType leaveType, double noOfDays) {
 		super();
 		this.id = id;
 		this.role = role;
@@ -60,11 +60,11 @@ public class RoleLeaveType {
 		this.id = id;
 	}
 
-	public int getNoOfDays() {
+	public double getNoOfDays() {
 		return noOfDays;
 	}
 
-	public void setNoOfDays(int noOfDays) {
+	public void setNoOfDays(double noOfDays) {
 		this.noOfDays = noOfDays;
 	}
 

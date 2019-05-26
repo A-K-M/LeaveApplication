@@ -23,11 +23,11 @@ public class StaffValidator implements Validator {
 		if (s.getPassword().isEmpty()) {
 			errors.rejectValue("password", "password", "Password cannot be empty");
 		}
-		if (s.getJoinDate().equals(null)) {
+		if (s.getJoinDate() == null) {
 			errors.rejectValue("joinDate", "joinDate", "Date cannot be empty");
 		}
 		if (s.getStaffName().isEmpty()) {
-			errors.rejectValue("name", "name", "Name cannot be empty");
+			errors.rejectValue("staffName", "name", "Name cannot be empty");
 		}
 		if (s.getEmailId().isEmpty()) {
 			errors.rejectValue("emailId", "emailId", "Email Address cannot be empty");
