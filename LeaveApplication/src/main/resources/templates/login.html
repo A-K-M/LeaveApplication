@@ -9,19 +9,21 @@
 	<div><label th:text="${error}"></label></div>
 		<table>
 			<tr>
+				<p style="color:red;" th:if="${Error=='error'}" >Invalid Username or Password</p>
 				<th>Username: </th>
-				<td><input type="text" th:field="*{userName}"><th:if="${#fields.hasErrors('userName')}" th:errors="*{userName}"></td>							
+				<td><input type="text" th:field="*{userName}">
+				<td style="color:red" th:if="${#fields.hasErrors('userName')}" th:errors="*{userName}"></td>							
 			</tr>
 			<tr>
 				<th>Password: </th>
-				<td><input type="text" th:field="*{password}"><th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></td>							
+				<td><input type="text" th:field="*{password}">
+				<td style="color:red" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></td>							
 			</tr>
 			<tr>
-				<th>Submit</th>
+				<td></td>
 				<td><input type="submit" value="submit"></td>
 			</tr>
 		</table>	
-		<p style="color:red;" th:if="${Error=='error'}" >Invalid Username or Password</p>
 	</form>
 </body>
 </html>

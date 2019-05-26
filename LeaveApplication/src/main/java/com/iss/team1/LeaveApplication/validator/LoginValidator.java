@@ -5,7 +5,7 @@ import org.springframework.validation.Validator;
 
 import com.iss.team1.LeaveApplication.model.Staff;
 
-public class StaffValidator implements Validator {
+public class LoginValidator implements Validator {
 
 	@Override
 	public boolean supports(Class clazz) {
@@ -22,15 +22,6 @@ public class StaffValidator implements Validator {
 		}
 		if (s.getPassword().isEmpty()) {
 			errors.rejectValue("password", "password", "Password cannot be empty");
-		}
-		if (s.getJoinDate().equals(null)) {
-			errors.rejectValue("joinDate", "joinDate", "Date cannot be empty");
-		}
-		if (s.getStaffName().isEmpty()) {
-			errors.rejectValue("name", "name", "Name cannot be empty");
-		}
-		if (s.getEmailId().isEmpty()) {
-			errors.rejectValue("emailId", "emailId", "Email Address cannot be empty");
 		}
 	}
 }

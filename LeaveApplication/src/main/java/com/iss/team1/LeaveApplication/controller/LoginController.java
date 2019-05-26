@@ -16,7 +16,7 @@ import com.iss.team1.LeaveApplication.model.Role;
 import com.iss.team1.LeaveApplication.model.Staff;
 import com.iss.team1.LeaveApplication.repo.RoleRepository;
 import com.iss.team1.LeaveApplication.repo.StaffRepository;
-import com.iss.team1.LeaveApplication.validator.StaffValidator;
+import com.iss.team1.LeaveApplication.validator.LoginValidator;
 
 @Controller
 public class LoginController {
@@ -36,7 +36,7 @@ public class LoginController {
 	
 	@InitBinder
 	protected void initBinder(WebDataBinder binder) {
-		binder.addValidators(new StaffValidator());
+		binder.addValidators(new LoginValidator());
 	}
 
 	@RequestMapping(path = "/loginForm", method = RequestMethod.GET)
@@ -66,10 +66,6 @@ public class LoginController {
 					return "managerLandingPage";
 				}
 			} 
-		else 
-			return "login";
-
-
 		}
 		model.addAttribute("login", login);
 		model.addAttribute("Error", "error");

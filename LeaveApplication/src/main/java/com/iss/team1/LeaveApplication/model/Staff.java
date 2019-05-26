@@ -20,12 +20,11 @@ import org.hibernate.validator.constraints.Length;
 import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
-//@Table(uniqueConstraints={@UniqueConstraint(columnNames="userName")})
+@Table(uniqueConstraints={@UniqueConstraint(columnNames="userName")})
 public class Staff {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
-	@NotEmpty(message = "Name may not be empty")
 	private String staffName;
 	@Length(max=60)
 	private String userName;
