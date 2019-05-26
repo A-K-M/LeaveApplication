@@ -57,7 +57,7 @@ public class LoginController {
 				System.out.println(staff.getUserName());
 
 				if (role.getRoleName().equals("Staff")) {
-					return "redirect:/listpublicholiday";
+					return "redirect:/emphome";
 				} else if (role.getRoleName().equals("Admin")) {
 					return "adminview";
 				} else if (role.getRoleName().equals("Manager")) {

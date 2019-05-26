@@ -1,19 +1,27 @@
 package com.iss.team1.LeaveApplication.validator;
 
-import java.time.LocalDate;
+import java.util.List;
 
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
 import com.iss.team1.LeaveApplication.model.PublicHoliday;
+import com.iss.team1.LeaveApplication.repo.PublicHolidayRepository;
 
 public class PublicHolidayValidator implements Validator{
+	
+	private PublicHolidayRepository publicHolidayRepo;
+
+	public PublicHolidayValidator(PublicHolidayRepository publicHolidayRepo) {
+		this.publicHolidayRepo = publicHolidayRepo;
+	}
 
 	@Override
 	public boolean supports(Class clazz) {
 		// TODO Auto-generated method stub
 		return PublicHoliday.class.equals(clazz);
 	}
+	
 	@Override
 	public void validate(Object target, Errors errors) {
 		// TODO Auto-generated method stub
@@ -24,9 +32,14 @@ public class PublicHolidayValidator implements Validator{
 		
 		if(P.getDate()==null) {
 			errors.rejectValue("date", "errors.date" , "date cannot be empty");
-		} else {
-			LocalDate date = P.getDate();
-			System.out.println(date.toString());
+		}
+		
+		List<PublicHoliday> holidays = publicHolidayRepo.findAll();
+		if(!holidays.isEmpty()) {
+			PublicHoliday holiday = holidays.stream().filter(h -> h.getDate().isEqual(P.getDate())).findFirst().orElse(null);
+			if(holiday != null) {
+				errors.rejectValue("date", "errors.date" , "Public Holiday Already Exists");
+			}
 		}
 
 	}
