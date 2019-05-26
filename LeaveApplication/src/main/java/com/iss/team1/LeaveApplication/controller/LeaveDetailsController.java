@@ -4,6 +4,7 @@ import java.text.SimpleDateFormat;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
@@ -23,6 +24,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
@@ -85,6 +87,12 @@ public class LeaveDetailsController {
 	public void setphRepo(PublicHolidayRepository phRepo) {
 		this.phRepo=phRepo;
 	}
+	
+	@ModelAttribute("leavetypes")
+    public Collection<LeaveType> getLeaveTypes() {
+        return ltRepo.findAll();
+    }
+	
 //	@RequestMapping(path="/leavelist")
 //	public String listMethod(Model model) {
 //		LeaveType lt=new LeaveType(1, "Annual", null, null, null);
@@ -222,11 +230,8 @@ public class LeaveDetailsController {
 	public String leaveUpdateMethod(Model model ,@PathVariable(value = "id") String id) {
 		Integer lID=Integer.valueOf(id);
 		LeaveHistory l=ldRepo.findById(lID).get();
-		if (l!=null) {
-			List<LeaveType> leaveTypes=ltRepo.findAll();
-			
+		if (l!=null) {			
 			model.addAttribute("leave", l);
-			model.addAttribute("leavetypes", leaveTypes);
 			return "leave";
 		}
 		return "redirect:/"+leaveList;
