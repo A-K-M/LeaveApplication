@@ -21,7 +21,7 @@ public class LeaveBalance {
 	@ManyToOne
 	@JoinColumn(name="leaveTypeId")
 	private LeaveType leaveType;
-	private int balanceLeave;
+	private double balanceLeave;
 	
 	public LeaveBalance() {
 		super();
@@ -52,11 +52,11 @@ public class LeaveBalance {
 		this.leaveType = leaveType;
 	}
 
-	public int getBalanceLeave() {
+	public double getBalanceLeave() {
 		return balanceLeave;
 	}
 
-	public void setBalanceLeave(int balanceLeave) {
+	public void setBalanceLeave(double balanceLeave) {
 		this.balanceLeave = balanceLeave;
 	}
 

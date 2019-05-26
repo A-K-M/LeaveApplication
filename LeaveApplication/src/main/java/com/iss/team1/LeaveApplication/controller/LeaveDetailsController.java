@@ -152,7 +152,7 @@ public class LeaveDetailsController {
 		System.out.println("got leave details");
 		
 		LeaveBalance lb=lbRepo.findLeaveBalanceByStaffAndLeaveType(l.getStaff().getId(), l.getLeaveType().getId());
-		Integer leaveleft=0;
+		double leaveleft=0;
 		//-------check status change to update leave left
 		if (LeaveStatus.valueOf(status).equals(LeaveStatus.APPROVED)) {
 				//.equals(LeaveStatus.APPROVED)) {
@@ -170,7 +170,7 @@ public class LeaveDetailsController {
 		ldRepo.save(l);
 		
 		if ((l.getStatus().equals(LeaveStatus.APPROVED) || l.getStatus().equals(LeaveStatus.CANCELLED))
-				&& !leaveleft.equals(0)) {
+				&& !(leaveleft == 0)) {
 			
 			lb.setBalanceLeave(lb.getBalanceLeave()+leaveleft);
 			System.out.println("updated2");

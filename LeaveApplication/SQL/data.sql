@@ -3,12 +3,12 @@ CREATE DATABASE IF NOT EXISTS leave_application;
 USE leave_application;
 
 CREATE TABLE IF NOT EXISTS compensation_leave_claim (id integer not null auto_increment, date date, no_of_hours double precision not null, reasons varchar(255), staff_id integer, primary key (id)) engine=InnoDB;
-CREATE TABLE IF NOT EXISTS leave_balance (id integer not null auto_increment, balance_leave integer not null, leave_type_id integer, staff_id integer, primary key (id)) engine=InnoDB;
-CREATE TABLE IF NOT EXISTS leave_history (id integer not null auto_increment, additional_reason varchar(200), contact_details varchar(200), description varchar(200), from_date date, comment varchar(200), no_of_days integer, status integer, to_date date, work_dissemination varchar(100), leave_typeid integer, staff_id integer, primary key (id)) engine=InnoDB;
+CREATE TABLE IF NOT EXISTS leave_balance (id integer not null auto_increment, balance_leave double precision not null, leave_type_id integer, staff_id integer, primary key (id)) engine=InnoDB;
+CREATE TABLE IF NOT EXISTS leave_history (id integer not null auto_increment, additional_reason varchar(200), contact_details varchar(200), description varchar(200), from_date date, comment varchar(200), no_of_days double precision, status integer, to_date date, work_dissemination varchar(100), leave_typeid integer, staff_id integer, primary key (id)) engine=InnoDB;
 CREATE TABLE IF NOT EXISTS leave_type (id integer not null auto_increment, leave_type_name varchar(255), primary key (id)) engine=InnoDB;
 CREATE TABLE IF NOT EXISTS public_holiday (id integer not null auto_increment, date date, name varchar(255), primary key (id)) engine=InnoDB;
 CREATE TABLE IF NOT EXISTS role (id integer not null auto_increment, role_name varchar(255), primary key (id)) engine=InnoDB;
-CREATE TABLE IF NOT EXISTS role_leave_type (id integer not null auto_increment, no_of_days integer not null, leave_type_id integer, role_id integer, primary key (id)) engine=InnoDB;
+CREATE TABLE IF NOT EXISTS role_leave_type (id integer not null auto_increment, no_of_days double precision not null, leave_type_id integer, role_id integer, primary key (id)) engine=InnoDB;
 CREATE TABLE IF NOT EXISTS staff (id integer not null auto_increment, email_id varchar(255), join_date date, password varchar(255), staff_name varchar(255), user_name varchar(60), reports_to integer, role_id integer, primary key (id)) engine=InnoDB;
 ALTER TABLE compensation_leave_claim add constraint FK3vnoc14935qj8hxalf0vpc4tw foreign key (staff_id) references staff (id);
 ALTER TABLE leave_balance add constraint FKr7fmdsbyl1l02pt10gdvgkkrq foreign key (leave_type_id) references leave_type (id);

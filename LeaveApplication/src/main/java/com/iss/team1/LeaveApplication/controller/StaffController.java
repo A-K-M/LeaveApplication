@@ -55,11 +55,6 @@ public class StaffController {
         return staffRepo.findManagers();
     }
 
-//    @ModelAttribute("staff")
-//    public Owner findOwner(@PathVariable("ownerId") int ownerId) {
-//        return this.owners.findById(ownerId);
-//    }
-
 	@InitBinder
 	protected void initBinder(WebDataBinder binder) {
 		binder.addValidators(new StaffValidator());
@@ -74,17 +69,13 @@ public class StaffController {
 	@GetMapping(path = "/staff/add")
 	public String createStaff(Model model) {
 		model.addAttribute("staff", new Staff());
-//		model.addAttribute("roles", roleRepo.findAll());
 		return "editStaff";
 	}
 	
 	@GetMapping(path = "/staff/edit/{id}")
 	public String editStaff(Model model, @PathVariable(value = "id") int id) {
 		Staff s = staffRepo.findById(id).orElse(null);
-		//System.out.println(s);
-		//System.out.println("Manager:" + s.getManager().getId());
 		model.addAttribute("staff", s);
-//		model.addAttribute("roles", roleRepo.findAll());
 		return "editStaff";
 	}
 
@@ -94,11 +85,6 @@ public class StaffController {
 			model.addAttribute("staff", staff);
             return "editStaff";
         }
-		//System.out.println(staff.getRole());
-	
-//		System.out.println("Manager:" + staff.getManager().);
-//		role = roleRepo.findByRoleName(role.getRoleName());
-//		staff.setRole(role);
 		staffRepo.save(staff);
 		return "redirect:/staff";
 	}

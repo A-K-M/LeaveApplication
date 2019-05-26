@@ -9,8 +9,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.validation.constraints.NotEmpty;
 
 import org.hibernate.validator.constraints.Length;
@@ -52,7 +50,7 @@ public class LeaveHistory {
 	private LeaveStatus status;
 	
 	@Column(name = "NoOfDays")
-	private Integer noOfDays;
+	private double noOfDays;
 	
 	@Length(max=200)
 	@Column(name = "Comment")
@@ -164,11 +162,11 @@ public class LeaveHistory {
 		this.status = status;
 	}
 	
-	public Integer getNoOfDays() {
+	public double getNoOfDays() {
 		return noOfDays;
 	}
 	
-	public void setNoOfDays(Integer noOfDays) {
+	public void setNoOfDays(double noOfDays) {
 		this.noOfDays = noOfDays;
 	}
 	
