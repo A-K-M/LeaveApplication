@@ -31,7 +31,7 @@ public class PublicHolidayController {
 
 	@InitBinder
 	protected void initBinder(WebDataBinder binder) {
-		binder.addValidators(new PublicHolidayValidator());
+		binder.addValidators(new PublicHolidayValidator(publicHolidayRepo));
 	}
 
 	@RequestMapping(path = "/createpublicholiday", method = RequestMethod.GET)

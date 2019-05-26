@@ -9,6 +9,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.hibernate.type.IntegerType;
@@ -119,6 +120,18 @@ public class LeaveDetailsController {
 		return "leavedetails";
 	}
 	
+	@GetMapping(path = "/emphome")
+	public String viewLeaveHistory(Model model, HttpSession session) {
+		
+		int staffId = (int)session.getAttribute("staff");
+		if(staffId == 0)
+			return "redirect:loginform";
+		List<LeaveHistory> leaves = ldRepo.findByStaff(staffId);
+		model.addAttribute("leaves", leaves);
+		
+		return "emplandingpage";
+	}
+	
 	@PostMapping(path = "/leavedetails")
 	public String viewLeaveDetailsMethodForm(@Valid LeaveHistory l, BindingResult bindingResult, Model model) {
 		System.out.println(l.getmanagerComment());
@@ -184,12 +197,17 @@ public class LeaveDetailsController {
 	}
 	
 	@GetMapping(path = "/leaveapply")
-	public String leaveApplyMethod(Model model) {
+	public String leaveApplyMethod(Model model, HttpSession session) {
+		
+		int staffId = (int)session.getAttribute("staff");
+		if(staffId == 0)
+			return "redirect:loginform";
+
 		LeaveHistory l=new LeaveHistory();
 		l.setFromDate(LocalDate.now());
 		l.setToDate(LocalDate.now().plusDays(1));
 		//l.setId(1);
-		Staff s=sRepo.findById(1).get();
+		Staff s=sRepo.findById(staffId).get();
 		System.out.println(s.toString());
 		l.setStaff(s);
 		l.setStatus(LeaveStatus.PENDING);
@@ -287,7 +305,8 @@ public class LeaveDetailsController {
 
 			ldRepo.save(l);
 			model.addAttribute("ldetails", l);
-			return "redirect:/"+leaveDetails+"/"+l.getId();
+//			return "redirect:/"+leaveDetails+"/"+l.getId();
+			return "redirect:emphome";
 			
 		}
 	}
