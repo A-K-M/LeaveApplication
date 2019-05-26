@@ -42,7 +42,7 @@ public class Staff {
 	private Collection<Staff> subordinates;	
 	@OneToMany(targetEntity = LeaveHistory.class, mappedBy = "staff")
 	private Collection<LeaveHistory> leaveHistories;
-	@OneToMany(targetEntity = LeaveBalance.class, mappedBy = "staff")
+	@OneToMany(cascade = CascadeType.ALL, targetEntity = LeaveBalance.class, mappedBy = "staff")
 	private Collection<LeaveBalance> leaveBalances;
 	@OneToMany(targetEntity = CompensationLeaveClaim.class, mappedBy = "staff")
 	private Collection<CompensationLeaveClaim> compensationLeaveClaims;

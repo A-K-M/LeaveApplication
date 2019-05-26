@@ -1,6 +1,5 @@
 package com.iss.team1.LeaveApplication.controller;
 
-import java.time.LocalDate;
 import java.util.Collection;
 
 import javax.validation.Valid;
@@ -17,6 +16,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import com.iss.team1.LeaveApplication.Service.StaffService;
 import com.iss.team1.LeaveApplication.model.Role;
 import com.iss.team1.LeaveApplication.model.Staff;
 import com.iss.team1.LeaveApplication.repo.RoleRepository;
@@ -28,6 +28,8 @@ public class StaffController {
 	
 	private StaffRepository staffRepo;
 	private RoleRepository roleRepo;
+	@Autowired
+	private StaffService staffService;
 	
 	@Autowired
 	public StaffController(StaffRepository staffRepo, RoleRepository roleRepo) {
@@ -86,6 +88,8 @@ public class StaffController {
             return "editStaff";
         }
 		staffRepo.save(staff);
+		staffService.setStaffLeaveBalance(staff);
+		
 		return "redirect:/staff";
 	}
 
@@ -95,7 +99,4 @@ public class StaffController {
 		return "redirect:/staff";
 	}
 	
-	public int calculateLeaveBalance(LocalDate joinDate) {
-		return 0;
-	}
 }
