@@ -15,11 +15,8 @@ public class PublicHoliday {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
-<<<<<<< HEAD
 	private String name;
-=======
-	private String name;
->>>>>>> branch 'master' of https://github.com/A-K-M/LeaveApplication.git
+
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private LocalDate date;
 	

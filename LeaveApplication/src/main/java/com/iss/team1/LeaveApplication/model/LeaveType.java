@@ -31,14 +31,11 @@ public class LeaveType {
 		// TODO Auto-generated constructor stub
 	}
 
-	public LeaveType(Integer id, String leaveTypeName, Collection<LeaveHistory> leaveHistories,
-			Collection<LeaveBalance> leaveBalances, Collection<RoleLeaveType> roleLeaveType) {
+	public LeaveType(String leaveTypeName) {
 		super();
-		this.id = id;
+		
 		this.leaveTypeName = leaveTypeName;
-		this.leaveHistories = leaveHistories;
-		this.leaveBalances = leaveBalances;
-		this.roleLeaveType = roleLeaveType;
+		
 	}
 
 	public String getLeaveTypeName() {
@@ -72,15 +69,16 @@ public class LeaveType {
 	public void setRoleLeaveType(Collection<RoleLeaveType> roleLeaveType) {
 		this.roleLeaveType = roleLeaveType;
 	}
-
+	public void setId(int id) {
+		this.id= id;
+	}
 	public Integer getId() {
 		return id;
 	}
 
 	@Override
 	public String toString() {
-		return "LeaveType [id=" + id + ", leaveTypeName=" + leaveTypeName + ", leaveHistories=" + leaveHistories
-				+ ", leaveBalances=" + leaveBalances + ", roleLeaveType=" + roleLeaveType + "]";
+		return "LeaveType [id=" + id + ", leaveTypeName=" + leaveTypeName + "]";
 	}
 	
 	
