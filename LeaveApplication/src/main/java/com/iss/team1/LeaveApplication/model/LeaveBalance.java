@@ -1,5 +1,6 @@
 package com.iss.team1.LeaveApplication.model;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -15,7 +16,7 @@ public class LeaveBalance {
 	@Id 
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
-	@ManyToOne
+	@ManyToOne 
 	@JoinColumn(name="staffId")
 	private Staff staff;
 	@ManyToOne

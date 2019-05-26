@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import com.iss.team1.LeaveApplication.model.Role;
 import com.iss.team1.LeaveApplication.model.Staff;
 import com.iss.team1.LeaveApplication.repo.StaffRepository;
+import com.iss.team1.LeaveApplication.util.SecurityUtil;
 import com.iss.team1.LeaveApplication.validator.LoginValidator;
 
 @Controller
@@ -48,7 +49,7 @@ public class LoginController {
 		}
 		Staff staff = staffrepo.findByuserName(login.getUserName());
 		if (staff != null) {
-			if (login.getPassword().equals(staff.getPassword())) {
+			if (SecurityUtil.isValidPassword(login.getPassword(), staff.getPassword())) {
 				model.addAttribute("staff", new Staff());
 				Role role = staff.getRole();
 				
