@@ -266,7 +266,7 @@ public class LeaveDetailsController {
 					List<LeaveType> leaveTypes=ltRepo.findAll();	
 					model.addAttribute("leave", l);
 					model.addAttribute("leavetypes", leaveTypes);
-					model.addAttribute("errMsg", "There is another leave during this date range.");
+					model.addAttribute("errMsg", "There is other leave during this date range.");
 					return "leave";
 				}
 				

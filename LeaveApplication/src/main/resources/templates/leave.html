@@ -14,7 +14,7 @@
 		</div>
 		<div th:if="${not #lists.isEmpty(leave)}">
 		
-			<form class="form-horizontal" th:object="${leave}" method="post">
+			<form class="form-horizontal" th:object="${leave}" th:action="@{/leaveapply}" method="post">
 				<div class="form-group">
 					<div class="col-sm-10">
 					<input type="hidden" class="form-control" th:field="*{id}" /> 
