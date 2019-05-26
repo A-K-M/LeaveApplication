@@ -1,5 +1,6 @@
 package com.iss.team1.LeaveApplication.controller;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,7 +40,7 @@ public class LoginController {
 	}
 
 	@RequestMapping(path = "/loginForm", method = RequestMethod.POST)
-	public String postLogin(@ModelAttribute("login") @Valid Staff login, BindingResult bindingResult, Model model) {
+	public String postLogin(@ModelAttribute("login") @Valid Staff login, BindingResult bindingResult, Model model, HttpServletRequest request) {
 		System.out.println("entered");
 		if (bindingResult.hasErrors()) {
 			model.addAttribute("login", login);
@@ -50,9 +51,13 @@ public class LoginController {
 			if (login.getPassword().equals(staff.getPassword())) {
 				model.addAttribute("staff", new Staff());
 				Role role = staff.getRole();
+				
+				request.getSession().setAttribute("staff", staff.getId());
+				System.out.println(staff.getId());
+				System.out.println(staff.getUserName());
 
 				if (role.getRoleName().equals("Staff")) {
-					return "staffLandingPage";
+					return "redirect:/listpublicholiday";
 				} else if (role.getRoleName().equals("Admin")) {
 					return "adminview";
 				} else if (role.getRoleName().equals("Manager")) {
