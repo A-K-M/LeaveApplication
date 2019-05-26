@@ -16,7 +16,10 @@ public class PublicHoliday {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	private String name;
+<<<<<<< HEAD
+=======
 	
+>>>>>>> refs/remotes/origin/master
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private LocalDate date;
 	
