@@ -13,7 +13,7 @@ import com.iss.team1.LeaveApplication.model.PublicHoliday;
 @Repository
 public interface PublicHolidayRepository extends JpaRepository<PublicHoliday , Integer> {
 
-//	@Query("SELECT p FROM PublicHoliday l where p.date = :date")
-//	List<PublicHoliday> findPublicHolidaysByDate(@Param("date") LocalDate date);
+	@Query("SELECT p FROM PublicHoliday p where p.date = :date")
+	List<PublicHoliday> findPublicHolidaysByDate(@Param("date") LocalDate date);
 
 }

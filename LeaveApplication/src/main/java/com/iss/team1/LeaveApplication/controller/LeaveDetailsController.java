@@ -11,17 +11,14 @@ import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
-import org.hibernate.type.IntegerType;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.propertyeditors.CustomDateEditor;
-import org.springframework.data.convert.JodaTimeConverters.LocalDateTimeToDateConverter;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
@@ -29,6 +26,7 @@ import com.iss.team1.LeaveApplication.model.LeaveBalance;
 import com.iss.team1.LeaveApplication.model.LeaveHistory;
 import com.iss.team1.LeaveApplication.model.LeaveHistory.LeaveStatus;
 import com.iss.team1.LeaveApplication.model.LeaveType;
+import com.iss.team1.LeaveApplication.model.PublicHoliday;
 import com.iss.team1.LeaveApplication.model.Staff;
 import com.iss.team1.LeaveApplication.repo.LeaveBalanceRepository;
 import com.iss.team1.LeaveApplication.repo.LeaveDetailsRepository;
@@ -37,6 +35,7 @@ import com.iss.team1.LeaveApplication.repo.PublicHolidayRepository;
 import com.iss.team1.LeaveApplication.repo.RoleRepository;
 import com.iss.team1.LeaveApplication.repo.StaffRepository;
 import com.iss.team1.LeaveApplication.validator.LeaveHistoryValidator;
+
 
 
 
@@ -54,10 +53,16 @@ public class LeaveDetailsController {
 	private PublicHolidayRepository phRepo;
 	
 	
+	
+//	@InitBinder
+//	protected void initBinder(WebDataBinder binder) {
+//		binder.addValidators(new LeaveHistoryValidator());
+//		
+//	}
+//	
 	@InitBinder
 	protected void initBinder(WebDataBinder binder) {
 		binder.addValidators(new LeaveHistoryValidator());
-		
 	}
 	
 	@Autowired
@@ -189,7 +194,7 @@ public class LeaveDetailsController {
 		l.setFromDate(LocalDate.now());
 		l.setToDate(LocalDate.now().plusDays(1));
 		//l.setId(1);
-		Staff s=sRepo.findById(1).get();
+		Staff s=sRepo.findById(1).get();//TODO: staffID session
 		System.out.println(s.toString());
 		l.setStaff(s);
 		l.setStatus(LeaveStatus.PENDING);
@@ -214,18 +219,27 @@ public class LeaveDetailsController {
 		return "redirect:/"+leaveList;
 	}
 	
-	@PostMapping(path = "/leavesubmit")
-	public String leaveApplyMethod(@Valid LeaveHistory l, BindingResult bindingResult, Model model) {
+	@PostMapping(path = "/leaveapply")
+	public String leaveApplyMethod(@ModelAttribute("leave") @Valid LeaveHistory leave, BindingResult bindingResult, Model model) {
+		LeaveHistory l=leave;
 		if (bindingResult.hasErrors()) {
-			System.out.println("got error");
-			System.out.println(l.getStaff().toString());
-			System.out.println(l.getLeaveType().toString());
-			System.out.println(bindingResult.toString());
-			List<LeaveType> leaveTypes=ltRepo.findAll();			
 			model.addAttribute("leave", l);
+			List<LeaveType> leaveTypes=ltRepo.findAll();
 			model.addAttribute("leavetypes", leaveTypes);
+			System.out.println("error");
+			System.out.println(bindingResult);
 			return "leave";
-		}else {
+		}else
+//		if (bindingResult.hasErrors()) {
+//			System.out.println("got error");
+//			System.out.println(l.getStaff().toString());
+//			System.out.println(l.getLeaveType().toString());
+//			System.out.println(bindingResult.toString());
+//			List<LeaveType> leaveTypes=ltRepo.findAll();			
+//			model.addAttribute("leave", l);
+//			model.addAttribute("leavetypes", leaveTypes);
+//			return "leave";
+		 {
 			System.out.println("no error");
 			LeaveBalance lb=lbRepo.findLeaveBalanceByStaffAndLeaveType(l.getStaff().getId(), l.getLeaveType().getId());
 			if (lb == null || lb.getBalanceLeave()<=0) {
@@ -297,15 +311,19 @@ public class LeaveDetailsController {
 		for (int i = 0; i < noOfDays; i++) {
 			//check if weekends
 			
-			//System.out.println("public holidays ="+phRepo.findPublicHolidaysByDate(l.getFromDate().plusDays(i)).size());
+			System.out.println("public holidays ="+phRepo.findPublicHolidaysByDate(startDate.plusDays(i)).size());
 			if(startDate.plusDays(i).getDayOfWeek()== DayOfWeek.SATURDAY
 			|| startDate.plusDays(i).getDayOfWeek()== DayOfWeek.SUNDAY
-			//|| phRepo.findPublicHolidaysByDate(l.getFromDate().plusDays(i)).size()>0 // check public holiday
+			|| phRepo.findPublicHolidaysByDate(startDate.plusDays(i)).size()>0 // check public holiday
 			) {
 				totalHolidays+=1;
 				
 			}
 		}
 		return totalHolidays;
+	}
+	public Integer isHoliday(LocalDate dateToCheck) {
+		List<PublicHoliday> holiday=phRepo.findPublicHolidaysByDate(dateToCheck);
+		return holiday.size();
 	}
 }

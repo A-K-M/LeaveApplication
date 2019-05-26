@@ -15,6 +15,7 @@ import javax.validation.constraints.NotEmpty;
 
 import org.hibernate.validator.constraints.Length;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.lang.NonNull;
 
 
 @Entity
@@ -42,8 +43,8 @@ public class LeaveHistory {
 	//@DateTimeFormat(pattern = "dd/MM/yyyy")
 	@Column(name = "ToDate")
 	private LocalDate toDate;
+
 	
-	@NotEmpty
 	@Length(max=200)
 	@Column(name = "Description")
 	private String description;
