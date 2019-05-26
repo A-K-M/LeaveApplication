@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import com.iss.team1.LeaveApplication.Service.LeaveHistoryService;
 import com.iss.team1.LeaveApplication.model.LeaveBalance;
 import com.iss.team1.LeaveApplication.model.LeaveHistory;
 import com.iss.team1.LeaveApplication.model.LeaveHistory.LeaveStatus;
@@ -54,18 +55,14 @@ public class LeaveDetailsController {
 	private LeaveBalanceRepository lbRepo;
 	private PublicHolidayRepository phRepo;
 	
-	
-	
-//	@InitBinder
-//	protected void initBinder(WebDataBinder binder) {
-//		binder.addValidators(new LeaveHistoryValidator());
-//		
-//	}
-//	
+
 	@InitBinder
 	protected void initBinder(WebDataBinder binder) {
 		binder.addValidators(new LeaveHistoryValidator());
 	}
+	
+	@Autowired
+	private LeaveHistoryService leaveHistoryService;
 	
 	@Autowired
 	public void setldRepo(LeaveDetailsRepository ldRepo) {
@@ -97,30 +94,6 @@ public class LeaveDetailsController {
         return ltRepo.findAll();
     }
 	
-//	@RequestMapping(path="/leavelist")
-//	public String listMethod(Model model) {
-//		LeaveType lt=new LeaveType(1, "Annual", null, null, null);
-//		ltRepo.save(lt);
-//		lt=new LeaveType(2, "Medical", null, null, null);
-//		ltRepo.save(lt);
-//		lt=new LeaveType(3, "Compensation", null, null, null);
-//		ltRepo.save(lt);
-//		
-//		Role r=new Role("Employee");
-//		rRepo.save(r);
-//		Staff s=new Staff(1, "aye", "aye", "aye", LocalDate.now(), "athin@gamil.com", r, 1);
-//		sRepo.save(s);
-//		LeaveHistory l=new LeaveHistory(s,lt,LocalDate.now(), LocalDate.now().plusDays(1L), "leave", LeaveStatus.PENDING, 1, null, null , null, null);
-//		ldRepo.save(l);
-//		
-//		List<LeaveHistory> leaveHistories=ldRepo.findAll();
-//		model.addAttribute("leaves", leaveHistories);
-//		
-//		System.out.println("saved");
-//		return "redirect:/leavedetails/"+l.getid();
-//		//return "list";
-//	}
-	
 	@GetMapping(path = "/leavedetails/{id}")
 	public String viewLeaveDetailsMethod(Model model,@PathVariable(value = "id") String id) {
 		
@@ -146,12 +119,6 @@ public class LeaveDetailsController {
 	
 	@PostMapping(path = "/leavedetails")
 	public String viewLeaveDetailsMethodForm(@Valid LeaveHistory l, BindingResult bindingResult, Model model) {
-		System.out.println(l.getmanagerComment());
-//		System.out.println(l.getStaff());
-//		if (bindingResult.hasErrors()) {
-//			model.addAttribute("ldetails", l);
-//			return "leavedetails";
-//		}else {
 		if (l.getmanagerComment().isEmpty()) {
 			model.addAttribute("ldetails", l);
 			model.addAttribute("errMsg","Please type in the comment box to reject!");
@@ -210,16 +177,18 @@ public class LeaveDetailsController {
 	
 	@GetMapping(path = "/leaveapply")
 	public String leaveApplyMethod(Model model, HttpSession session) {
-		
-		int staffId = (int)session.getAttribute("staff");
-		if(staffId == 0)
-			return "redirect:loginform";
+		//System.out.println(session.getAttribute("staff"));
+//		if (session.getAttribute("staff")==null) {
+//			return "redirect:loginform";
+//		}
 
+
+		//int staffId = (int)session.getAttribute("staff");
 		LeaveHistory l=new LeaveHistory();
 		l.setFromDate(LocalDate.now());
 		l.setToDate(LocalDate.now().plusDays(1));
 		//l.setId(1);
-		Staff s=sRepo.findById(staffId).get();
+		Staff s=sRepo.findById(1).get();
 
 		System.out.println(s.toString());
 		l.setStaff(s);
@@ -244,6 +213,7 @@ public class LeaveDetailsController {
 	
 	@PostMapping(path = "/leaveapply")
 	public String leaveApplyMethod(@ModelAttribute("leave") @Valid LeaveHistory leave, BindingResult bindingResult, Model model) {
+
 		LeaveHistory l=leave;
 		if (bindingResult.hasErrors()) {
 			model.addAttribute("leave", l);
@@ -273,6 +243,15 @@ public class LeaveDetailsController {
 				model.addAttribute("errMsg", "There is no enough leave balance.");
 				return "leave";
 			}
+			if (leaveHistoryService.isPublicHoliday(leave.getFromDate())==true
+				|| leaveHistoryService.isPublicHoliday(leave.getToDate())==true) {
+				List<LeaveType> leaveTypes=ltRepo.findAll();	
+				model.addAttribute("leave", l);
+				model.addAttribute("leavetypes", leaveTypes);
+				model.addAttribute("errMsg", "From Date or To Date cannot be Public Holiday");
+				return "leave";
+			}
+
 			//check if there is other leaves within this date range
 			List<LeaveHistory> existingLeaves=ldRepo.findExistingByStaffAndDateRangeAndStatus(l.getStaff().getId(),l.getFromDate(),l.getToDate());
 						
@@ -324,7 +303,6 @@ public class LeaveDetailsController {
 
 			ldRepo.save(l);
 			model.addAttribute("ldetails", l);
-//			return "redirect:/"+leaveDetails+"/"+l.getId();
 			return "redirect:emphome";
 			
 		}
@@ -338,16 +316,12 @@ public class LeaveDetailsController {
 			System.out.println("public holidays ="+phRepo.findPublicHolidaysByDate(startDate.plusDays(i)).size());
 			if(startDate.plusDays(i).getDayOfWeek()== DayOfWeek.SATURDAY
 			|| startDate.plusDays(i).getDayOfWeek()== DayOfWeek.SUNDAY
-			|| phRepo.findPublicHolidaysByDate(startDate.plusDays(i)).size()>0 // check public holiday
+			|| leaveHistoryService.isPublicHoliday(startDate.plusDays(i))== true // check public holiday
 			) {
 				totalHolidays+=1;
 				
 			}
 		}
 		return totalHolidays;
-	}
-	public Integer isHoliday(LocalDate dateToCheck) {
-		List<PublicHoliday> holiday=phRepo.findPublicHolidaysByDate(dateToCheck);
-		return holiday.size();
 	}
 }

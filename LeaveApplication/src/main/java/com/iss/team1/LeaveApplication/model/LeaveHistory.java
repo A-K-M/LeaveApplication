@@ -1,6 +1,7 @@
 package com.iss.team1.LeaveApplication.model;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -12,8 +13,11 @@ import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotEmpty;
 
 import org.hibernate.validator.constraints.Length;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.lang.NonNull;
+
+import com.iss.team1.LeaveApplication.repo.PublicHolidayRepository;
 
 
 @Entity
@@ -43,7 +47,7 @@ public class LeaveHistory {
 	private LocalDate toDate;
 
 	
-	@Length(max=200)
+	@Length(min=8, max=200)
 	@Column(name = "Description")
 	private String description;
 	
@@ -213,3 +217,4 @@ public class LeaveHistory {
 	
 	
 }
+

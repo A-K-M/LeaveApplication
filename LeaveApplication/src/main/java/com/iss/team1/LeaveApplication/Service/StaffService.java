@@ -24,6 +24,8 @@ public class StaffService {
 	@Autowired
 	private LeaveBalanceRepository lbRepo;
 
+	@Autowired
+	private StaffService staffService;
 	
 //	@Autowired
 //	public StaffService(LeaveTypeRepository ltRepo, RoleLeaveTypeRepository rltRepo, LeaveBalanceRepository lbRepo) {
