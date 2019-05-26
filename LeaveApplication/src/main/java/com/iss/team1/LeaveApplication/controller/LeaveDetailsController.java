@@ -4,11 +4,13 @@ import java.text.SimpleDateFormat;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -89,6 +91,12 @@ public class LeaveDetailsController {
 	public void setphRepo(PublicHolidayRepository phRepo) {
 		this.phRepo=phRepo;
 	}
+	
+	@ModelAttribute("leavetypes")
+    public Collection<LeaveType> getLeaveTypes() {
+        return ltRepo.findAll();
+    }
+	
 //	@RequestMapping(path="/leavelist")
 //	public String listMethod(Model model) {
 //		LeaveType lt=new LeaveType(1, "Annual", null, null, null);
@@ -124,6 +132,18 @@ public class LeaveDetailsController {
 		return "leavedetails";
 	}
 	
+	@GetMapping(path = "/emphome")
+	public String viewLeaveHistory(Model model, HttpSession session) {
+		
+		int staffId = (int)session.getAttribute("staff");
+		if(staffId == 0)
+			return "redirect:loginform";
+		List<LeaveHistory> leaves = ldRepo.findByStaff(staffId);
+		model.addAttribute("leaves", leaves);
+		
+		return "emplandingpage";
+	}
+	
 	@PostMapping(path = "/leavedetails")
 	public String viewLeaveDetailsMethodForm(@Valid LeaveHistory l, BindingResult bindingResult, Model model) {
 		System.out.println(l.getmanagerComment());
@@ -157,7 +177,7 @@ public class LeaveDetailsController {
 		System.out.println("got leave details");
 		
 		LeaveBalance lb=lbRepo.findLeaveBalanceByStaffAndLeaveType(l.getStaff().getId(), l.getLeaveType().getId());
-		Integer leaveleft=0;
+		double leaveleft=0;
 		//-------check status change to update leave left
 		if (LeaveStatus.valueOf(status).equals(LeaveStatus.APPROVED)) {
 				//.equals(LeaveStatus.APPROVED)) {
@@ -175,7 +195,7 @@ public class LeaveDetailsController {
 		ldRepo.save(l);
 		
 		if ((l.getStatus().equals(LeaveStatus.APPROVED) || l.getStatus().equals(LeaveStatus.CANCELLED))
-				&& !leaveleft.equals(0)) {
+				&& !(leaveleft == 0)) {
 			
 			lb.setBalanceLeave(lb.getBalanceLeave()+leaveleft);
 			System.out.println("updated2");
@@ -189,12 +209,18 @@ public class LeaveDetailsController {
 	}
 	
 	@GetMapping(path = "/leaveapply")
-	public String leaveApplyMethod(Model model) {
+	public String leaveApplyMethod(Model model, HttpSession session) {
+		
+		int staffId = (int)session.getAttribute("staff");
+		if(staffId == 0)
+			return "redirect:loginform";
+
 		LeaveHistory l=new LeaveHistory();
 		l.setFromDate(LocalDate.now());
 		l.setToDate(LocalDate.now().plusDays(1));
 		//l.setId(1);
-		Staff s=sRepo.findById(1).get();//TODO: staffID session
+		Staff s=sRepo.findById(staffId).get();
+
 		System.out.println(s.toString());
 		l.setStaff(s);
 		l.setStatus(LeaveStatus.PENDING);
@@ -209,11 +235,8 @@ public class LeaveDetailsController {
 	public String leaveUpdateMethod(Model model ,@PathVariable(value = "id") String id) {
 		Integer lID=Integer.valueOf(id);
 		LeaveHistory l=ldRepo.findById(lID).get();
-		if (l!=null) {
-			List<LeaveType> leaveTypes=ltRepo.findAll();
-			
+		if (l!=null) {			
 			model.addAttribute("leave", l);
-			model.addAttribute("leavetypes", leaveTypes);
 			return "leave";
 		}
 		return "redirect:/"+leaveList;
@@ -301,12 +324,13 @@ public class LeaveDetailsController {
 
 			ldRepo.save(l);
 			model.addAttribute("ldetails", l);
-			return "redirect:/"+leaveDetails+"/"+l.getId();
+//			return "redirect:/"+leaveDetails+"/"+l.getId();
+			return "redirect:emphome";
 			
 		}
 	}
 	
-	public Integer getNoOfHolidays(LocalDate startDate, Integer noOfDays) {
+	public Integer getNoOfHolidays(LocalDate startDate, Double noOfDays) {
 		Integer totalHolidays=0;
 		for (int i = 0; i < noOfDays; i++) {
 			//check if weekends

@@ -1,5 +1,6 @@
 package com.iss.team1.LeaveApplication.controller;
 
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +31,7 @@ public class PublicHolidayController {
 
 	@InitBinder
 	protected void initBinder(WebDataBinder binder) {
-		binder.addValidators(new PublicHolidayValidator());
+		binder.addValidators(new PublicHolidayValidator(publicHolidayRepo));
 	}
 
 	@RequestMapping(path = "/createpublicholiday", method = RequestMethod.GET)
@@ -46,7 +47,7 @@ public class PublicHolidayController {
 			System.out.println("entered");
 			if (bindingResult.hasErrors()) {
 				System.out.println("HELLO THERE2");
-				model.addAttribute("${PublicHoliday}", PublicHoliday);
+				model.addAttribute("PublicHoliday", PublicHoliday);
 				return "createHolidayForm";
 			}
 			publicHolidayRepo.save(PublicHoliday);
@@ -55,7 +56,13 @@ public class PublicHolidayController {
 	}
 
 	@RequestMapping(path = "/listpublicholiday", method = RequestMethod.GET)
-	public String saveStaff(Model model) {
+	public String listHoliday(Model model , HttpSession session) {
+		if (session.getAttribute("staff")== null)
+		{
+			return "redirect:/loginForm";
+		}
+		int currentsession = (int)session.getAttribute("staff");
+		  System.out.println("session passed"  + " " + currentsession);
 		model.addAttribute("PublicHoliday", publicHolidayRepo.findAll());
 		return "publicHolidayList";
 	}
