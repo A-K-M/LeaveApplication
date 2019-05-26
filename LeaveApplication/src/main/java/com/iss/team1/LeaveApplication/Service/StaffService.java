@@ -23,15 +23,6 @@ public class StaffService {
 	private RoleLeaveTypeRepository rltRepo;
 	@Autowired
 	private LeaveBalanceRepository lbRepo;
-
-	
-//	@Autowired
-//	public StaffService(LeaveTypeRepository ltRepo, RoleLeaveTypeRepository rltRepo, LeaveBalanceRepository lbRepo) {
-//		super();
-//		this.ltRepo = ltRepo;
-//		this.rltRepo = rltRepo;
-//		this.lbRepo = lbRepo;
-//	}
 	
 	@Autowired
 	public void setltRepo(LeaveTypeRepository ltRepo) {
