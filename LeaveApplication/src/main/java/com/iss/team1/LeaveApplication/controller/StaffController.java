@@ -21,6 +21,7 @@ import com.iss.team1.LeaveApplication.model.Role;
 import com.iss.team1.LeaveApplication.model.Staff;
 import com.iss.team1.LeaveApplication.repo.RoleRepository;
 import com.iss.team1.LeaveApplication.repo.StaffRepository;
+import com.iss.team1.LeaveApplication.util.SecurityUtil;
 import com.iss.team1.LeaveApplication.validator.StaffValidator;
 
 @Controller
@@ -85,6 +86,7 @@ public class StaffController {
 			model.addAttribute("staff", staff);
             return "editStaff";
         }
+		staff.setPassword(SecurityUtil.hashPassword(staff.getPassword()));
 		staffRepo.save(staff);
 		return "redirect:/staff";
 	}
