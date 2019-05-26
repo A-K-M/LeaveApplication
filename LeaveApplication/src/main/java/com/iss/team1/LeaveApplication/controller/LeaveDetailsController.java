@@ -292,7 +292,7 @@ public class LeaveDetailsController {
 		}
 	}
 	
-	public Integer getNoOfHolidays(LocalDate startDate, Integer noOfDays) {
+	public Integer getNoOfHolidays(LocalDate startDate, Double noOfDays) {
 		Integer totalHolidays=0;
 		for (int i = 0; i < noOfDays; i++) {
 			//check if weekends

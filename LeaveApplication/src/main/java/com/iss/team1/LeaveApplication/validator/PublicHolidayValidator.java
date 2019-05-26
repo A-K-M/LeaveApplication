@@ -1,5 +1,7 @@
 package com.iss.team1.LeaveApplication.validator;
 
+import java.time.LocalDate;
+
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
@@ -17,10 +19,14 @@ public class PublicHolidayValidator implements Validator{
 		// TODO Auto-generated method stub
 		PublicHoliday P = (PublicHoliday) target;
 		if (P.getName().isEmpty()) {
-			errors.rejectValue("name", "name", "Holiday Name cannot be empty.");
+			errors.rejectValue("name", "errors.name", "Holiday Name cannot be empty.");
 		}
+		
 		if(P.getDate()==null) {
-			errors.rejectValue("date", "date" , "date cannot be empty");
+			errors.rejectValue("date", "errors.date" , "date cannot be empty");
+		} else {
+			LocalDate date = P.getDate();
+			System.out.println(date.toString());
 		}
 
 	}
