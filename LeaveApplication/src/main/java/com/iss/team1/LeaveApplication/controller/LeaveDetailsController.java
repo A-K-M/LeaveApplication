@@ -1,12 +1,8 @@
 package com.iss.team1.LeaveApplication.controller;
 
-import java.text.SimpleDateFormat;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.Collection;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -29,32 +25,23 @@ import com.iss.team1.LeaveApplication.model.LeaveBalance;
 import com.iss.team1.LeaveApplication.model.LeaveHistory;
 import com.iss.team1.LeaveApplication.model.LeaveHistory.LeaveStatus;
 import com.iss.team1.LeaveApplication.model.LeaveType;
-import com.iss.team1.LeaveApplication.model.PublicHoliday;
 import com.iss.team1.LeaveApplication.model.Staff;
 import com.iss.team1.LeaveApplication.repo.LeaveBalanceRepository;
 import com.iss.team1.LeaveApplication.repo.LeaveDetailsRepository;
 import com.iss.team1.LeaveApplication.repo.LeaveTypeRepository;
-import com.iss.team1.LeaveApplication.repo.PublicHolidayRepository;
-import com.iss.team1.LeaveApplication.repo.RoleRepository;
 import com.iss.team1.LeaveApplication.repo.StaffRepository;
 import com.iss.team1.LeaveApplication.validator.LeaveHistoryValidator;
-
-
-
 
 @Controller
 public class LeaveDetailsController {
 
 	private static final String leaveList = "leavelist";
-	private static final String leaveDetails = "leavedetails";
+	//private static final String leaveDetails = "leavedetails";
 	
 	private LeaveDetailsRepository ldRepo;
 	private LeaveTypeRepository ltRepo;
 	private StaffRepository sRepo;
-	private RoleRepository rRepo;
 	private LeaveBalanceRepository lbRepo;
-	private PublicHolidayRepository phRepo;
-	
 
 	@InitBinder
 	protected void initBinder(WebDataBinder binder) {
@@ -65,32 +52,15 @@ public class LeaveDetailsController {
 	private LeaveHistoryService leaveHistoryService;
 	
 	@Autowired
-	public void setldRepo(LeaveDetailsRepository ldRepo) {
+	public void setRepo(LeaveDetailsRepository ldRepo,LeaveTypeRepository ltRepo, StaffRepository sRepo,LeaveBalanceRepository lbRepo) {
 		this.ldRepo=ldRepo;
-	}
-	@Autowired
-	public void setltRepo(LeaveTypeRepository ltRepo) {
 		this.ltRepo=ltRepo;
-	}
-	@Autowired
-	public void setsRepo(StaffRepository sRepo) {
 		this.sRepo=sRepo;
-	}
-	@Autowired
-	public void setrRepo(RoleRepository rRepo) {
-		this.rRepo=rRepo;
-	}
-	@Autowired
-	public void setlbRepo(LeaveBalanceRepository lbRepo) {
 		this.lbRepo=lbRepo;
-	}
-	@Autowired
-	public void setphRepo(PublicHolidayRepository phRepo) {
-		this.phRepo=phRepo;
 	}
 	
 	@ModelAttribute("leavetypes")
-    public Collection<LeaveType> getLeaveTypes() {
+    public List<LeaveType> getLeaveTypes() {
         return ltRepo.findAll();
     }
 	
@@ -99,7 +69,7 @@ public class LeaveDetailsController {
 		
 		LeaveHistory l=ldRepo.findById(Integer.valueOf(id)).orElseGet(null);
 		model.addAttribute("leavedetails", l);
-		model.addAttribute("leaveList", ldRepo.findAllByStaffAndDateRange(l.getStaff().getId(),l.getFromDate(),l.getToDate()).stream().sorted(Comparator.comparing(LeaveHistory::getFromDate).reversed()).collect(Collectors.toList()));
+		model.addAttribute("leaveList", leaveHistoryService.findAllByStaffAndDateRange(l.getStaff().getId(),l.getFromDate(),l.getToDate()).stream().sorted(Comparator.comparing(LeaveHistory::getFromDate).reversed()).collect(Collectors.toList()));
 		System.out.println("found");
 		
 		return "leavedetails";
@@ -111,7 +81,7 @@ public class LeaveDetailsController {
 		int staffId = (int)session.getAttribute("staff");
 		if(staffId == 0)
 			return "redirect:loginform";
-		List<LeaveHistory> leaves = ldRepo.findByStaff(staffId);
+		List<LeaveHistory> leaves = leaveHistoryService.findByStaff(staffId);
 		model.addAttribute("leaves", leaves);
 		
 		return "emplandingpage";
@@ -193,10 +163,10 @@ public class LeaveDetailsController {
 		System.out.println(s.toString());
 		l.setStaff(s);
 		l.setStatus(LeaveStatus.PENDING);
-		List<LeaveType> leaveTypes=ltRepo.findAll();
+		//List<LeaveType> leaveTypes=ltRepo.findAll();
 		
 		model.addAttribute("leave", l);
-		model.addAttribute("leavetypes", leaveTypes);
+		model.addAttribute("leavetypes");
 		return "leave";
 	}
 	
@@ -217,43 +187,34 @@ public class LeaveDetailsController {
 		LeaveHistory l=leave;
 		if (bindingResult.hasErrors()) {
 			model.addAttribute("leave", l);
-			List<LeaveType> leaveTypes=ltRepo.findAll();
-			model.addAttribute("leavetypes", leaveTypes);
+			//List<LeaveType> leaveTypes=ltRepo.findAll();
+			model.addAttribute("leavetypes");
 			System.out.println("error");
 			System.out.println(bindingResult);
 			return "leave";
-		}else
-//		if (bindingResult.hasErrors()) {
-//			System.out.println("got error");
-//			System.out.println(l.getStaff().toString());
-//			System.out.println(l.getLeaveType().toString());
-//			System.out.println(bindingResult.toString());
-//			List<LeaveType> leaveTypes=ltRepo.findAll();			
-//			model.addAttribute("leave", l);
-//			model.addAttribute("leavetypes", leaveTypes);
-//			return "leave";
-		 {
+		}
+		else{
 			System.out.println("no error");
 			LeaveBalance lb=lbRepo.findLeaveBalanceByStaffAndLeaveType(l.getStaff().getId(), l.getLeaveType().getId());
 			if (lb == null || lb.getBalanceLeave()<=0) {
 				System.out.println("not enough leave balance");
-				List<LeaveType> leaveTypes=ltRepo.findAll();	
+				//List<LeaveType> leaveTypes=ltRepo.findAll();	
 				model.addAttribute("leave", l);
-				model.addAttribute("leavetypes", leaveTypes);
+				model.addAttribute("leavetypes");
 				model.addAttribute("errMsg", "There is no enough leave balance.");
 				return "leave";
 			}
 			if (leaveHistoryService.isPublicHoliday(leave.getFromDate())==true
 				|| leaveHistoryService.isPublicHoliday(leave.getToDate())==true) {
-				List<LeaveType> leaveTypes=ltRepo.findAll();	
+				//List<LeaveType> leaveTypes=ltRepo.findAll();	
 				model.addAttribute("leave", l);
-				model.addAttribute("leavetypes", leaveTypes);
+				model.addAttribute("leavetypes");
 				model.addAttribute("errMsg", "From Date or To Date cannot be Public Holiday");
 				return "leave";
 			}
 
 			//check if there is other leaves within this date range
-			List<LeaveHistory> existingLeaves=ldRepo.findExistingByStaffAndDateRangeAndStatus(l.getStaff().getId(),l.getFromDate(),l.getToDate());
+			List<LeaveHistory> existingLeaves=leaveHistoryService.findExistingByStaffAndDateRangeAndStatus(l.getStaff().getId(),l.getFromDate(),l.getToDate());
 						
 			if (existingLeaves.size()>0) {
 				Long isexisting=0L;
@@ -263,9 +224,9 @@ public class LeaveDetailsController {
 				}
 				if (existingLeaves.size()-isexisting >0) {
 					System.out.println("other leave exist");
-					List<LeaveType> leaveTypes=ltRepo.findAll();	
+					//List<LeaveType> leaveTypes=ltRepo.findAll();	
 					model.addAttribute("leave", l);
-					model.addAttribute("leavetypes", leaveTypes);
+					model.addAttribute("leavetypes");
 					model.addAttribute("errMsg", "There is other leave during this date range.");
 					return "leave";
 				}
@@ -294,9 +255,9 @@ public class LeaveDetailsController {
 			
 			if (lb == null || lb.getBalanceLeave()<l.getNoOfDays()) {
 				System.out.println("not enough leave balance");
-				List<LeaveType> leaveTypes=ltRepo.findAll();	
+				//List<LeaveType> leaveTypes=ltRepo.findAll();	
 				model.addAttribute("leave", l);
-				model.addAttribute("leavetypes", leaveTypes);
+				model.addAttribute("leavetypes");
 				model.addAttribute("errMsg", "There is no enough leave balance.");
 				return "leave";
 			}
@@ -313,7 +274,7 @@ public class LeaveDetailsController {
 		for (int i = 0; i < noOfDays; i++) {
 			//check if weekends
 			
-			System.out.println("public holidays ="+phRepo.findPublicHolidaysByDate(startDate.plusDays(i)).size());
+			
 			if(startDate.plusDays(i).getDayOfWeek()== DayOfWeek.SATURDAY
 			|| startDate.plusDays(i).getDayOfWeek()== DayOfWeek.SUNDAY
 			|| leaveHistoryService.isPublicHoliday(startDate.plusDays(i))== true // check public holiday
