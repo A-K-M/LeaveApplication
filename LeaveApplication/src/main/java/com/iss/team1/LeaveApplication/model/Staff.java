@@ -28,13 +28,10 @@ public class Staff {
 	@NotEmpty(message = "Name may not be empty")
 	private String staffName;
 	@Length(max=60)
-
 	private String userName;
-
 	private String password;
 	@DateTimeFormat(pattern = "dd-MM-yyyy")
 	private LocalDate joinDate;
-
 	private String emailId;
 	@ManyToOne
 	@JoinColumn(name = "roleId")
@@ -42,7 +39,7 @@ public class Staff {
 	@ManyToOne
 	@JoinColumn(name="reportsTo")
 	private Staff manager;
-	@OneToMany(mappedBy="manager")
+	@OneToMany(targetEntity = Staff.class, mappedBy="manager")
 	private Collection<Staff> subordinates;	
 	@OneToMany(targetEntity = LeaveHistory.class, mappedBy = "staff")
 	private Collection<LeaveHistory> leaveHistories;
@@ -129,7 +126,7 @@ public class Staff {
 		return manager;
 	}
 	
-	public void setManger(Staff manager) {
+	public void setManager(Staff manager) {
 		this.manager = manager;
 	}
 	
@@ -144,6 +141,6 @@ public class Staff {
 	public String toString() {
 		return "Staff [id=" + id + ", staffName=" + staffName + ", userName=" + userName + ", password="
 				+ password + ", joiningDate=" + joinDate + ", emailId=" + emailId + ", role=" + role.getId()
-				+ ", manager=" + manager.staffName + "]";
+				+ "]";
 	}
 }

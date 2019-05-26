@@ -1,5 +1,6 @@
 package com.iss.team1.LeaveApplication.controller;
 
+import java.time.LocalDate;
 import java.util.Collection;
 
 import javax.validation.Valid;
@@ -62,11 +63,27 @@ public class StaffController {
 	@InitBinder
 	protected void initBinder(WebDataBinder binder) {
 		binder.addValidators(new StaffValidator());
+	}	
+
+	@GetMapping(path = "/staff")
+	public String getAllStaff(Model model) {
+		model.addAttribute("staff", staffRepo.findAll());	
+		return "staffList";
 	}
 
 	@GetMapping(path = "/staff/add")
 	public String createStaff(Model model) {
 		model.addAttribute("staff", new Staff());
+//		model.addAttribute("roles", roleRepo.findAll());
+		return "editStaff";
+	}
+	
+	@GetMapping(path = "/staff/edit/{id}")
+	public String editStaff(Model model, @PathVariable(value = "id") int id) {
+		Staff s = staffRepo.findById(id).orElse(null);
+		//System.out.println(s);
+		//System.out.println("Manager:" + s.getManager().getId());
+		model.addAttribute("staff", s);
 //		model.addAttribute("roles", roleRepo.findAll());
 		return "editStaff";
 	}
@@ -86,25 +103,13 @@ public class StaffController {
 		return "redirect:/staff";
 	}
 
-	@GetMapping(path = "/staff")
-	public String getAllStaff(Model model) {
-		model.addAttribute("staff", staffRepo.findAll());	
-		return "staffList";
-	}
-
-	@GetMapping(path = "/staff/edit/{id}")
-	public String editStaff(Model model, @PathVariable(value = "id") int id) {
-		Staff s = staffRepo.findById(id).orElse(null);
-		//System.out.println(s);
-		//System.out.println("Manager:" + s.getManager().getId());
-		model.addAttribute("staff", s);
-//		model.addAttribute("roles", roleRepo.findAll());
-		return "editStaff";
-	}
-
 	@GetMapping(path = "/staff/delete/{id}")
 	public String deleteStaff(@PathVariable(name = "id") int id) {
 		staffRepo.delete(staffRepo.findById(id).orElse(null));
 		return "redirect:/staff";
+	}
+	
+	public int calculateLeaveBalance(LocalDate joinDate) {
+		return 0;
 	}
 }
