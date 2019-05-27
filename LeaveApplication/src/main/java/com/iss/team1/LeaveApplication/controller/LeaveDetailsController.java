@@ -139,12 +139,12 @@ public class LeaveDetailsController {
 //		}
 
 
-		//int staffId = (int)session.getAttribute("staff");
+		int staffId = (int)session.getAttribute("staff");
 		LeaveHistory l=new LeaveHistory();
 		l.setFromDate(LocalDate.now());
 		l.setToDate(LocalDate.now().plusDays(1));
 		//l.setId(1);
-		Staff s=sRepo.findById(1).get();
+		Staff s=sRepo.findById(staffId).get();
 
 		System.out.println(s.toString());
 		l.setStaff(s);

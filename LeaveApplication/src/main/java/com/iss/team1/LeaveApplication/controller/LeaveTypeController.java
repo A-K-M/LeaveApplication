@@ -21,6 +21,7 @@ import com.iss.team1.LeaveApplication.validator.LeaveTypeValidator;
 
 @Controller
 public class LeaveTypeController {
+	
 	private LeaveTypeRepository repo;
 	private static final String leaveType_list = "leaveType";
 	private static final String leaveType_form = "LeaveTypeForm";
