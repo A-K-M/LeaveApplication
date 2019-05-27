@@ -1,0 +1,27 @@
+.with_img {
+  height: auto;
+  min-height: 730px;
+  background-color: #E1E2DA;
+  background-size: cover;
+  background-position: center;
+  background-repeat: repeat;
+  padding-bottom: 50px;
+}
+
+.for_login {
+  height: 100vh;
+  min-height: 500px;
+  background-image: url('/images/bg.jpeg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: repeat;
+  padding-bottom: 50px;
+}
+
+
+.card-trans {
+  background-color: rgba(245, 245, 245, 1);
+  opacity: .4;
+}
+
+

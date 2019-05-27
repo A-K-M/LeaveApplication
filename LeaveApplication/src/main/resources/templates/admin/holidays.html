@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org"
+	th:replace="fragments/layout :: body_layout(~{::body},~{::h1})">
+<h1 class="font-weight-light">Holiday List</h1>
+<body>
+	<div class="row">
+		<div class="col-2">
+			<a th:href="${'/admin/holidays/add'}" class="btn btn-outline-success btn-sm">New Holiday</a>
+		</div>
+		
+	</div>
+	<br>
+	<table id="table"
+		class="table table-striped table-bordered table-hover"
+		style="width: 100%">
+		<thead>
+			<tr class="font-weight-light">
+				<th width="40%">Holiday Name</th>
+				<th width="40%">Holiday Name</th>
+				<th width="20%">Action</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr th:each="holiday : ${PublicHoliday}">
+				<td width="40%" th:text="${holiday.name}">id</td>
+				<td width="40%" th:text="${holiday.date}">roleId</td>
+				<td width="20%"><a th:href="${'/admin/holidays/delete/'+ holiday.Id}" class="btn btn-outline-danger btn-sm">Delete</a></td>
+			</tr>
+		</tbody>
+	</table>
+	
+	<script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.js"></script>
+	<script type="text/javascript" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+	<script type="text/javascript" src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
+
+	<script>
+   $(document).ready(function() {
+		$('#table').DataTable();
+		} );
+   </script>
+
+</body>
+
+
+</html>

@@ -1,0 +1,34 @@
+
+<!DOCTYPE html>
+<html xmlns:th="http://thymleaf.org"
+	th:replace="fragments/layout :: body_layout(~{::body},~{::h1})">
+<h1 class="font-weight-light">Leave Type Form</h1>
+<body>
+	<form class="form" th:object="${leaveType}" method="post">
+		<div class="row">
+			<div class="col-6">
+				<div class="row">
+					<div class="col-4 form-group">
+						<label for="roleName">Leave Type Name : </label>
+					</div>
+					<div class="col-8 form-group">
+						<input type="text" class="form-control" th:field="*{leaveTypeName}" />
+					</div>
+					<div class="col-4 form-group"></div>
+					<div class="col-8 form-group">
+						<p class="text-danger float-left" th:if="${#fields.hasErrors('leaveTypeName')}" th:errors="*{leaveTypeName}"></p>
+					</div>
+
+				</div>
+			</div>
+			<div class="col-6">
+				<div class="row">
+					<div class="col-12 form-group">
+						<input type="submit" value="save" class="btn btn-info"/>
+					</div>
+				</div>
+			</div>
+		</div>
+	</form>
+</body>
+</html>

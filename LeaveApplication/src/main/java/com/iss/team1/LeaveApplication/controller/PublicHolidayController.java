@@ -33,44 +33,46 @@ public class PublicHolidayController {
 	protected void initBinder(WebDataBinder binder) {
 		binder.addValidators(new PublicHolidayValidator(publicHolidayRepo));
 	}
-
-	@RequestMapping(path = "/createpublicholiday", method = RequestMethod.GET)
-	public String createHoliday(Model model) {
-		model.addAttribute("PublicHoliday", new PublicHoliday());
-		return "createHolidayForm";
+	
+	@RequestMapping(path = "/admin/holidays", method = RequestMethod.GET)
+	public String listHoliday(Model model, HttpSession session) {
+		if (session.getAttribute("admin") == null) {
+			return "redirect:/login";
+		}
+		//int currentsession = (int) session.getAttribute("admin");
+		model.addAttribute("PublicHoliday", publicHolidayRepo.findAll());
+		return "/admin/holidays";
 	}
 
-	@RequestMapping(path = "/createpublicholiday", method = RequestMethod.POST)
+	@RequestMapping(path = "/admin/holidays/add", method = RequestMethod.GET)
+	public String createHoliday(Model model, HttpSession session) {
+		if (session.getAttribute("admin") == null) {
+			return "redirect:/login";
+		}
+		model.addAttribute("PublicHoliday", new PublicHoliday());
+		return "/admin/holiday_form";
+	}
+
+	@RequestMapping(path = "/admin/holidays/add", method = RequestMethod.POST)
 	public String createholiday(@ModelAttribute("PublicHoliday") @Valid PublicHoliday PublicHoliday,
 			BindingResult bindingResult, Model model) {
-		{
-			System.out.println("entered");
-			if (bindingResult.hasErrors()) {
-				System.out.println("HELLO THERE2");
-				model.addAttribute("PublicHoliday", PublicHoliday);
-				return "createHolidayForm";
-			}
-			publicHolidayRepo.save(PublicHoliday);
-			return "redirect:/listpublicholiday";
+		System.out.println("asfasdf");
+		if (bindingResult.hasErrors()) {
+			System.out.println("hrere");
+			model.addAttribute("PublicHoliday", PublicHoliday);
+			return "/admin/holiday_form";
 		}
+		publicHolidayRepo.save(PublicHoliday);
+		return "redirect:/admin/holidays";
 	}
 
-	@RequestMapping(path = "/listpublicholiday", method = RequestMethod.GET)
-	public String listHoliday(Model model , HttpSession session) {
-		if (session.getAttribute("staff")== null)
-		{
-			return "redirect:/loginForm";
+	@RequestMapping(path = "/admin/holidays/delete/{Id}", method = RequestMethod.GET)
+	public String deleteHoliday(@PathVariable(value = "Id") Integer Id, Model model, HttpSession session) {
+		if (session.getAttribute("admin") == null) {
+			return "redirect:/login";
 		}
-		int currentsession = (int)session.getAttribute("staff");
-		  System.out.println("session passed"  + " " + currentsession);
-		model.addAttribute("PublicHoliday", publicHolidayRepo.findAll());
-		return "publicHolidayList";
-	}
-
-	@RequestMapping(path = "/DeleteHoliday/{Id}", method = RequestMethod.GET)
-	public String deleteHoliday(@PathVariable(value = "Id") Integer Id, Model model) {
 		model.addAttribute("PublicHoliday", publicHolidayRepo.findById(Id).orElse(null));
 		publicHolidayRepo.deleteById(Id);
-		return "redirect:/listpublicholiday";
+		return "redirect:/admin/holidays";
 	}
 }

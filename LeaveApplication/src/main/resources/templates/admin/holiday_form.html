@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://thymleaf.org"
+	th:replace="fragments/layout :: body_layout(~{::body},~{::h1})">
+<h1 class="font-weight-light">Holiday Form</h1>
+<body>
+<form class="form" th:object="${PublicHoliday}"  method="post">
+		<div class="row">
+			<div class="col-6">
+				<div class="row">
+					<div class="col-3 form-group">
+						<label for="name">Holiday Name:</label>
+					</div>
+					<div class="col-9 form-group">
+						<input type="text" class="form-control" th:field="${PublicHoliday.name}" >
+					</div>
+					<div class="col-3 form-group"></div>
+					<div class="col-9 form-group">
+						<p class="text-danger float-left" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></p>
+					</div>
+				</div>
+			</div>
+			<div class="col-6">
+				<div class="row">
+					<div class="col-3 form-group">
+						<label for="name">Date: </label>
+					</div>
+					<div class="col-9 form-group">
+						<input type="date" class="form-control" th:field="${PublicHoliday.date}" />
+					</div>
+					<div class="col-3 form-group"></div>
+					<div class="col-9 form-group">
+						<p class="text-danger float-left" th:if="${#fields.hasErrors('date')}" th:errors="*{date}"></p>
+					</div>
+
+				</div>
+			</div>
+			
+			<div class="col-6">
+				<div class="row">
+					<div class="col-12 form-group">
+						<input type="submit" value="save" class="btn btn-info"/>
+					</div>
+				</div>
+			</div>
+		</div>
+	</form>
+
+</body>
+</html>
+
+
+

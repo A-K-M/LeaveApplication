@@ -3,6 +3,7 @@ package com.iss.team1.LeaveApplication.controller;
 import java.time.LocalDate;
 import java.util.Collection;
 
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,28 +66,25 @@ public class StaffController {
 		binder.addValidators(new StaffValidator(staffRepo));
 	}	
 
-	@GetMapping(path = "/staff")
-	public String getAllStaff(Model model) {
+	@GetMapping(path = "/admin/employees")
+	public String getAllStaff(Model model, HttpSession session) {
+		if (session.getAttribute("admin") == null) {
+			return "redirect:/login";
+		}
 		model.addAttribute("staff", staffRepo.findAll());	
-		return "staffList";
+		return "admin/employees";
 	}
 
-	@GetMapping(path = "/staff/add")
-	public String createStaff(Model model) {
-		Staff s = new Staff();
-		s.setJoinDate(LocalDate.now());
-		model.addAttribute("staff", s);
-		return "editStaff";
+	@GetMapping(path = "/admin/employees/add")
+	public String createStaff(Model model, HttpSession session) {
+		if (session.getAttribute("admin") == null) {
+			return "redirect:/login";
+		}
+		model.addAttribute("staff", new Staff());
+		return "admin/employee_form";
 	}
-	
-	@GetMapping(path = "/staff/edit/{id}")
-	public String editStaff(Model model, @PathVariable(value = "id") int id) {
-		Staff s = staffRepo.findById(id).orElse(null);
-		model.addAttribute("staff", s);
-		return "editStaff";
-	}
-
-	@PostMapping(path = "staff")
+		
+	@PostMapping(path = "/admin/employees/add")
 	public String saveStaff(@Valid Staff staff, BindingResult bindingResult, ModelMap model) {
 		if (bindingResult.hasErrors()) {
 			model.addAttribute("staff", staff);
@@ -100,11 +98,43 @@ public class StaffController {
 		
 		return "redirect:/staff";
 	}
+	
+	@GetMapping(path = "/admin/employees/edit/{id}")
+	public String employee_form(Model model, @PathVariable(value = "id") int id, HttpSession session) {
+		if (session.getAttribute("admin") == null) {
+			return "redirect:/login";
+		}
+		Staff s = staffRepo.findById(id).orElse(null);
+		model.addAttribute("staff", s);
+		
+		return "redirect:/admin/employees";
+	}
 
-	@GetMapping(path = "/staff/delete/{id}")
-	public String deleteStaff(@PathVariable(name = "id") int id) {
-		staffRepo.delete(staffRepo.findById(id).orElse(null));
+
+	@PostMapping(path = "/admin/employees/edit/{id}")
+	public String saveEditStaff(@Valid Staff staff, BindingResult bindingResult, ModelMap model) {
+		if (bindingResult.hasErrors()) {
+			model.addAttribute("staff", staff);
+            return "editStaff";
+        }
+		if(staff.getId()==0) {
+			staff.setPassword(SecurityUtil.hashPassword("123"));
+		}
+		staffRepo.save(staff);
+		staffService.setStaffLeaveBalance(staff);
+		
 		return "redirect:/staff";
+	}
+
+
+
+	@GetMapping(path = "/admin/employees/delete/{id}")
+	public String deleteStaff(@PathVariable(name = "id") int id, HttpSession session) {
+		if (session.getAttribute("admin") == null) {
+			return "redirect:/login";
+		}
+		staffRepo.delete(staffRepo.findById(id).orElse(null));
+		return "redirect:/admin/employees";
 	}
 	
 }
