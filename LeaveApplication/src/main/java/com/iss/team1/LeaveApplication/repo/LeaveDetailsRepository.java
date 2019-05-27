@@ -22,6 +22,7 @@ public interface LeaveDetailsRepository extends JpaRepository<LeaveHistory, Inte
 	@Query("SELECT l FROM LeaveHistory l where l.staff.id = :staffid and ((l.fromDate >=:fromDate and l.fromDate <= :toDate) or (l.toDate >= :fromDate and l.toDate<= :toDate) )")
 	List<LeaveHistory> findAllByStaffAndDateRange(@Param("staffid") Integer staffid,@Param("fromDate") LocalDate fromDate,@Param("toDate") LocalDate toDate);
 
+<<<<<<< HEAD
 	@Query(value = "SELECT * FROM leave_history l where MONTH(to_date) = :month AND YEAR(from_date) = :year AND leave_typeid = 1",
 			nativeQuery = true)
 	List<LeaveHistory> findAllAnnualByMonth(@Param("month") Integer month, @Param("year") Integer year);
@@ -33,4 +34,10 @@ public interface LeaveDetailsRepository extends JpaRepository<LeaveHistory, Inte
 	@Query(value = "SELECT * FROM leave_history l where MONTH(to_date) = :month AND YEAR(from_date) = :year AND leave_typeid = 3",
 			nativeQuery = true)
 	List<LeaveHistory> findAllCompensationByMonth(@Param("month") Integer month, @Param("year") Integer year);
+=======
+	   
+    @Query("SELECT l FROM LeaveHistory l where l.status = 'PENDING' and l.staff.manager.id= :id ")
+    List<LeaveHistory> findLeaveHistoriesByStatusPendingAndManagerId(@Param("id") Integer id);
+    
+>>>>>>> branch 'master' of https://github.com/A-K-M/LeaveApplication.git
 }

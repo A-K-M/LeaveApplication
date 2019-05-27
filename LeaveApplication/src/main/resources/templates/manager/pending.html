@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org"
+	th:replace="fragments/layout :: body_layout(~{::body},~{::h1})">
+<h1 class="font-weight-light">Pending Leave Requests</h1>
+<body>
+	<br>
+	<table id="table"
+		class="table table-striped table-bordered table-hover"
+		style="width: 100%">
+		<thead>
+			    <tr>
+            
+                <th>Staff Name</th>
+                <th>Leave Type</th>
+                <th>From Date</th>
+                <th>To Date</th>
+                <th>Description</th>
+                <th>Status</th>
+                <th>No Of Days</th>
+<!--                 <th>Manager Comments</th> -->
+                <th>Additional Reasons</th>
+                <th>Action</th>>
+<!--                 <th>Work Dissemination</th> -->
+<!--                 <th>Contact Details</th> -->
+            </tr>
+		</thead>
+		<tbody>
+			 <tr th:each=" slh : ${staffLeaveHistory}">
+            
+                <td th:text="${slh.staff.staffName}">Name</td>
+                <td th:text="${slh.leaveType.leaveTypeName}">Leave Type</td>
+                <td th:text="${slh.fromDate}">From Date</td>
+                <td th:text="${slh.toDate}">To Date</td>
+                <td th:text="${slh.description}">Description</td>
+                <td th:text="${slh.status}">Status</td>
+                <td th:text="${slh.noOfDays}">No Of Days</td>
+<!--                 <td th:text="${slh.managerComment}">Manager Comments</td> -->
+                <td th:text="${slh.additionalReason}">Additional Reasons</td>
+<!--                 <td th:text="${slh.workDissemination}">Work Dissemination</td> -->
+<!--                 <td th:text="${slh.contactDetails}">Contact Details</td> -->
+                <td><a th:href="${'/leavedetails/' + slh.id}" class="btn btn-outline-info btn-sm">View Details</a></td>
+            </tr>
+		</tbody>
+	</table>
+
+	<script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.js"></script>
+	<script type="text/javascript" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+	<script type="text/javascript" src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
+
+	<script>
+   $(document).ready(function() {
+		$('#table').DataTable();
+		} );
+   </script>
+</body>
+
+
+</html>
