@@ -2,6 +2,7 @@ package com.iss.team1.LeaveApplication.controller;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -12,7 +13,6 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.comparator.Comparators;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -65,6 +65,7 @@ public class LeaveDetailsController {
         return ltRepo.findAll();
     }
 	
+	//both
 	@GetMapping(path = "/leavedetails/{id}")
 	public String viewLeaveDetailsMethod(Model model,@PathVariable(value = "id") String id) {
 		
@@ -75,6 +76,7 @@ public class LeaveDetailsController {
 		return "leavedetails";
 	}
 	
+	//emp
 	@GetMapping(path = "/emphome")
 	public String viewLeaveHistory(Model model, HttpSession session) {
 		
@@ -87,6 +89,7 @@ public class LeaveDetailsController {
 		return "emplandingpage";
 	}
 	
+	//both 
 	@PostMapping(path = "/leavedetails")
 	public String viewLeaveDetailsMethodForm(@Valid LeaveHistory leavedetails, BindingResult bindingResult, Model model) {
 		if (leavedetails.getmanagerComment().isEmpty()) {
@@ -104,6 +107,7 @@ public class LeaveDetailsController {
 //		
 	}
 	
+	//both
 	@GetMapping(path = "/leavehistory/{id}/{status}")
 	public String changeLeaveStatus(Model model ,@PathVariable(value = "id") String id, @PathVariable(value="status") String status) {
 		LeaveHistory l=ldRepo.findById(Integer.valueOf(id)).get();
@@ -130,21 +134,18 @@ public class LeaveDetailsController {
 		return "redirect:/"+leaveList;
 		
 	}
-	
+	//emp
 	@GetMapping(path = "/leaveapply")
 	public String leaveApplyMethod(Model model, HttpSession session) {
-		//System.out.println(session.getAttribute("staff"));
 //		if (session.getAttribute("staff")==null) {
 //			return "redirect:loginform";
 //		}
-
-
-		int staffId = (int)session.getAttribute("staff");
+		//int staffId = (int)session.getAttribute("staff");
 		LeaveHistory l=new LeaveHistory();
 		l.setFromDate(LocalDate.now());
 		l.setToDate(LocalDate.now().plusDays(1));
 		//l.setId(1);
-		Staff s=sRepo.findById(staffId).get();
+		Staff s=sRepo.findById(1).get();
 
 		System.out.println(s.toString());
 		l.setStaff(s);
@@ -155,6 +156,7 @@ public class LeaveDetailsController {
 		return "leave";
 	}
 	
+	//emp
 	@GetMapping(path = "/leaveupdate/{id}")
 	public String leaveUpdateMethod(Model model ,@PathVariable(value = "id") String id) {
 		Integer lID=Integer.valueOf(id);
@@ -166,6 +168,7 @@ public class LeaveDetailsController {
 		return "redirect:/"+leaveList;
 	}
 	
+	//emp
 	@PostMapping(path = "/leaveapply")
 	public String leaveApplyMethod(@ModelAttribute("leave") @Valid LeaveHistory leave, BindingResult bindingResult, Model model) {
 
@@ -213,8 +216,8 @@ public class LeaveDetailsController {
 				l.setNoOfDays(noOfDays);
 			}
 			else {
-				noOfDays=Double.valueOf((l.getToDate().getDayOfYear()-l.getFromDate().getDayOfYear())+1);
-				
+				//noOfDays=Double.valueOf((l.getToDate().getDayOfYear()-l.getFromDate().getDayOfYear())+1);
+				noOfDays =Double.valueOf(ChronoUnit.DAYS.between(l.getFromDate(), l.getToDate()))+1;
 				l.setNoOfDays(noOfDays);
 				Integer totalweekends=0;
 				if (l.getLeaveType().getId()==1) {

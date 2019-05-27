@@ -23,6 +23,13 @@ public class CompensationLeaveClaim {
 	private double noOfHours;
 	private String reasons;
 	private Integer status;
+	
+	public enum Status {
+		APPLIED,
+		APPROVED,
+		REJECTED,
+		CANCELLED;		
+	}
 	public CompensationLeaveClaim() {
 		super();
 		// TODO Auto-generated constructor stub
