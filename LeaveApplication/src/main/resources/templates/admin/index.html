@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org"
+	th:replace="fragments/layout :: body_layout(~{::body},~{::h1})">
+<h1 class="font-weight-light">Employee Role List</h1>
+<body>
+	<div class="row">
+		<div class="col-3">
+			<div class="card text-center">
+				<div class="card-header">Employees</div>
+				<div class="card-body">
+					<h5 class="card-title">Employees List</h5>
+					<p class="card-text">Manage Employees List</p>
+					<a th:href="@{/admin/employees}" class="btn btn-outline-primary">View</a>
+				</div>
+			</div>
+		</div>
+		<div class="col-3">
+			<div class="card text-center">
+				<div class="card-header">Roles</div>
+				<div class="card-body">
+					<h5 class="card-title">Roles List</h5>
+					<p class="card-text"> Manage Roles List </p>
+					<a th:href="@{/admin/roles}" class="btn btn-outline-primary">View</a>
+				</div>
+			</div>
+		</div>
+		<div class="col-3">
+			<div class="card text-center">
+				<div class="card-header">Leave Types</div>
+				<div class="card-body">
+					<h5 class="card-title">Leave Types List</h5>
+					<p class="card-text"> Manage Leave Types List </p>
+					<a th:href="@{/admin/leavetypes}" class="btn btn-outline-primary">View</a>
+				</div>
+			</div>
+		</div>
+		<div class="col-3">
+			<div class="card text-center">
+				<div class="card-header">Holidays</div>
+				<div class="card-body">
+					<h5 class="card-title">Holidays List</h5>
+					<p class="card-text">Manage Holidays List </p>
+					<a th:href="@{/admin/holidays}" class="btn btn-outline-primary">View</a>
+				</div>
+			</div>
+		</div>
+		
+	</div>
+</body>
+</html>

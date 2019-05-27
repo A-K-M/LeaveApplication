@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://thymleaf.org"
+	th:replace="fragments/layout :: body_layout(~{::body},~{::h1})">
+<h1 class="font-weight-light">Role Form</h1>
+<body>
+	<form class="form" th:object="${roles}" method="post">
+		<div class="row">
+			<div class="col-6">
+				<div class="row">
+					<div class="col-3 form-group">
+						<label for="roleName">Role Name : </label>
+					</div>
+					<div class="col-9 form-group">
+						<input type="text" class="form-control" th:field="*{roleName}" />
+					</div>
+					<div class="col-3 form-group"></div>
+					<div class="col-9 form-group">
+						<p class="text-danger float-left" th:if="${#fields.hasErrors('roleName')}" th:errors="*{roleName}"></p>
+					</div>
+
+				</div>
+			</div>
+			<div class="col-6">
+				<div class="row">
+					<div class="col-12 form-group">
+					</div>
+				</div>
+			</div>
+			<div class="col-2"></div>
+			<div class="col-7">
+				<div class="row">
+					<div class="col-12 form-group">
+						<input type="submit" value="save" class="btn btn-info float-right"/>
+						<a th:href="@{/admin/holidays}" class="btn btn-secondary float-left">Back to list</a>
+				
+					</div>
+				</div>
+			</div>
+		</div>
+	</form>
+</body>
+</html>

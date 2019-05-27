@@ -61,7 +61,22 @@ public class LeaveHistoryValidator implements Validator {
 		if(lh.getToDate().isBefore(LocalDate.now()))
 		{
 			errors.rejectValue("toDate", "toDate", "To Date cannot be earlier than today");
-		}		
+		}	
+		if (lh.getLeaveType().getId()==3) {
+			
+			if (!lh.getFromDate().equals(lh.getToDate())) {
+				errors.rejectValue("toDate", "toDate", "From Date and To Date must be same for compensation leave. Compensation leave cannot be more than one day at once.");
+			}
+			if (String.valueOf(lh.getNoOfDays())==null) {
+				errors.rejectValue("noOfDays", "noOfDays", "No of Days must be filled");
+			}
+//			else if (String.valueOf(lh.getNoOfDays()) != "0.5" || String.valueOf(lh.getNoOfDays()) != "1" || String.valueOf(lh.getNoOfDays()) != "1.0") {
+//				errors.rejectValue("noOfDays", "noOfDays", "No of Days can only be 0.5 or 1");
+//			}
+			else if (Double.compare(lh.getNoOfDays(),0.5)!=0 && Double.compare(lh.getNoOfDays(),1)!=0) {
+				errors.rejectValue("noOfDays", "noOfDays", "No of Days can only be 0.5 or 1");
+			}
+		}
 	}
 	
 	private Boolean isWeekend(LocalDate dateToCheck)

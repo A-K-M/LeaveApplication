@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org"
+	th:replace="fragments/layout :: body_layout(~{::body},~{::h1})">
+<h1 class="font-weight-light">Employee List</h1>
+<body>
+	<div class="row">
+		<div class="col-2">
+			<a th:href="@{/admin/employees/add}" class="btn btn-outline-success btn-sm">New Employee</a>
+		</div>
+		<div class="col-8"></div>
+		
+	</div>
+	<br>
+	<table id="table"
+		class="table table-striped table-bordered table-hover"
+		style="width: 100%">
+		<thead>
+			<tr class="font-weight-light">
+				<th>Id</th>
+					<th>Name</th>
+					<th>Username</th>
+					<th>Role</th>
+					<th>Manager</th>
+					<th>Date of Joining</th>
+					<th>Email</th>
+				<th width="15%">Action</th>
+				<th></th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr th:each="staff : ${staff}">
+				<td th:text="${staff.id}">Id</td>
+					<td th:text="${staff.staffName}">Name</td>
+					<td th:text="${staff.userName}">Username</td>
+					<td th:text="${staff.role.roleName}">Role</td>
+					<td th:text="${staff.manager?.staffName}">Manager</td>
+					<td th:text="${#temporals.format(staff.joinDate, 'dd-MM-yyyy')}">Date
+						of Joining</td>
+					<td th:text="${staff.emailId}">Email</td>
+					<td><a th:href="${'/admin/employees/edit/' + staff.id}" class="btn btn-outline-primary btn-sm">Edit</a></td>
+					<td><a th:href="${'/admin/employees/delete/' + staff.id}" class="btn btn-outline-danger btn-sm">Delete</a></td>
+			</tr>
+		</tbody>
+	</table>
+
+	<script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.js"></script>
+	<script type="text/javascript" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+	<script type="text/javascript" src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
+
+	<script>
+   $(document).ready(function() {
+		$('#table').DataTable();
+		} );
+   </script>
+</body>
+
+
+</html>

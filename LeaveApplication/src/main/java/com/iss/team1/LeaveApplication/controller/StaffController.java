@@ -1,10 +1,9 @@
 package com.iss.team1.LeaveApplication.controller;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,14 +38,14 @@ public class StaffController {
 	@Autowired
 	private StaffService staffService;
 	
-	
+	@Autowired
 	public StaffController(StaffRepository staffRepo, RoleRepository roleRepo, LeaveBalanceRepository lbRepo) {
 		super();
 		this.staffRepo = staffRepo;
 		this.roleRepo = roleRepo;
 		this.lbRepo = lbRepo;
 	}
-
+	
 	@ModelAttribute("roles")
     public Collection<Role> getRoles() {
         return roleRepo.findAll();
@@ -62,37 +61,32 @@ public class StaffController {
 		binder.addValidators(new StaffValidator(staffRepo));
 	}	
 
-	@GetMapping(path = "/staff")
-	public String getAllStaff(Model model) {
+	@GetMapping(path = "/admin/employees")
+	public String getAllStaff(Model model, HttpSession session) {
+		if (session.getAttribute("admin") == null) {
+			return "redirect:/login";
+		}
 		model.addAttribute("staff", staffRepo.findAll());	
-		return "staffList";
+		return "admin/employees";
 	}
 
-	@GetMapping(path = "/staff/add")
-	public String createStaff(Model model) {
+	@GetMapping(path = "/admin/employees/add")
+	public String createStaff(Model model, HttpSession session) {
+		if (session.getAttribute("admin") == null) {
+			return "redirect:/login";
+		}
 		Staff s = new Staff();
 		s.setJoinDate(LocalDate.now());
 		model.addAttribute("staff", s);
-		return "editStaff";
+
+		return "admin/employee_form";
 	}
-	
-	@GetMapping(path = "/staff/edit/{id}")
-	public String editStaff(Model model, @PathVariable(value = "id") int id) {
-		Staff s = staffRepo.findById(id).orElse(null);
 		
-		LeaveBalance bal = lbRepo.findAnnualLeaveBalanceByStaffId(id);
-				
-		model.addAttribute("staff", s);
-		model.addAttribute("balance", bal);
-
-		return "editStaff";
-	}
-
-	@PostMapping(path = "staff")
+	@PostMapping(path = "/admin/employees/add")
 	public String saveStaff(@Valid Staff staff, LeaveBalance bal, BindingResult bindingResult, ModelMap model) {
 		if (bindingResult.hasErrors()) {
 			model.addAttribute("staff", staff);
-            return "editStaff";
+            return "admin/employee_form";
         }
 		if(staff.getId()==0) {
 			staff.setPassword(SecurityUtil.hashPassword("123"));
@@ -107,14 +101,58 @@ public class StaffController {
 			lbRepo.save(bal2);
 		}
 
-		return "redirect:/staff";
+		
+		return "redirect:/admin/employees";
 	}
 	
+	@GetMapping(path = "/admin/employees/edit/{id}")
+	public String employee_form(Model model, @PathVariable(value = "id") int id, HttpSession session) {
+		if (session.getAttribute("admin") == null) {
+			return "redirect:/login";
+		}
+		Staff s = staffRepo.findById(id).orElse(null);
+		LeaveBalance bal = lbRepo.findAnnualLeaveBalanceByStaffId(id);
+		
+		model.addAttribute("staff", s);
+		model.addAttribute("balance", bal);
+		
+		return "admin/employee_form";
+	}
 
-	@GetMapping(path = "/staff/delete/{id}")
-	public String deleteStaff(@PathVariable(name = "id") int id) {
+
+	@PostMapping(path = "/admin/employees/edit/{id}")
+	public String saveEditStaff(@Valid Staff staff, LeaveBalance bal, BindingResult bindingResult, ModelMap model) {
+		if (bindingResult.hasErrors()) {
+			model.addAttribute("staff", staff);
+			return "admin/employee_form";
+        }
+		if(staff.getId()==0) {
+			staff.setPassword(SecurityUtil.hashPassword("123"));
+			staffRepo.save(staff);
+			staffService.setStaffLeaveBalance(staff);
+		}
+		else {
+			staffRepo.save(staff);
+			double b = bal.getBalanceLeave();
+			LeaveBalance bal2 = lbRepo.findAnnualLeaveBalanceByStaffId(staff.getId());
+			bal2.setBalanceLeave(b);
+			lbRepo.save(bal2);
+		}
+
+		
+		return "redirect:/admin/employees";
+	}
+
+
+
+	@GetMapping(path = "/admin/employees/delete/{id}")
+	public String deleteStaff(@PathVariable(name = "id") int id, HttpSession session) {
+		if (session.getAttribute("admin") == null) {
+			return "redirect:/login";
+		}
 		staffRepo.delete(staffRepo.findById(id).orElse(null));
-		return "redirect:/staff";
+		return "redirect:/admin/employees";
 	}
 	
 }
+

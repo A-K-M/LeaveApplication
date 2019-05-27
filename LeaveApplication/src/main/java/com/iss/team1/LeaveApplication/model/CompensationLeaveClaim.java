@@ -22,61 +22,69 @@ public class CompensationLeaveClaim {
 	private LocalDate date;
 	private double noOfHours;
 	private String reasons;
+	private Integer status;
 	
+	public enum Status {
+		APPLIED,
+		APPROVED,
+		REJECTED,
+		CANCELLED;		
+	}
 	public CompensationLeaveClaim() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-
-	public CompensationLeaveClaim(Integer id, Staff staff, LocalDate date, double noOfHours, String reasons) {
-		super();
-		this.id = id;
-		this.staff = staff;
-		this.date = date;
-		this.noOfHours = noOfHours;
-		this.reasons = reasons;
-	}
-
 	public Integer getId() {
 		return id;
 	}
-
+	public void setId(Integer id) {
+		this.id = id;
+	}
 	public Staff getStaff() {
 		return staff;
 	}
-
 	public void setStaff(Staff staff) {
 		this.staff = staff;
 	}
-
 	public LocalDate getDate() {
 		return date;
 	}
-
 	public void setDate(LocalDate date) {
 		this.date = date;
 	}
-
 	public double getNoOfHours() {
 		return noOfHours;
 	}
-
 	public void setNoOfHours(double noOfHours) {
 		this.noOfHours = noOfHours;
 	}
-
 	public String getReasons() {
 		return reasons;
 	}
-
 	public void setReasons(String reasons) {
 		this.reasons = reasons;
 	}
-
+	public Integer getStatus() {
+		return status;
+	}
+	public void setStatus(Integer status) {
+		this.status = status;
+	}
+	public CompensationLeaveClaim( Staff staff, LocalDate date, double noOfHours, String reasons,
+			Integer status) {
+		super();
+		this.staff = staff;
+		this.date = date;
+		this.noOfHours = noOfHours;
+		this.reasons = reasons;
+		this.status = status;
+	}
 	@Override
 	public String toString() {
-		return "CompensationLeaveClaim [id=" + id + ", staff=" + staff.getStaffName() + ", date=" + date + ", noOfHours=" + noOfHours
-				+ ", reasons=" + reasons + "]";
+		return "CompensationLeaveClaim [id=" + id + ", staff=" + staff + ", date=" + date + ", noOfHours=" + noOfHours
+				+ ", reasons=" + reasons + ", status=" + status + "]";
 	}
+
+	
 
 }
