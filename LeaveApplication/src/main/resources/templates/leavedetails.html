@@ -4,7 +4,7 @@
 <h1 class="font-weight-light">Staff Form</h1>
 <body>
 	<div th:if="${not #lists.isEmpty(errMsg)}">
-		<label th:text="${errMsg}" class="col-sm-2 control-label lbl-error"></label>
+		<label th:text="${errMsg}" class="col-4 text-danger"></label>
 	</div>
 	<form class="form" th:object="${leavedetails}"
 		th:action="@{/leavehistory/detail}" method="post">
@@ -28,7 +28,7 @@
 					</div>
 					<div class="col-9 form-group">
 						<input type="text" class="form-control"
-							th:field="*{staff.staffName}" readonly />
+							th:field="*{status}" readonly />
 					</div>
 				</div>
 			</div>
@@ -159,7 +159,7 @@
 						<a th:if="${leavedetails.status == leavedetails.status.PENDING}" th:href="${'/leavehistory/detail/'+leavedetails.id+'/DELETED'}" class="btn btn-outline-danger">Delete</a>
 					</div>
 					<div th:if="${#session.getAttribute('staff')}" class="col-4">
-						<a th:if="${leavedetails.status == leavedetails.status.APPROVED}" th:href="${'/leavehistory/detail/'+leavedetails.id+'/CANCELLED'}" class="btn btn-warning">Cancel</a>
+						<a th:if="${leavedetails.status == leavedetails.status.APPROVED}" th:href="${'/leavehistory/detail/'+leavedetails.id+'/CANCELLED'}" class="btn btn-outline-danger">Cancel</a>
 					</div>
 					<!-- Manager -->
 					<div th:if="${#session.getAttribute('manager')}" class="col-4">
@@ -174,14 +174,14 @@
 
 	
 
-	</form>
+	
 	<hr>
 
 	<div th:if="${#session.getAttribute('manager')}">
 		<div th:if="${not #lists.isEmpty(leaveList)}">
 			<h3 class="font-weight-light">Leaves taken by this employee within the same date</h3>
 			<div class="col-4">
-				<a th:href="${'/leavedetails/'+leavedetails.id}" target="_blank"
+				<a th:href="${'/manager/oldhistories/'+leavedetails.staff.id}" target="_blank"
 					class="btn btn-outline-secondary">View All of this subordinate</a>
 			</div>
 			<br>
@@ -210,7 +210,7 @@
 						<td th:text="${leave.toDate}">To Date</td>
 						<td th:text="${leave.noOfDays}">No of Days</td>
 						<td th:text="${leave.status}">Status</td>
-						<td><a th:href="${'/leavedetails/'+leave.id}"
+						<td><a th:href="${'/leavehistory/detail/'+leave.id}"
 							class="btn btn-outline-info btn-sm">Detail</a></td>
 					</tr>
 				</tbody>
@@ -235,7 +235,7 @@
 		</div>
 	</div>
 
-
+</form>
 
 </body>
 </html>
