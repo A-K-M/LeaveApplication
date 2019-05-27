@@ -88,7 +88,7 @@ public class StaffController {
 	public String saveStaff(@Valid Staff staff, BindingResult bindingResult, ModelMap model) {
 		if (bindingResult.hasErrors()) {
 			model.addAttribute("staff", staff);
-            return "editStaff";
+            return "admin/employee_form";
         }
 		if(staff.getId()==0) {
 			staff.setPassword(SecurityUtil.hashPassword("123"));
@@ -96,7 +96,7 @@ public class StaffController {
 		staffRepo.save(staff);
 		staffService.setStaffLeaveBalance(staff);
 		
-		return "redirect:/staff";
+		return "redirect:/admin/employees";
 	}
 	
 	@GetMapping(path = "/admin/employees/edit/{id}")
@@ -107,7 +107,7 @@ public class StaffController {
 		Staff s = staffRepo.findById(id).orElse(null);
 		model.addAttribute("staff", s);
 		
-		return "redirect:/admin/employees";
+		return "admin/employee_form";
 	}
 
 
@@ -115,7 +115,7 @@ public class StaffController {
 	public String saveEditStaff(@Valid Staff staff, BindingResult bindingResult, ModelMap model) {
 		if (bindingResult.hasErrors()) {
 			model.addAttribute("staff", staff);
-            return "editStaff";
+			return "admin/employee_form";
         }
 		if(staff.getId()==0) {
 			staff.setPassword(SecurityUtil.hashPassword("123"));
@@ -123,7 +123,7 @@ public class StaffController {
 		staffRepo.save(staff);
 		staffService.setStaffLeaveBalance(staff);
 		
-		return "redirect:/staff";
+		return "redirect:/admin/employees";
 	}
 
 
