@@ -29,7 +29,7 @@ public class Staff {
 	@Length(max=60)
 	private String userName;
 	private String password;
-	@DateTimeFormat(pattern = "dd-MM-yyyy")
+	@DateTimeFormat(pattern="yyyy-MM-dd")
 	private LocalDate joinDate;
 	private String emailId;
 	@ManyToOne
@@ -96,7 +96,6 @@ public class Staff {
 		this.password = password;
 	}
 	
-	@DateTimeFormat(pattern="dd-MMM-YYYY")
 	public LocalDate getJoinDate() {
 		return joinDate;
 	}
