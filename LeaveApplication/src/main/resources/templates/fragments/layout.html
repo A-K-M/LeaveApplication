@@ -56,7 +56,7 @@
                     </li>
                 </ul>
                 <!-- Employee -->
-                <ul class="navbar-nav ml-auto" th:if="${#session.getAttribute('manager')}">
+                <ul class="navbar-nav ml-auto" th:if="${#session.getAttribute('staff')}">
                     <li class="nav-item active">
                         <a class="nav-link" th:href="@{/admin/index}">Dashboard
                         </a>
