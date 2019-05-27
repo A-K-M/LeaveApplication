@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html xmlns:th="http://thymleaf.org"
+	th:replace="fragments/layout :: body_layout(~{::body},~{::h1})">
+<h1 class="font-weight-light">Leave Application</h1>
+
+<div th:if="${not #lists.isEmpty(errMsg)}">
+	<label class="text-danger" th:text="${errMsg}"
+		></label>
+</div>
+<div th:if="${#lists.isEmpty(leave)}">
+	<h5 class="text-danger">Oops... Something went wrong. Please go
+		back and try again.</h5>
+</div>
+<body>
+	<div class="container">
+
+		<div th:if="${not #lists.isEmpty(leave)}">
+
+			<form class="form-horizontal" th:object="${leave}"
+				th:action="@{/leaveapply}" method="post">
+				<div class="row">
+					<div class="form-group">
+						<div class="col-sm-10">
+							<input type="hidden" class="form-control" th:field="*{id}" /> <input
+								type="hidden" class="form-control" th:field="*{staff}" /> <input
+								type="hidden" class="form-control" th:field="*{status}" />
+						</div>
+					</div>
+					<div class="col-12 form-group">
+						<div class="row">
+							<div class="col-1 form-group" style="padding-left: 27px;">
+								<label for="roleName">Leave Type : </label>
+							</div>
+							<div class="col-12" style="padding-left: 27px;">
+								<select th:field="*{leaveType}" class="form-control">
+									<option th:each="leaveType : ${leavetypes}"
+										th:value="${leaveType.id}"
+										th:text="${leaveType.leaveTypeName}">List</option>
+								</select>
+								<p th:if="${#fields.hasErrors('leaveType')}"
+									th:errors="*{leaveType}" class="text-danger"></p>
+							</div>
+						</div>
+					</div>
+					<div class="col-6 form-group">
+						<div class="row">
+							<div class="col-1 form-group" style="padding-left: 27px;">
+								<label for="roleName">From : </label>
+							</div>
+							<div class="col-12" style="padding-left: 27px;">
+								<input type="date" class="form-control" th:field="*{fromDate}" />
+								<p th:if="${#fields.hasErrors('fromDate')}"
+									th:errors="*{fromDate}" class="text-danger"></p>
+
+							</div>
+						</div>
+					</div>
+					<div class="col-6 form-group">
+						<div class="row">
+							<div class="col-1 form-group" style="padding-left: 27px;">
+								<label for="roleName">From : </label>
+							</div>
+							<div class="col-12" style="padding-left: 27px;">
+								<input type="date" class="form-control" th:field="*{toDate}" />
+								<p th:if="${#fields.hasErrors('toDate')}" th:errors="*{toDate}"
+									class="text-danger"></p>
+
+							</div>
+						</div>
+					</div>
+					<div class="col-6 form-group">
+						<div class="row">
+							<div class="col-1 form-group" style="padding-left: 27px;">
+								<label for="roleName">No of Days (only for
+									compensation):</label>
+							</div>
+							<div class="col-12" style="padding-left: 27px;">
+								<input type="text" class="form-control" th:field="*{noOfDays}" />
+								<p th:if="${#fields.hasErrors('noOfDays')}"
+									th:errors="*{noOfDays}" class="text-danger"></p>
+							</div>
+						</div>
+					</div>
+					<div class="col-6 form-group">
+						<div class="row">
+							<div class="col-1 form-group" style="padding-left: 27px;">
+								<label for="roleName">Description:</label>
+							</div>
+							<div class="col-12" style="padding-left: 27px;">
+								<input type="text" class="form-control"
+									th:field="*{description}" row=3 />
+								<p th:if="${#fields.hasErrors('description')}"
+									th:errors="*{description}" class="text-danger"></p>
+							</div>
+						</div>
+					</div>
+					<div class="col-6 form-group">
+						<div class="row">
+							<div class="col-1 form-group" style="padding-left: 27px;">
+								<label for="roleName">Additional Reasons:</label>
+							</div>
+							<div class="col-12" style="padding-left: 27px;">
+								<input type="text" class="form-control"
+									th:field="*{additionalReason}" row=3 />
+								<p th:if="${#fields.hasErrors('additionalReason')}"
+									th:errors="*{additionalReason}" class="text-danger"></p>
+							</div>
+						</div>
+					</div>
+					<div class="col-6 form-group">
+						<div class="row">
+							<div class="col-1 form-group" style="padding-left: 27px;">
+								<label for="roleName">Work Dissemination(if any):</label>
+							</div>
+							<div class="col-12" style="padding-left: 27px;">
+								<input type="text" class="form-control"
+									th:field="*{workDissemination}" />
+							</div>
+						</div>
+					</div>
+					<div class="col-6 form-group">
+						<div class="row">
+							<div class="col-1 form-group" style="padding-left: 27px;">
+								<label for="roleName">Contact Details:</label>
+							</div>
+							<div class="col-12" style="padding-left: 27px;">
+								<input type="text" class="form-control"
+									th:field="*{contactDetails}" row=3 />
+							</div>
+						</div>
+					</div>
+					<div class="col-6">
+						<div class="row">
+							<div class="col-12 form-group"></div>
+						</div>
+					</div>
+					<div class="col-2"></div>
+					<div class="col-7">
+						<div class="row">
+							<div class="col-12 form-group">
+								<input type="submit" value="save"
+									class="btn btn-info float-right" /> <input type="reset"
+									value="Clear" class="btn btn-info float-left" />
+							</div>
+						</div>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+</body>
+</html>

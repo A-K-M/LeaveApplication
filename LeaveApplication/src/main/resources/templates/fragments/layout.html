@@ -35,44 +35,21 @@
                  <!-- manager -->
                 <ul class="navbar-nav ml-auto" th:if="${#session.getAttribute('manager')}">
                     <li class="nav-item active">
-                        <a class="nav-link" th:href="@{/admin/index}">Dashboard
+                        <a class="nav-link" th:href="@{/manager/pending}">Pending Leaves
                         </a>
-                    </li>
-                    <li class="nav-item active">
-                        <a class="nav-link" th:href="@{/admin/employees}">Employees</a>
-                    </li>
-                    <li class="nav-item active">
-                        <a class="nav-link" th:href="@{/admin/roles}">Roles</a>
-                    </li>
-                    
-                    <li class="nav-item active">
-                        <a class="nav-link" th:href="@{/admin/leavetypes}">Leave Types</a>
-                    </li>
-                    <li class="nav-item active">
-                        <a class="nav-link" th:href="@{/admin/holidays}">Holidays</a>
                     </li>
                     <li class="nav-item active">
                         <a class="nav-link" th:href="@{/logout}">Logout</a>
                     </li>
                 </ul>
                 <!-- Employee -->
-                <ul class="navbar-nav ml-auto" th:if="${#session.getAttribute('manager')}">
+                <ul class="navbar-nav ml-auto" th:if="${#session.getAttribute('staff')}">
                     <li class="nav-item active">
-                        <a class="nav-link" th:href="@{/admin/index}">Dashboard
+                        <a class="nav-link" th:href="@{/admin/index}">Leave Histories
                         </a>
                     </li>
                     <li class="nav-item active">
-                        <a class="nav-link" th:href="@{/admin/employees}">Employees</a>
-                    </li>
-                    <li class="nav-item active">
-                        <a class="nav-link" th:href="@{/admin/roles}">Roles</a>
-                    </li>
-                    
-                    <li class="nav-item active">
-                        <a class="nav-link" th:href="@{/admin/leavetypes}">Leave Types</a>
-                    </li>
-                    <li class="nav-item active">
-                        <a class="nav-link" th:href="@{/admin/holidays}">Holidays</a>
+                        <a class="nav-link" th:href="@{/admin/employees}">Apply Leave</a>
                     </li>
                     <li class="nav-item active">
                         <a class="nav-link " th:href="@{/logout}">Logout</a>

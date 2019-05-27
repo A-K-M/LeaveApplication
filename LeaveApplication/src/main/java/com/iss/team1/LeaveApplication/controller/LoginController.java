@@ -67,13 +67,13 @@ public class LoginController {
 				Role role = staff.getRole();
 				if (role.getRoleName().equals("Staff")) {
 					request.getSession().setAttribute("staff", staff.getId());
-					return "redirect:/employee/";
+					return "redirect:/employee/leavehistory";
 				} else if (role.getRoleName().equals("Admin")) {
 					request.getSession().setAttribute("admin", staff.getId());
 					return "redirect:/admin/index";
 				} else if (role.getRoleName().equals("Manager")) {
 					request.getSession().setAttribute("manager", staff.getId());
-					return "redirect:/mamager/";
+					return "redirect:/manager/pending";
 				}
 			}
 		}

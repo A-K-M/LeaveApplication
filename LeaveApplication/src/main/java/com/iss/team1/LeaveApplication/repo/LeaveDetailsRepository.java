@@ -21,4 +21,9 @@ public interface LeaveDetailsRepository extends JpaRepository<LeaveHistory, Inte
 	
 	@Query("SELECT l FROM LeaveHistory l where l.staff.id = :staffid and ((l.fromDate >=:fromDate and l.fromDate <= :toDate) or (l.toDate >= :fromDate and l.toDate<= :toDate) )")
 	List<LeaveHistory> findAllByStaffAndDateRange(@Param("staffid") Integer staffid,@Param("fromDate") LocalDate fromDate,@Param("toDate") LocalDate toDate);
+
+	   
+    @Query("SELECT l FROM LeaveHistory l where l.status = 'PENDING' and l.staff.manager.id= :id ")
+    List<LeaveHistory> findLeaveHistoriesByStatusPendingAndManagerId(@Param("id") Integer id);
+    
 }
