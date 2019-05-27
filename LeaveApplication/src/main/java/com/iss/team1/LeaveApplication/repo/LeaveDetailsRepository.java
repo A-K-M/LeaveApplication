@@ -21,4 +21,16 @@ public interface LeaveDetailsRepository extends JpaRepository<LeaveHistory, Inte
 	
 	@Query("SELECT l FROM LeaveHistory l where l.staff.id = :staffid and ((l.fromDate >=:fromDate and l.fromDate <= :toDate) or (l.toDate >= :fromDate and l.toDate<= :toDate) )")
 	List<LeaveHistory> findAllByStaffAndDateRange(@Param("staffid") Integer staffid,@Param("fromDate") LocalDate fromDate,@Param("toDate") LocalDate toDate);
+
+	@Query(value = "SELECT * FROM leave_history l where MONTH(to_date) = :month AND YEAR(from_date) = :year AND leave_typeid = 1",
+			nativeQuery = true)
+	List<LeaveHistory> findAllAnnualByMonth(@Param("month") Integer month, @Param("year") Integer year);
+	
+	@Query(value = "SELECT * FROM leave_history l where MONTH(to_date) = :month AND YEAR(from_date) = :year AND leave_typeid = 2",
+			nativeQuery = true)
+	List<LeaveHistory> findAllMedicalByMonth(@Param("month") Integer month, @Param("year") Integer year);
+	
+	@Query(value = "SELECT * FROM leave_history l where MONTH(to_date) = :month AND YEAR(from_date) = :year AND leave_typeid = 3",
+			nativeQuery = true)
+	List<LeaveHistory> findAllCompensationByMonth(@Param("month") Integer month, @Param("year") Integer year);
 }
