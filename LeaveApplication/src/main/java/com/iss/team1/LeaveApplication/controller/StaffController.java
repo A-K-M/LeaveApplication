@@ -19,8 +19,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import com.iss.team1.LeaveApplication.Service.StaffService;
+import com.iss.team1.LeaveApplication.model.LeaveBalance;
 import com.iss.team1.LeaveApplication.model.Role;
 import com.iss.team1.LeaveApplication.model.Staff;
+import com.iss.team1.LeaveApplication.repo.LeaveBalanceRepository;
 import com.iss.team1.LeaveApplication.repo.RoleRepository;
 import com.iss.team1.LeaveApplication.repo.StaffRepository;
 import com.iss.team1.LeaveApplication.util.SecurityUtil;
@@ -31,25 +33,18 @@ public class StaffController {
 	
 	private StaffRepository staffRepo;
 	private RoleRepository roleRepo;
+	private LeaveBalanceRepository lbRepo;
 	
 	@Autowired
 	private StaffService staffService;
 	
 	@Autowired
-	public StaffController(StaffRepository staffRepo, RoleRepository roleRepo) {
+	public StaffController(StaffRepository staffRepo, RoleRepository roleRepo, LeaveBalanceRepository lbRepo) {
+		super();
 		this.staffRepo = staffRepo;
 		this.roleRepo = roleRepo;
-    }
-	
-//	@Autowired
-//	public void setStaffRepo(StaffRepo staffRepo) {
-//		this.staffRepo = staffRepo;
-//	}
-//	
-//	@Autowired
-//	public void setRoleRepo(RoleRepo roleRepo) {
-//		this.roleRepo = roleRepo;
-//	}
+		this.lbRepo = lbRepo;
+	}
 	
 	@ModelAttribute("roles")
     public Collection<Role> getRoles() {
@@ -80,21 +75,32 @@ public class StaffController {
 		if (session.getAttribute("admin") == null) {
 			return "redirect:/login";
 		}
-		model.addAttribute("staff", new Staff());
+		Staff s = new Staff();
+		s.setJoinDate(LocalDate.now());
+		model.addAttribute("staff", s);
+
 		return "admin/employee_form";
 	}
 		
 	@PostMapping(path = "/admin/employees/add")
-	public String saveStaff(@Valid Staff staff, BindingResult bindingResult, ModelMap model) {
+	public String saveStaff(@Valid Staff staff, LeaveBalance bal, BindingResult bindingResult, ModelMap model) {
 		if (bindingResult.hasErrors()) {
 			model.addAttribute("staff", staff);
             return "admin/employee_form";
         }
 		if(staff.getId()==0) {
 			staff.setPassword(SecurityUtil.hashPassword("123"));
+			staffRepo.save(staff);
+			staffService.setStaffLeaveBalance(staff);
 		}
-		staffRepo.save(staff);
-		staffService.setStaffLeaveBalance(staff);
+		else {
+			staffRepo.save(staff);
+			double b = bal.getBalanceLeave();
+			LeaveBalance bal2 = lbRepo.findAnnualLeaveBalanceByStaffId(staff.getId());
+			bal2.setBalanceLeave(b);
+			lbRepo.save(bal2);
+		}
+
 		
 		return "redirect:/admin/employees";
 	}
@@ -105,23 +111,34 @@ public class StaffController {
 			return "redirect:/login";
 		}
 		Staff s = staffRepo.findById(id).orElse(null);
+		LeaveBalance bal = lbRepo.findAnnualLeaveBalanceByStaffId(id);
+		
 		model.addAttribute("staff", s);
+		model.addAttribute("balance", bal);
 		
 		return "admin/employee_form";
 	}
 
 
 	@PostMapping(path = "/admin/employees/edit/{id}")
-	public String saveEditStaff(@Valid Staff staff, BindingResult bindingResult, ModelMap model) {
+	public String saveEditStaff(@Valid Staff staff, LeaveBalance bal, BindingResult bindingResult, ModelMap model) {
 		if (bindingResult.hasErrors()) {
 			model.addAttribute("staff", staff);
 			return "admin/employee_form";
         }
 		if(staff.getId()==0) {
 			staff.setPassword(SecurityUtil.hashPassword("123"));
+			staffRepo.save(staff);
+			staffService.setStaffLeaveBalance(staff);
 		}
-		staffRepo.save(staff);
-		staffService.setStaffLeaveBalance(staff);
+		else {
+			staffRepo.save(staff);
+			double b = bal.getBalanceLeave();
+			LeaveBalance bal2 = lbRepo.findAnnualLeaveBalanceByStaffId(staff.getId());
+			bal2.setBalanceLeave(b);
+			lbRepo.save(bal2);
+		}
+
 		
 		return "redirect:/admin/employees";
 	}
@@ -138,3 +155,4 @@ public class StaffController {
 	}
 	
 }
+

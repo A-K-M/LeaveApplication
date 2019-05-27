@@ -10,6 +10,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotEmpty;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 @Entity
 public class CompensationLeaveClaim {
 	
@@ -19,14 +21,23 @@ public class CompensationLeaveClaim {
 	@ManyToOne
 	@JoinColumn(name="staffId")
 	private Staff staff;
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private LocalDate date;
 	private double noOfHours;
 	private String reasons;
-	private Integer status;
+	private Status status;
+	
+	public enum Status {
+		APPLIED,
+		APPROVED,
+		REJECTED,
+		CANCELLED;		
+	}
 	public CompensationLeaveClaim() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
+	
 	public Integer getId() {
 		return id;
 	}
@@ -57,14 +68,17 @@ public class CompensationLeaveClaim {
 	public void setReasons(String reasons) {
 		this.reasons = reasons;
 	}
-	public Integer getStatus() {
+	
+	public Status getStatus() {
 		return status;
 	}
-	public void setStatus(Integer status) {
+
+	public void setStatus(Status status) {
 		this.status = status;
 	}
+
 	public CompensationLeaveClaim( Staff staff, LocalDate date, double noOfHours, String reasons,
-			Integer status) {
+			Status status) {
 		super();
 		this.staff = staff;
 		this.date = date;

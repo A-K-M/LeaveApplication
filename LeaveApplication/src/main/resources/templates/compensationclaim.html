@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns:th="http://thymeleaf.org">
+<head lang="en">
+<title>Claim Compensation </title>
+</head>
+<body>
+	<div class="container">
+		<h2>Claim Compensation  </h2>
+		
+		<div th:if="${#lists.isEmpty(errMsg)}">
+		<h3>Oops... Something went wrong. Please go back and try again.</h3>
+		</div>
+		<div th:if="${not #lists.isEmpty(compensationclaim)}">
+		
+			<form class="form-horizontal" th:object="${compensationclaim}" th:action="@{/compensationclaim}" method="post">
+				<div class="form-group">
+					<div class="col-sm-10">
+					<input type="hidden" class="form-control" th:field="*{id}" /> 
+ 						<input type="hidden" class="form-control" th:field="*{staff}" />
+ 						<input type="hidden" class="form-control" th:field="*{status}" />  
+					</div>
+				</div>
+				
+				<div class="form-group">
+					<label class="col-sm-2 control-label">Date :</label>
+					<div class="col-sm-10">
+					
+						<input type="date" class="form-control" th:field="*{date}" />
+						<p th:if="${#fields.hasErrors('date')}" th:errors="*{date}"></p>
+			
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-2 control-label">No of Hours :</label>
+					<div class="col-sm-10">
+					
+						<input type="text" class="form-control" th:field="*{noOfHours}" />
+						<p th:if="${#fields.hasErrors('noOfHours')}" th:errors="*{noOfHours}"></p>
+					
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-2 control-label">Reason :</label>
+					<div class="col-sm-10">
+					
+						<input type="text" class="form-control" th:field="*{reasons}" />
+						<p th:if="${#fields.hasErrors('reasons')}" th:errors="*{reasons}"></p>
+					
+					</div>
+				</div>
+				
+				<div class="form-group">
+					<div class="col-sm-2">
+						<button type="submit" class="btn btn-primary">Submit</button>
+					</div>
+				</div>
+
+			</form>
+		</div>
+	</div>
+
+</body>
+</html>

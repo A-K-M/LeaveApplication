@@ -65,7 +65,7 @@ public class LoginController {
 			if (SecurityUtil.isValidPassword(login.getPassword(), staff.getPassword())) {
 				model.addAttribute("staff", new Staff());
 				Role role = staff.getRole();
-				if (role.getRoleName().equals("Staff")) {
+				if (role.getRoleName().equals("Employee")) {
 					request.getSession().setAttribute("staff", staff.getId());
 					return "redirect:/employee/leavehistory";
 				} else if (role.getRoleName().equals("Admin")) {

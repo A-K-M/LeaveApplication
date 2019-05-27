@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 
 import com.iss.team1.LeaveApplication.model.LeaveBalance;
 import com.iss.team1.LeaveApplication.model.LeaveType;
-import com.iss.team1.LeaveApplication.model.PublicHoliday;
 import com.iss.team1.LeaveApplication.model.Role;
 import com.iss.team1.LeaveApplication.model.Staff;
 import com.iss.team1.LeaveApplication.repo.LeaveBalanceRepository;
@@ -27,8 +26,6 @@ public class StaffService {
 	private RoleLeaveTypeRepository rltRepo;
 	@Autowired
 	private LeaveBalanceRepository lbRepo;
-	@Autowired
-	private PublicHolidayRepository phRepo;
 	
 	@Autowired
 	private LeaveHistoryService leaveHistoryService;
@@ -47,11 +44,6 @@ public class StaffService {
 	@Autowired
 	public void setlbRepo(LeaveBalanceRepository lbRepo) {
 		this.lbRepo = lbRepo;
-	}
-
-	@Autowired
-	public void setPhRepo(PublicHolidayRepository phRepo) {
-		this.phRepo = phRepo;
 	}
 
 	public void setStaffLeaveBalance(Staff s) {

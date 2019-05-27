@@ -2,12 +2,15 @@ package com.iss.team1.LeaveApplication.validator;
 
 import java.util.List;
 
+import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
+import com.iss.team1.LeaveApplication.model.LeaveBalance;
 import com.iss.team1.LeaveApplication.model.Staff;
 import com.iss.team1.LeaveApplication.repo.StaffRepository;
 
+@Component
 public class StaffValidator implements Validator {
 
 	private StaffRepository sRepo;
@@ -19,7 +22,7 @@ public class StaffValidator implements Validator {
 	@Override
 	public boolean supports(Class clazz) {
 		// TODO Auto-generated method stub
-		return Staff.class.equals(clazz);
+		return Staff.class.equals(clazz) || LeaveBalance.class.equals(clazz);
 	}
 
 	@Override

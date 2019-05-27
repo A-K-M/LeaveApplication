@@ -40,11 +40,11 @@ public class Staff {
 	private Staff manager;
 	@OneToMany(targetEntity = Staff.class, mappedBy="manager")
 	private Collection<Staff> subordinates;	
-	@OneToMany(targetEntity = LeaveHistory.class, mappedBy = "staff")
+	@OneToMany(cascade = CascadeType.ALL, targetEntity = LeaveHistory.class, mappedBy = "staff")
 	private Collection<LeaveHistory> leaveHistories;
 	@OneToMany(cascade = CascadeType.ALL, targetEntity = LeaveBalance.class, mappedBy = "staff")
 	private Collection<LeaveBalance> leaveBalances;
-	@OneToMany(targetEntity = CompensationLeaveClaim.class, mappedBy = "staff")
+	@OneToMany(cascade = CascadeType.ALL, targetEntity = CompensationLeaveClaim.class, mappedBy = "staff")
 	private Collection<CompensationLeaveClaim> compensationLeaveClaims;
 	
 	public Staff() {
@@ -135,6 +135,30 @@ public class Staff {
 		this.leaveHistories = leaveHistories;
 	}
 	
+	public Collection<Staff> getSubordinates() {
+		return subordinates;
+	}
+
+	public void setSubordinates(Collection<Staff> subordinates) {
+		this.subordinates = subordinates;
+	}
+
+	public Collection<LeaveBalance> getLeaveBalances() {
+		return leaveBalances;
+	}
+
+	public void setLeaveBalances(Collection<LeaveBalance> leaveBalances) {
+		this.leaveBalances = leaveBalances;
+	}
+
+	public Collection<CompensationLeaveClaim> getCompensationLeaveClaims() {
+		return compensationLeaveClaims;
+	}
+
+	public void setCompensationLeaveClaims(Collection<CompensationLeaveClaim> compensationLeaveClaims) {
+		this.compensationLeaveClaims = compensationLeaveClaims;
+	}
+
 	@Override
 	public String toString() {
 		return "Staff [id=" + id + ", staffName=" + staffName + ", userName=" + userName + ", password="

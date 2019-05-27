@@ -1,5 +1,7 @@
 package com.iss.team1.LeaveApplication.repo;
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -12,4 +14,9 @@ public interface LeaveBalanceRepository extends JpaRepository<LeaveBalance, Inte
 
 	@Query("SELECT l FROM LeaveBalance l where l.staff.id = :staffid and l.leaveType.id= :leavetypeid")
 	LeaveBalance findLeaveBalanceByStaffAndLeaveType(@Param("staffid") Integer staffid,@Param("leavetypeid") Integer leavetypeid);
+
+	List<LeaveBalance> findByStaffId(int id);	
+	
+	@Query("SELECT l FROM LeaveBalance l where l.staff.id = :staffid and l.leaveType.id= 1")
+	LeaveBalance findAnnualLeaveBalanceByStaffId(@Param("staffid") Integer staffid);
 }

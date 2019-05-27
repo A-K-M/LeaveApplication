@@ -1,0 +1,49 @@
+
+<!DOCTYPE html>
+<html xmlns:th="http://thymeleaf.org">
+<head lang="en">
+<title>Compensation Claim List</title>
+</head>
+<body>
+	<div class="container">
+	<a th:href="@{/compensationclaim}">Claim new compensation</a>
+			<h2>Compensation Claim List</h2>
+		<div th:if="${not #lists.isEmpty(compensationclaim)}">
+			
+			
+			<table class="table table-striped">
+				<tr>
+					<th>ID</th>
+					<th>Date</th>
+					<th>No of Hours</th>
+					<th>Status</th>
+					<th>Reason</th>
+				</tr>
+				<tr th:each="claim : ${compensationclaim}">
+					<td th:text="${claim.id}">Id</td>
+					<td th:text="${claim.date}">Date</td>
+					<td th:text="${claim.noOfHours}">No of Hours</td>
+					
+					<td th:text="${claim.status}">Status</td>
+					<td th:text="${claim.reasons}">Reason</td>
+					
+					
+					<td th:if="${claim.status == claim.status.APPLIED}">
+						<a th:href="${'/compensationclaim/update/'+ claim.id}"
+						class="btn btn-default">Edit</a></td>
+					<td th:if="${claim.status == claim.status.APPLIED}">
+						<a th:href="${'/compensationclaim/'+ claim.id+'/CANCELLED'}"
+						class="btn btn-danger">Cancel</a></td>
+						
+					<td th:if="${claim.status == claim.status.APPLIED}">
+						<a th:href="${'/compensationclaim/'+ claim.id+'/APPROVED'}"
+						class="btn btn-danger">Approve</a></td>
+					<td th:if="${claim.status == claim.status.APPLIED}">
+						<a th:href="${'/compensationclaim/'+ claim.id+'/REJECTED'}"
+						class="btn btn-danger">Reject</a></td>
+				</tr>
+			</table>
+		</div>
+	</div>
+</body>
+</html>
