@@ -84,8 +84,8 @@ public class LoginController {
 	}
 	
 	@RequestMapping(path = "/logout", method = RequestMethod.GET)
-	public String Login(Model model , SessionStatus status) {
-		status.setComplete();
+	public String Login(Model model , HttpSession session) {
+		session.invalidate();
 		model.addAttribute("login", new Staff());
 		return "login";
 	}

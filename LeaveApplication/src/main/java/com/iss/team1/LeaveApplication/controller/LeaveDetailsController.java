@@ -125,7 +125,7 @@ public class LeaveDetailsController {
 
 	//Employee and Manager
 	@PostMapping(path = "/leavehistory/detail")
-	public String viewLeaveDetailsMethodForm(@Valid LeaveHistory leavedetails, BindingResult bindingResult, Model model,  HttpSession session) {
+	public String viewLeaveDetailsMethodForm(LeaveHistory leavedetails, BindingResult bindingResult, Model model,  HttpSession session) {
 		System.out.println("get list1");
 		if (session.getAttribute("staff") == null && session.getAttribute("manager") == null) {
 			return "redirect:/login";
@@ -149,7 +149,7 @@ public class LeaveDetailsController {
 	//Employee and Manager
 	@GetMapping(path = "/leavehistory/detail/{id}/{status}")
 	public String changeLeaveStatus(Model model ,@PathVariable(value = "id") String id, @PathVariable(value="status") String status,  HttpSession session) {
-		if (session.getAttribute("staff") == null || session.getAttribute("manager") == null) {
+		if (session.getAttribute("staff") == null && session.getAttribute("manager") == null) {
 			return "redirect:/login";
 		}
 		
@@ -181,10 +181,11 @@ public class LeaveDetailsController {
 			
 			lbRepo.save(lb);
 		}
-		if(session.getAttribute("staff") == null) {
-			return "redirect:/manager/leavedetails";
+		if (session.getAttribute("staff") == null){
+
+			return "redirect:/manager/pending";
 		}
-		return "redirect:/"+leaveList;
+		return "redirect:/employee/leavehistory";
 
 		
 	}
@@ -319,4 +320,16 @@ public class LeaveDetailsController {
 		}
 		return totalHolidays;
 	}
+	
+	
+	 @GetMapping(path = "/manager/oldhistories/{id}")
+	    public String getLeaveHistoryStaff(Model model, @PathVariable(value="id") String id, HttpSession session) {
+		 
+		 if (session.getAttribute("manager") == null) {
+				return "redirect:/login";
+			}
+	        List <LeaveHistory> slh = ldRepo.findLeaveHistoriesByStaffInCurrentYear(Integer.valueOf(id));
+	        model.addAttribute("staffLeaveHistory", slh);
+	        return "/manager/subordinate";
+	    }
 }

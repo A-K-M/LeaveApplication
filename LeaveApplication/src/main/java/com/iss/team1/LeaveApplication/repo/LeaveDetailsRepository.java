@@ -37,4 +37,7 @@ public interface LeaveDetailsRepository extends JpaRepository<LeaveHistory, Inte
     @Query("SELECT l FROM LeaveHistory l where l.status = 'PENDING' and l.staff.manager.id= :id ")
     List<LeaveHistory> findLeaveHistoriesByStatusPendingAndManagerId(@Param("id") Integer id);
     
+    @Query("SELECT l FROM LeaveHistory l where l.staff.id = :id and YEAR(l.fromDate)= YEAR(CURDATE())")
+    List<LeaveHistory> findLeaveHistoriesByStaffInCurrentYear(@Param("id") Integer id);
+    
 }
