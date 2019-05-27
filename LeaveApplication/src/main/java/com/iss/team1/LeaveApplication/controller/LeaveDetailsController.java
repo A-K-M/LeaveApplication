@@ -181,8 +181,8 @@ public class LeaveDetailsController {
 			
 			lbRepo.save(lb);
 		}
-		if (session.getAttribute("staff") == null){
 
+		if(session.getAttribute("staff") == null) {
 			return "redirect:/manager/pending";
 		}
 		return "redirect:/employee/leavehistory";
