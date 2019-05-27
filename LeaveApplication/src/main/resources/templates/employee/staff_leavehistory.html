@@ -16,9 +16,10 @@
 		<thead>
 			<tr>
 				<th>Leave Id</th>
-				<th>Name</th>
+				<th>Employee Name</th>
 				<th>From date</th>
 				<th>To date</th>
+				<th>No of Days</th>
 				<th>Status</th>
 				<th>Action</th>
 			</tr>
@@ -29,6 +30,7 @@
 				<td th:text="${leave.staff.staffName}"></td>
 				<td th:text="${leave.fromDate}"></td>
 				<td th:text="${leave.toDate}"></td>
+				<td th:text="${leave.noOfDays}"></td>
 				<td th:text="${leave.status}"></td>
 				<td><a th:href="@{'/leavehistory/detail/'+${leave.id}}" class="btn btn-outline-info btn-sm">Detail</a></td>
 			</tr>
