@@ -4,9 +4,6 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,21 +29,11 @@ public class StaffService {
 	private LeaveBalanceRepository lbRepo;
 	@Autowired
 	private PublicHolidayRepository phRepo;
-
-//<<<<<<< HEAD
+	
 	@Autowired
-	private StaffService staffService;
+	private LeaveHistoryService leaveHistoryService;
 	
-//	@Autowired
-//	public StaffService(LeaveTypeRepository ltRepo, RoleLeaveTypeRepository rltRepo, LeaveBalanceRepository lbRepo) {
-//		super();
-//		this.ltRepo = ltRepo;
-//		this.rltRepo = rltRepo;
-//		this.lbRepo = lbRepo;
-//	}
-	
-//=======
-//>>>>>>> branch 'master' of https://github.com/A-K-M/LeaveApplication.git
+
 	@Autowired
 	public void setltRepo(LeaveTypeRepository ltRepo) {
 		this.ltRepo = ltRepo;
@@ -98,7 +85,6 @@ public class StaffService {
 
 	public int numOfWorkingDays(LocalDate joinDate) {
 
-		List<PublicHoliday> ph = phRepo.findAll();
 		LocalDate startDate = joinDate;
 		LocalDate endDate = LocalDate.of(joinDate.getYear(), 12, 31);
 
@@ -108,21 +94,11 @@ public class StaffService {
 		for (int i = 0; i <= days; i++) {
 			if (startDate.plusDays(i).getDayOfWeek() != DayOfWeek.SATURDAY
 					&& startDate.plusDays(i).getDayOfWeek() != DayOfWeek.SUNDAY
-					&& isHoliday(startDate.plusDays(i)) == false)
+					&& leaveHistoryService.isPublicHoliday(startDate.plusDays(i)) == false)
 				a++;
 		}
-		System.out.println(a);
 		return a;
 
-	}
-
-	public boolean isHoliday(LocalDate date) {
-		List<PublicHoliday> ph = phRepo.findAll();
-		for (PublicHoliday publicHoliday : ph) {
-			if(publicHoliday.getDate() == date)
-			return true;
-		}
-		return false;
 	}
 
 }
