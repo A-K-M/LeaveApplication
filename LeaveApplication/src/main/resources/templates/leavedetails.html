@@ -101,7 +101,7 @@
 					<div th:if="${leavedetails.status == leavedetails.status.PENDING}" class="col-sm-2">
 						<a th:href="${'/leaveupdate/'+leavedetails.id}" class="btn btn-primary">Update</a>
 					</div>
-					<div th:if="${leavedetails.status == leavedetails.status.PENDING OR leavedetails.status == leavedetails.status.APPROVED}" class="col-sm-2">
+					<div th:if="${leavedetails.status == leavedetails.status.APPROVED}" class="col-sm-2">
 						<a th:href="${'/leavehistory/'+leavedetails.id+'/CANCELLED'}" type="button" class="btn btn-warning">Cancel</a>
 					</div>
 					<div th:if="${leavedetails.status == leavedetails.status.PENDING}" class="col-sm-2">
