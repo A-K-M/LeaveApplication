@@ -1,5 +1,6 @@
 package com.iss.team1.LeaveApplication.controller;
 
+import java.time.LocalDate;
 import java.util.Collection;
 
 import javax.validation.Valid;
@@ -72,7 +73,9 @@ public class StaffController {
 
 	@GetMapping(path = "/staff/add")
 	public String createStaff(Model model) {
-		model.addAttribute("staff", new Staff());
+		Staff s = new Staff();
+		s.setJoinDate(LocalDate.now());
+		model.addAttribute("staff", s);
 		return "editStaff";
 	}
 	
@@ -89,7 +92,9 @@ public class StaffController {
 			model.addAttribute("staff", staff);
             return "editStaff";
         }
-		staff.setPassword(SecurityUtil.hashPassword(staff.getPassword()));
+		if(staff.getId()==0) {
+			staff.setPassword(SecurityUtil.hashPassword("123"));
+		}
 		staffRepo.save(staff);
 		staffService.setStaffLeaveBalance(staff);
 		
