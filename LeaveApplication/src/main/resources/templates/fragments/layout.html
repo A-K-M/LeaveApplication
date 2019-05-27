@@ -45,11 +45,11 @@
                 <!-- Employee -->
                 <ul class="navbar-nav ml-auto" th:if="${#session.getAttribute('staff')}">
                     <li class="nav-item active">
-                        <a class="nav-link" th:href="@{/admin/index}">Leave Histories
+                        <a class="nav-link" th:href="@{/employee/leavehistory}">Leave Histories
                         </a>
                     </li>
                     <li class="nav-item active">
-                        <a class="nav-link" th:href="@{/admin/employees}">Apply Leave</a>
+                        <a class="nav-link" th:href="@{/employee/leaveapply}">Apply Leave</a>
                     </li>
                     <li class="nav-item active">
                         <a class="nav-link " th:href="@{/logout}">Logout</a>

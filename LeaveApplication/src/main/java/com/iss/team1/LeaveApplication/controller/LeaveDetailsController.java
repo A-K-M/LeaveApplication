@@ -35,7 +35,7 @@ import com.iss.team1.LeaveApplication.validator.LeaveHistoryValidator;
 @Controller
 public class LeaveDetailsController {
 
-	private static final String leaveList = "/employee/leavehistory";
+	private static final String leaveList = "employee/leavehistory";
 	//private static final String leaveDetails = "leavedetails";
 	
 	private LeaveDetailsRepository ldRepo;
@@ -110,24 +110,31 @@ public class LeaveDetailsController {
 	//Employee and Manager
 	@GetMapping(path = "/leavehistory/detail/{id}")
 	public String viewLeaveDetailsMethod(Model model,@PathVariable(value = "id") String id, HttpSession session) {
-		if (session.getAttribute("staff") == null || session.getAttribute("manager") == null) {
+		if (session.getAttribute("staff") == null && session.getAttribute("manager") == null) {
 			return "redirect:/login";
 		}
+		System.out.println("entered");
 		LeaveHistory l=ldRepo.findById(Integer.valueOf(id)).orElseGet(null);
+		System.out.println("model:"+l.toString());
 		model.addAttribute("leavedetails", l);
+		System.out.println("model added");
 		model.addAttribute("leaveList", leaveHistoryService.findAllByStaffAndDateRange(l.getStaff().getId(),l.getFromDate(),l.getToDate()).stream().sorted(Comparator.comparing(LeaveHistory::getFromDate).reversed()).collect(Collectors.toList()));
+		System.out.println("get list");
 		return "leavedetails";
 	}
 
 	//Employee and Manager
-	@PostMapping(path = "/leavehistory/detail/{id}")
+	@PostMapping(path = "/leavehistory/detail")
 	public String viewLeaveDetailsMethodForm(@Valid LeaveHistory leavedetails, BindingResult bindingResult, Model model,  HttpSession session) {
-		if (session.getAttribute("staff") == null || session.getAttribute("manager") == null) {
+		System.out.println("get list1");
+		if (session.getAttribute("staff") == null && session.getAttribute("manager") == null) {
 			return "redirect:/login";
 		}
 		if (leavedetails.getmanagerComment().isEmpty()) {
+			System.out.println("get list2");
 			model.addAttribute("leavedetails", leavedetails);
 			model.addAttribute("errMsg","Please type in the comment box to reject!");
+			System.out.println("get list3");
 			return "leavedetails";
 		}
 		else {
@@ -164,7 +171,14 @@ public class LeaveDetailsController {
 		if ((l.getStatus().equals(LeaveStatus.APPROVED) || l.getStatus().equals(LeaveStatus.CANCELLED))
 				&& !(leaveleft == 0)) {
 			
-			lb.setBalanceLeave(lb.getBalanceLeave()+leaveleft);
+			//add
+			if (l.getLeaveType().getId()==3) {
+				lb.setBalanceLeave(lb.getBalanceLeave()+(leaveleft*8));
+			}
+			else {
+				lb.setBalanceLeave(lb.getBalanceLeave()+leaveleft);
+			}
+			
 			lbRepo.save(lb);
 		}
 		if(session.getAttribute("staff") == null) {
@@ -197,13 +211,13 @@ public class LeaveDetailsController {
 			LeaveHistory l=ldRepo.findById(lID).get();
 			if (l!=null) {			
 				model.addAttribute("leave", l);
-				return "leave";
+				return "/employee/leave";
 			}
 			return "redirect:/"+leaveList;
 		}
 
 	  //Employee
-	@PostMapping(path = "/leaveapply")
+	@PostMapping(path = "/employee/leaveapply")
 	public String leaveApplyMethod(@ModelAttribute("leave") @Valid LeaveHistory leave, BindingResult bindingResult, Model model,  HttpSession session) {
 
 		  if (session.getAttribute("staff") == null) {
@@ -214,7 +228,7 @@ public class LeaveDetailsController {
 		if (bindingResult.hasErrors()) {
 			model.addAttribute("leave", l);
 			model.addAttribute("leavetypes");
-			return "leave";
+			return "/employee/leave";
 		}
 		else{
 			LeaveBalance lb=lbRepo.findLeaveBalanceByStaffAndLeaveType(l.getStaff().getId(), l.getLeaveType().getId());
@@ -222,14 +236,14 @@ public class LeaveDetailsController {
 				model.addAttribute("leave", l);
 				model.addAttribute("leavetypes");
 				model.addAttribute("errMsg", "There is no enough leave balance.");
-				return "leave";
+				return "/employee/leave";
 			}
 			if (leaveHistoryService.isPublicHoliday(leave.getFromDate())==true
 				|| leaveHistoryService.isPublicHoliday(leave.getToDate())==true) {
 				model.addAttribute("leave", l);
 				model.addAttribute("leavetypes");
 				model.addAttribute("errMsg", "From Date or To Date cannot be Public Holiday");
-				return "leave";
+				return "/employee/leave";
 			}
 
 			//check if there is other leaves within this date range
@@ -244,7 +258,7 @@ public class LeaveDetailsController {
 					model.addAttribute("leave", l);
 					model.addAttribute("leavetypes");
 					model.addAttribute("errMsg", "There is other leave during this date range.");
-					return "leave";
+					return "/employee/leave";
 				}
 			}
 			Double noOfDays=new Double(0);
@@ -270,11 +284,22 @@ public class LeaveDetailsController {
 			}
 			
 			//check leave balance
-			if (lb == null || lb.getBalanceLeave()<l.getNoOfDays()) {
-				model.addAttribute("leave", l);
-				model.addAttribute("leavetypes");
-				model.addAttribute("errMsg", "There is no enough leave balance.");
-				return "leave";
+			if (l.getLeaveType().getId()==3) {
+				double availLeave=lb.getBalanceLeave()/8;
+				if (lb==null || l.getNoOfDays()>availLeave) {
+					model.addAttribute("leave", l);
+					model.addAttribute("leavetypes");
+					model.addAttribute("errMsg", "There is no enough leave balance.");
+					return "leave";
+				}
+			}
+			else {
+				if (lb == null || lb.getBalanceLeave()<l.getNoOfDays()) {
+					model.addAttribute("leave", l);
+					model.addAttribute("leavetypes");
+					model.addAttribute("errMsg", "There is no enough leave balance.");
+					return "leave";
+				}
 			}
 			ldRepo.save(l);
 			return "redirect:/"+leaveList;

@@ -3,21 +3,22 @@
 	th:replace="fragments/layout :: body_layout(~{::body},~{::h1})">
 <h1 class="font-weight-light">Leave Application</h1>
 
-<div th:if="${not #lists.isEmpty(errMsg)}">
+
+<body>
+	<div class="container">
+	<div th:if="${not #lists.isEmpty(errMsg)}">
 	<label class="text-danger" th:text="${errMsg}"
-		></label>
+		></label >
 </div>
 <div th:if="${#lists.isEmpty(leave)}">
 	<h5 class="text-danger">Oops... Something went wrong. Please go
 		back and try again.</h5>
 </div>
-<body>
-	<div class="container">
 
 		<div th:if="${not #lists.isEmpty(leave)}">
 
 			<form class="form-horizontal" th:object="${leave}"
-				th:action="@{/leaveapply}" method="post">
+				th:action="@{/employee/leaveapply}" method="post">
 				<div class="row">
 					<div class="form-group">
 						<div class="col-sm-10">
@@ -28,8 +29,8 @@
 					</div>
 					<div class="col-12 form-group">
 						<div class="row">
-							<div class="col-1 form-group" style="padding-left: 27px;">
-								<label for="roleName">Leave Type : </label>
+							<div class="col-2 form-group" style="padding-left: 27px;">
+								<label class="float-left" for="roleName">Leave Type : </label >
 							</div>
 							<div class="col-12" style="padding-left: 27px;">
 								<select th:field="*{leaveType}" class="form-control">
@@ -44,8 +45,8 @@
 					</div>
 					<div class="col-6 form-group">
 						<div class="row">
-							<div class="col-1 form-group" style="padding-left: 27px;">
-								<label for="roleName">From : </label>
+							<div class="col-3 form-group" style="padding-left: 27px;">
+								<label class="float-left" for="roleName">From : </label >
 							</div>
 							<div class="col-12" style="padding-left: 27px;">
 								<input type="date" class="form-control" th:field="*{fromDate}" />
@@ -57,8 +58,8 @@
 					</div>
 					<div class="col-6 form-group">
 						<div class="row">
-							<div class="col-1 form-group" style="padding-left: 27px;">
-								<label for="roleName">From : </label>
+							<div class="col-3 form-group" style="padding-left: 27px;">
+								<label class="float-left" for="roleName">To : </label >
 							</div>
 							<div class="col-12" style="padding-left: 27px;">
 								<input type="date" class="form-control" th:field="*{toDate}" />
@@ -70,9 +71,9 @@
 					</div>
 					<div class="col-6 form-group">
 						<div class="row">
-							<div class="col-1 form-group" style="padding-left: 27px;">
-								<label for="roleName">No of Days (only for
-									compensation):</label>
+							<div class="col-12 form-group" style="padding-left: 27px;">
+								<label class="float-left" for="roleName">No of Days (only for
+									compensation):</label >
 							</div>
 							<div class="col-12" style="padding-left: 27px;">
 								<input type="text" class="form-control" th:field="*{noOfDays}" />
@@ -83,8 +84,8 @@
 					</div>
 					<div class="col-6 form-group">
 						<div class="row">
-							<div class="col-1 form-group" style="padding-left: 27px;">
-								<label for="roleName">Description:</label>
+							<div class="col-12 form-group" style="padding-left: 27px;">
+								<label class="float-left" for="roleName">Description:</label >
 							</div>
 							<div class="col-12" style="padding-left: 27px;">
 								<input type="text" class="form-control"
@@ -96,8 +97,8 @@
 					</div>
 					<div class="col-6 form-group">
 						<div class="row">
-							<div class="col-1 form-group" style="padding-left: 27px;">
-								<label for="roleName">Additional Reasons:</label>
+							<div class="col-12 form-group" style="padding-left: 27px;">
+								<label class="float-left" for="roleName">Additional Reasons:</label >
 							</div>
 							<div class="col-12" style="padding-left: 27px;">
 								<input type="text" class="form-control"
@@ -109,8 +110,8 @@
 					</div>
 					<div class="col-6 form-group">
 						<div class="row">
-							<div class="col-1 form-group" style="padding-left: 27px;">
-								<label for="roleName">Work Dissemination(if any):</label>
+							<div class="col-12 form-group" style="padding-left: 27px;">
+								<label class="float-left" for="roleName">Work Dissemination(if any):</label >
 							</div>
 							<div class="col-12" style="padding-left: 27px;">
 								<input type="text" class="form-control"
@@ -120,8 +121,8 @@
 					</div>
 					<div class="col-6 form-group">
 						<div class="row">
-							<div class="col-1 form-group" style="padding-left: 27px;">
-								<label for="roleName">Contact Details:</label>
+							<div class="col-6 form-group" style="padding-left: 27px;">
+								<label class="float-left" for="roleName">Contact Details:</label >
 							</div>
 							<div class="col-12" style="padding-left: 27px;">
 								<input type="text" class="form-control"
@@ -140,7 +141,7 @@
 							<div class="col-12 form-group">
 								<input type="submit" value="save"
 									class="btn btn-info float-right" /> <input type="reset"
-									value="Clear" class="btn btn-info float-left" />
+									value="Clear" class="btn btn-secondary float-left" />
 							</div>
 						</div>
 					</div>

@@ -30,7 +30,7 @@
 				<td th:text="${leave.fromDate}"></td>
 				<td th:text="${leave.toDate}"></td>
 				<td th:text="${leave.status}"></td>
-				<td><a th:href="@{'/leavedetails/'+${leave.id}}" class="btn btn-outline-info btn-sm">Detail</a></td>
+				<td><a th:href="@{'/leavehistory/detail/'+${leave.id}}" class="btn btn-outline-info btn-sm">Detail</a></td>
 			</tr>
 		</tbody>
 	</table>
