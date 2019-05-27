@@ -7,7 +7,7 @@
 	<div class="container">
 		<h2>Claim Compensation  </h2>
 		
-		<div th:if="${#lists.isEmpty(compensationclaim)}">
+		<div th:if="${#lists.isEmpty(errMsg)}">
 		<h3>Oops... Something went wrong. Please go back and try again.</h3>
 		</div>
 		<div th:if="${not #lists.isEmpty(compensationclaim)}">
