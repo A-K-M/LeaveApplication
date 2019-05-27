@@ -62,7 +62,7 @@ public class StaffController {
 
 	@InitBinder
 	protected void initBinder(WebDataBinder binder) {
-		binder.addValidators(new StaffValidator());
+		binder.addValidators(new StaffValidator(staffRepo));
 	}	
 
 	@GetMapping(path = "/staff")
