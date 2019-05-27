@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head lang="en">
+<title>Monthly Leave List</title>
+</head>
+<body>
+	<div class="container">
+		<div>
+			<h2>Monthly Leave List</h2>					
+<!-- 			<span><a th:href="${'/staff/edit/' + staff.id}"
+						class="btn btn-default">Edit</a></span> -->
+						
+			<h4>Annual Leave</h4>		
+			<table class="table table-striped">
+				<tr>
+					<th>Name</th>
+					<th>From Date</th>
+					<th>To Date</th>
+				</tr>
+				<tr th:each="a : ${aLeave}">
+					<td th:text="${a.staff.staffName}"></td>
+					<td th:text="${#temporals.format(a.fromDate, 'dd-MM-yyyy')}"></td>
+					<td th:text="${#temporals.format(a.toDate, 'dd-MM-yyyy')}"></td>
+				</tr>
+			</table>
+			
+			<h4>Medical Leave</h4>		
+			<table class="table table-striped">
+				<tr>
+					<th>Name</th>
+					<th>From Date</th>
+					<th>To Date</th>
+				</tr>
+				<tr th:each="a : ${mLeave}">
+					<td th:text="${a.staff.staffName}"></td>
+					<td th:text="${#temporals.format(a.fromDate, 'dd-MM-yyyy')}"></td>
+					<td th:text="${#temporals.format(a.toDate, 'dd-MM-yyyy')}"></td>
+				</tr>
+			</table>
+			
+			<h4>Compensastion Leave</h4>		
+			<table class="table table-striped">
+				<tr>
+					<th>Name</th>
+					<th>From Date</th>
+					<th>To Date</th>
+				</tr>
+				<tr th:each="a : ${cLeave}">
+					<td th:text="${a.staff.staffName}"></td>
+					<td th:text="${#temporals.format(a.fromDate, 'dd-MM-yyyy')}"></td>
+					<td th:text="${#temporals.format(a.toDate, 'dd-MM-yyyy')}"></td>
+				</tr>
+			</table>
+		</div>
+	</div>
+</body>
+</html>
