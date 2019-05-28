@@ -305,7 +305,7 @@ public class LeaveDetailsController {
 					model.addAttribute("leave", l);
 					model.addAttribute("leavetypes");
 					model.addAttribute("errMsg", "There is no enough leave balance.");
-					return "leave";
+					return "employee/leave";
 				}
 			}
 			else {
@@ -313,7 +313,7 @@ public class LeaveDetailsController {
 					model.addAttribute("leave", l);
 					model.addAttribute("leavetypes");
 					model.addAttribute("errMsg", "There is no enough leave balance.");
-					return "leave";
+					return "employee/leave";
 				}
 			}
 			ldRepo.save(l);
