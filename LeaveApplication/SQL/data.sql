@@ -3,12 +3,12 @@ CREATE DATABASE IF NOT EXISTS leave_application;
 USE leave_application;
 
 CREATE TABLE IF NOT EXISTS compensation_leave_claim (id integer not null auto_increment, date date, no_of_hours double precision not null, reasons varchar(255), staff_id integer, primary key (id)) engine=InnoDB;
-CREATE TABLE IF NOT EXISTS leave_balance (id integer not null auto_increment, balance_leave double precision not null, leave_type_id integer, staff_id integer, primary key (id)) engine=InnoDB;
-CREATE TABLE IF NOT EXISTS leave_history (id integer not null auto_increment, additional_reason varchar(200), contact_details varchar(200), description varchar(200), from_date date, comment varchar(200), no_of_days double precision, status integer, to_date date, work_dissemination varchar(100), leave_typeid integer, staff_id integer, primary key (id)) engine=InnoDB;
+CREATE TABLE IF NOT EXISTS leave_balance (id integer not null auto_increment, balance_leave integer not null, leave_type_id integer, staff_id integer, primary key (id)) engine=InnoDB;
+CREATE TABLE IF NOT EXISTS leave_history (id integer not null auto_increment, additional_reason varchar(200), contact_details varchar(200), description varchar(200), from_date date, comment varchar(200), no_of_days integer, status integer, to_date date, work_dissemination varchar(100), leave_typeid integer, staff_id integer, primary key (id)) engine=InnoDB;
 CREATE TABLE IF NOT EXISTS leave_type (id integer not null auto_increment, leave_type_name varchar(255), primary key (id)) engine=InnoDB;
 CREATE TABLE IF NOT EXISTS public_holiday (id integer not null auto_increment, date date, name varchar(255), primary key (id)) engine=InnoDB;
 CREATE TABLE IF NOT EXISTS role (id integer not null auto_increment, role_name varchar(255), primary key (id)) engine=InnoDB;
-CREATE TABLE IF NOT EXISTS role_leave_type (id integer not null auto_increment, no_of_days double precision not null, leave_type_id integer, role_id integer, primary key (id)) engine=InnoDB;
+CREATE TABLE IF NOT EXISTS role_leave_type (id integer not null auto_increment, no_of_days integer not null, leave_type_id integer, role_id integer, primary key (id)) engine=InnoDB;
 CREATE TABLE IF NOT EXISTS staff (id integer not null auto_increment, email_id varchar(255), join_date date, password varchar(255), staff_name varchar(255), user_name varchar(60), reports_to integer, role_id integer, primary key (id)) engine=InnoDB;
 ALTER TABLE compensation_leave_claim add constraint FK3vnoc14935qj8hxalf0vpc4tw foreign key (staff_id) references staff (id);
 ALTER TABLE leave_balance add constraint FKr7fmdsbyl1l02pt10gdvgkkrq foreign key (leave_type_id) references leave_type (id);
@@ -51,6 +51,9 @@ INSERT INTO `leave_application`.`staff` (`id`, `email_id`, `join_date`, `passwor
 INSERT INTO `leave_application`.`staff` (`id`, `email_id`, `join_date`, `password`, `staff_name`, `user_name`, `reports_to`, `role_id`) VALUES ('14', 'sa48Team1@gmail.com', '2019-01-01', '123', 'Joffrey Baratheon', 'jBaratheon1', '2', '3');
 INSERT INTO `leave_application`.`staff` (`id`, `email_id`, `join_date`, `password`, `staff_name`, `user_name`, `reports_to`, `role_id`) VALUES ('15', 'sa48Team1@gmail.com', '2019-01-01', '123', 'Sandor Clegane', 'sClegane1', '3', '3');
 INSERT INTO `leave_application`.`staff` (`id`, `email_id`, `join_date`, `password`, `staff_name`, `user_name`, `reports_to`, `role_id`) VALUES ('16', 'sa48Team1@gmail.com', '2019-01-01', '123', 'Tyrion Lannister', 'tLannister1', '4', '3');
+INSERT INTO `leave_application`.`staff` (`id`, `email_id`, `join_date`, `password`, `staff_name`, `user_name`, `role_id`) VALUES ('17', 'sa48Team1@gmail.com', '2019-01-01', '$2a$12$4C6oSXAV4fIjDJjKX04jvexElOUho5nFyPPVDs/C6gLyRQGHCSO8y', 'Admin1', 'test1', '1');
+INSERT INTO `leave_application`.`staff` (`id`, `email_id`, `join_date`, `password`, `staff_name`, `user_name`, `role_id`) VALUES ('18', 'sa48Team1@gmail.com', '2019-01-01', '$2a$12$g.Yq9HvrdzLUe/Skh9u06O6othiK/3V9sEocDZpmjBy4nLfuVHzKi', 'Manager1', 'test2', '2');
+INSERT INTO `leave_application`.`staff` (`id`, `email_id`, `join_date`, `password`, `staff_name`, `user_name`, `reports_to`, `role_id`) VALUES ('19', 'sa48Team1@gmail.com', '2019-01-01', '$2a$12$jXscqgWFC7T5vtprNoApZ.aF7duEluejca..WOBhlQF/18qATWChG', 'Employee1', 'test3', '18', '3');
 
 INSERT INTO `leave_application`.`public_holiday` (`id`, `date`, `name`) VALUES ('1', '2019-01-01', 'New Year\'s Day');
 INSERT INTO `leave_application`.`public_holiday` (`id`, `date`, `name`) VALUES ('2', '2019-02-05', 'Chinese New Year');
@@ -112,3 +115,12 @@ INSERT INTO `leave_application`.`leave_balance` (`id`, `balance_leave`, `leave_t
 INSERT INTO `leave_application`.`leave_balance` (`id`, `balance_leave`, `leave_type_id`, `staff_id`) VALUES ('46', '14', '1', '16');
 INSERT INTO `leave_application`.`leave_balance` (`id`, `balance_leave`, `leave_type_id`, `staff_id`) VALUES ('47', '60', '2', '16');
 INSERT INTO `leave_application`.`leave_balance` (`id`, `balance_leave`, `leave_type_id`, `staff_id`) VALUES ('48', '0', '3', '16');
+INSERT INTO `leave_application`.`leave_balance` (`id`, `balance_leave`, `leave_type_id`, `staff_id`) VALUES ('49', '18', '1', '17');
+INSERT INTO `leave_application`.`leave_balance` (`id`, `balance_leave`, `leave_type_id`, `staff_id`) VALUES ('50', '60', '2', '17');
+INSERT INTO `leave_application`.`leave_balance` (`id`, `balance_leave`, `leave_type_id`, `staff_id`) VALUES ('51', '0', '3', '17');
+INSERT INTO `leave_application`.`leave_balance` (`id`, `balance_leave`, `leave_type_id`, `staff_id`) VALUES ('52', '18', '1', '18');
+INSERT INTO `leave_application`.`leave_balance` (`id`, `balance_leave`, `leave_type_id`, `staff_id`) VALUES ('53', '60', '2', '18');
+INSERT INTO `leave_application`.`leave_balance` (`id`, `balance_leave`, `leave_type_id`, `staff_id`) VALUES ('54', '0', '3', '18');
+INSERT INTO `leave_application`.`leave_balance` (`id`, `balance_leave`, `leave_type_id`, `staff_id`) VALUES ('55', '14', '1', '19');
+INSERT INTO `leave_application`.`leave_balance` (`id`, `balance_leave`, `leave_type_id`, `staff_id`) VALUES ('56', '60', '2', '19');
+INSERT INTO `leave_application`.`leave_balance` (`id`, `balance_leave`, `leave_type_id`, `staff_id`) VALUES ('57', '0', '3', '19');
