@@ -79,7 +79,7 @@ public class StaffController {
 		s.setJoinDate(LocalDate.now());
 		model.addAttribute("staff", s);
 
-		return "admin/employee_form";
+		return "admin/employee_form_new";
 	}
 		
 	@PostMapping(path = "/admin/employees/add")

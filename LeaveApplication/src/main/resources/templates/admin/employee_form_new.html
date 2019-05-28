@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html xmlns:th="http://thymleaf.org"
+	th:replace="fragments/layout :: body_layout(~{::body},~{::h1})">
+<h1 class="font-weight-light">Staff Form</h1>
+<body>
+	<form class="form" th:object="${staff}" method="post">
+		<div class="row">
+			<div class="col-12 form-group">
+				<div class="row">
+					<div class="col-1 form-group" style="padding-left: 27px;">
+						<label for="roleName">Role : </label>
+					</div>
+					<div class="col-12" style="padding-left: 27px;">
+						<select class="form-control" th:field="*{role}">
+							<option th:each="role : ${roles}" th:value="${role.id}"
+								th:text="${role.roleName}"></option>
+						</select>
+					</div>
+				</div>
+			</div>
+			<div class="col-6">
+				<div class="row">
+					<div class="col-3 form-group">
+						<label for="roleName">Full Name : </label>
+					</div>
+					<div class="col-9 form-group">
+						<input type="text" class="form-control" th:field="*{staffName}" />
+					</div>
+					<div class="col-3 form-group"></div>
+					<div class="col-9 form-group">
+						<span class="text-danger float-left"
+							th:if="${#fields.hasErrors('staffName')}"
+							th:errors="*{staffName}"></span>
+					</div>
+				</div>
+			</div>
+			<div class="col-6">
+				<div class="row">
+					<div class="col-3 form-group">
+						<label for="roleName">Email : </label>
+					</div>
+					<div class="col-9 form-group">
+						<input type="email" class="form-control" th:field="*{emailId}" />
+					</div>
+					<div class="col-3 form-group"></div>
+					<div class="col-9 form-group">
+						<span class="text-danger float-left"
+							th:if="${#fields.hasErrors('emailId')}" th:errors="*{emailId}"></span>
+					</div>
+				</div>
+			</div>
+			<div class="col-6">
+				<div class="row">
+					<div class="col-3 form-group">
+						<label for="roleName">Manager : </label>
+					</div>
+					<div class="col-9 form-group">
+						<select class="form-control" th:field="*{manager}" id="id">
+							<option value="0">Select Manager</option>
+							<option th:each="manager : ${managers}" th:value="${manager.id}"
+								th:text="${manager.staffName}"></option>
+						</select>
+					</div>
+					<div class="col-3 form-group"></div>
+					<div class="col-9 form-group"></div>
+				</div>
+			</div>
+			<div class="col-6">
+				<div class="row">
+					<div class="col-3 form-group">
+						<label for="roleName">Joined Date : </label>
+					</div>
+					<div class="col-9 form-group">
+						<input type="date" class="form-control" th:field="*{joinDate}" />
+					</div>
+					<div class="col-3 form-group"></div>
+					<div class="col-9 form-group">
+						<span class="text-danger float-left"
+							th:if="${#fields.hasErrors('joinDate')}" th:errors="*{joinDate}"></span>
+					</div>
+				</div>
+			</div>
+
+			<div class="col-6">
+				<div class="row">
+					<div class="col-3 form-group">
+						<label for="roleName">Username : </label>
+					</div>
+					<div class="col-9 form-group">
+						<input type="text" class="form-control" th:field="*{userName}" />
+					</div>
+					<div class="col-3 form-group"></div>
+					<div class="col-9 form-group">
+						<span class="text-danger float-left"
+							th:if="${#fields.hasErrors('userName')}" th:errors="*{userName}"></span>
+					</div>
+				</div>
+			</div>	
+			
+			<div class="col-6">
+				<div class="row">
+					<div class="col-9 form-group">
+						<input type="hidden" class="form-control" th:field="*{password}" />
+					</div>
+					<div class="col-3 form-group"></div>
+				</div>
+			</div>
+
+			
+
+			<div class="col-6">
+				<div class="row">
+					<div class="col-4"></div>
+					<div class="col-8 form-group">
+						<a th:href="@{/admin/employees}"
+							class="btn btn-secondary float-left">Back to list</a>
+					</div>
+				</div>
+			</div>
+			<div class="col-6">
+				<div class="row">
+					<div class="col-9 form-group">
+						<input type="submit" value="save" class="btn btn-info float-right" />
+					</div>
+				</div>
+			</div>
+		</div>
+	</form>
+</body>
+</html>
