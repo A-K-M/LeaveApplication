@@ -1,25 +1,34 @@
-
 <!DOCTYPE html>
-<html xmlns:th="http://thymeleaf.org">
-<head lang="en">
-<title>Compensation Claim List</title>
-</head>
+<html xmlns:th="https://www.thymeleaf.org"
+	th:replace="fragments/layout :: body_layout(~{::body},~{::h1})">
+<h1 class="font-weight-light">Compensation Claims</h1>
 <body>
-	<div class="container">
-	<a th:href="@{/compensationclaim}">Claim new compensation</a>
-			<h2>Compensation Claim List</h2>
-		<div th:if="${not #lists.isEmpty(compensationclaim)}">
-			
-			
-			<table class="table table-striped">
-				<tr>
+
+<div class="row" th:if="${#session.getAttribute('staff')}">
+		<div class="col-4">
+			<a th:href="@{/compensationclaim}" class="btn btn-outline-success btn-sm">Claim</a>
+		</div>
+		<div class="col-8"></div>
+		
+</div>
+	
+	<br>
+	<table id="table"
+		class="table table-striped table-bordered table-hover"
+		style="width: 100%">
+		<thead>
+			<tr>
 					<th>ID</th>
 					<th>Date</th>
 					<th>No of Hours</th>
 					<th>Status</th>
 					<th>Reason</th>
+					<th>Action</th>
+					<th>Action</th>
 				</tr>
-				<tr th:each="claim : ${compensationclaim}">
+		</thead>
+		<tbody>
+			<tr th:each="claim : ${compensationclaim}">
 					<td th:text="${claim.id}">Id</td>
 					<td th:text="${claim.date}">Date</td>
 					<td th:text="${claim.noOfHours}">No of Hours</td>
@@ -28,22 +37,33 @@
 					<td th:text="${claim.reasons}">Reason</td>
 					
 					
-					<td th:if="${claim.status == claim.status.APPLIED}">
-						<a th:href="${'/compensationclaim/update/'+ claim.id}"
-						class="btn btn-default">Edit</a></td>
-					<td th:if="${claim.status == claim.status.APPLIED}">
-						<a th:href="${'/compensationclaim/'+ claim.id+'/CANCELLED'}"
-						class="btn btn-danger">Cancel</a></td>
+					<td th:if="${#session.getAttribute('staff')}">
+						<a th:if="${claim.status == claim.status.APPLIED}" th:href="${'/compensationclaim/update/'+ claim.id}"
+						class="btn btn-outline-info btn-sm">Edit</a></td>
+					<td th:if="${#session.getAttribute('staff')}">
+						<a  th:if="${claim.status == claim.status.APPLIED}" th:href="${'/compensationclaim/'+ claim.id+'/CANCELLED'}"
+						class="btn btn-outline-danger btn-sm">Cancel</a></td>
 						
-					<td th:if="${claim.status == claim.status.APPLIED}">
-						<a th:href="${'/compensationclaim/'+ claim.id+'/APPROVED'}"
-						class="btn btn-danger">Approve</a></td>
-					<td th:if="${claim.status == claim.status.APPLIED}">
-						<a th:href="${'/compensationclaim/'+ claim.id+'/REJECTED'}"
-						class="btn btn-danger">Reject</a></td>
+					<td th:if="${#session.getAttribute('manager')}">
+						<a th:if="${claim.status == claim.status.APPLIED}"  th:href="${'/compensationclaim/'+ claim.id+'/APPROVED'}"
+						class="btn btn-outline-success btn-sm">Approve</a></td>
+					<td th:if="${#session.getAttribute('manager')}">
+						<a th:if="${claim.status == claim.status.APPLIED}"  th:href="${'/compensationclaim/'+ claim.id+'/REJECTED'}"
+						class="btn btn-outline-danger btn-sm">Reject</a></td>
 				</tr>
-			</table>
-		</div>
-	</div>
+		</tbody>
+	</table>
+
+	<script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.js"></script>
+	<script type="text/javascript" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+	<script type="text/javascript" src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
+
+	<script>
+   $(document).ready(function() {
+		$('#table').DataTable();
+		} );
+   </script>
 </body>
+
+
 </html>

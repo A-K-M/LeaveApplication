@@ -1,63 +1,80 @@
 <!DOCTYPE html>
-<html xmlns:th="http://thymeleaf.org">
-<head lang="en">
-<title>Claim Compensation </title>
-</head>
+<html xmlns:th="http://thymleaf.org"
+	th:replace="fragments/layout :: body_layout(~{::body},~{::h1})">
+<h1 class="font-weight-light">Compensation Claim Form</h1>
 <body>
-	<div class="container">
-		<h2>Claim Compensation  </h2>
-		
-		<div th:if="${#lists.isEmpty(errMsg)}">
-		<h3>Oops... Something went wrong. Please go back and try again.</h3>
-		</div>
-		<div th:if="${not #lists.isEmpty(compensationclaim)}">
-		
-			<form class="form-horizontal" th:object="${compensationclaim}" th:action="@{/compensationclaim}" method="post">
-				<div class="form-group">
-					<div class="col-sm-10">
+
+
+	
+	<form class="form" th:object="${compensationclaim}" th:action="@{/compensationclaim}"  method="post">
+
+
+
+		<div class="row">
+			<div>
+					<div>
 					<input type="hidden" class="form-control" th:field="*{id}" /> 
  						<input type="hidden" class="form-control" th:field="*{staff}" />
  						<input type="hidden" class="form-control" th:field="*{status}" />  
 					</div>
 				</div>
-				
-				<div class="form-group">
-					<label class="col-sm-2 control-label">Date :</label>
-					<div class="col-sm-10">
-					
+				<div class="col-6">
+				<div class="row">
+					<div class="col-3 form-group ">
+						<label for="date">Date  : </label>
+					</div>
+					<div class="col-9 form-group">
 						<input type="date" class="form-control" th:field="*{date}" />
-						<p th:if="${#fields.hasErrors('date')}" th:errors="*{date}"></p>
-			
+					</div>
+					<div class="col-3 form-group"></div>
+					<div class="col-9 form-group">
+						<p th:if="${#fields.hasErrors('date')}" th:errors="*{date}" class="text-danger float-left"></p>
 					</div>
 				</div>
-				<div class="form-group">
-					<label class="col-sm-2 control-label">No of Hours :</label>
-					<div class="col-sm-10">
-					
+			</div>
+			<div class="col-6">
+				<div class="row">
+					<div class="col-4 form-group">
+						<label for="noOfHours" >Number of Hour : </label>
+					</div>
+					<div class="col-8 form-group">
 						<input type="text" class="form-control" th:field="*{noOfHours}" />
-						<p th:if="${#fields.hasErrors('noOfHours')}" th:errors="*{noOfHours}"></p>
-					
+					</div>
+					<div class="col-4 form-group"></div>
+					<div class="col-8 form-group">
+						<p class="text-danger float-left" th:if="${#fields.hasErrors('noOfHours')}" th:errors="*{noOfHours}"></p>
 					</div>
 				</div>
-				<div class="form-group">
-					<label class="col-sm-2 control-label">Reason :</label>
-					<div class="col-sm-10">
-					
+			</div>
+			<div class="col-12">
+				<div class="row">
+					<div class="col-3 form-group" style="padding-left: 27px;">
+						<label for="reasons" class="float-left">Reason : </label>
+					</div>
+					<div class="col-12" style="padding-left: 27px;">
+
 						<input type="text" class="form-control" th:field="*{reasons}" />
-						<p th:if="${#fields.hasErrors('reasons')}" th:errors="*{reasons}"></p>
-					
-					</div>
-				</div>
 				
-				<div class="form-group">
-					<div class="col-sm-2">
-						<button type="submit" class="btn btn-primary">Submit</button>
+
+
+					</div>
+
+					<div class="col-12 form-group">
+						<p class="text-danger float-left" th:if="${#fields.hasErrors('reasons')}" th:errors="*{reasons}"></p>
+					</div>
+
+				</div>
+			</div>
+			
+			
+			<div class="col-6">
+				<div class="row">
+					<div class="col-12 form-group">
+						<input type="submit" value="save" class="btn btn-info " />
 					</div>
 				</div>
-
-			</form>
+			</div>
 		</div>
-	</div>
-
+	</form>
 </body>
 </html>

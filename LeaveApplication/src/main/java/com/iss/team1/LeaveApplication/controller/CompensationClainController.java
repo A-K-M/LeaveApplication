@@ -57,21 +57,30 @@ public class CompensationClainController {
 	private CompensationClaimService compensationClaimService;
 	
 	@GetMapping(path = "/compensationclaimlist")
-	public String viewCompensationClaimList(Model model) {
+	public String viewCompensationClaimList(Model model, HttpSession session) {
+		if (session.getAttribute("staff") == null) {
+			return "redirect:/login";
+		}
 		List<CompensationLeaveClaim> claims= compensationClaimService.findByStaff(1);
 		model.addAttribute("compensationclaim", claims);
 		return "compensationclaimlist";
 	}
 	
 	@GetMapping(path = "/manager/compensationclaimlist")
-	public String viewCompensationClaimApproval(Model model) {
+	public String viewCompensationClaimApproval(Model model, HttpSession session) {
+		if (session.getAttribute("manager") == null) {
+			return "redirect:/login";
+		}
 		List<CompensationLeaveClaim> claims= compensationClaimService.findByStatus(Status.APPLIED);
 		model.addAttribute("compensationclaim", claims);
 		return "compensationclaimlist";
 	}
 	
 	@GetMapping(path = "/compensationclaim")
-	public String claimCompensation(Model model) {
+	public String claimCompensation(Model model, HttpSession session) {
+		if (session.getAttribute("staff") == null) {
+			return "redirect:/login";
+		}
 		CompensationLeaveClaim claim=new CompensationLeaveClaim();
 		claim.setStaff(sRepo.findById(1).get());
 		claim.setDate(LocalDate.now());
@@ -81,8 +90,10 @@ public class CompensationClainController {
 	}
 	
 	@GetMapping(path = "/compensationclaim/update/{id}")
-	public String claimCompensationUpdate(Model model,@PathVariable(value = "id") String id) {
-		
+	public String claimCompensationUpdate(Model model,@PathVariable(value = "id") String id, HttpSession session) {
+		if (session.getAttribute("staff") == null) {
+			return "redirect:/login";
+		}
 		CompensationLeaveClaim claim=ccRepo.findById(Integer.valueOf(id)).get();
 		model.addAttribute("compensationclaim", claim);
 		return "compensationclaim";
@@ -121,8 +132,11 @@ public class CompensationClainController {
 		}
 	}
 	@GetMapping(path = "/compensationclaim/{id}/{status}")
-	public String claimCompensationUpdateStatus(Model model,@PathVariable(value = "id") String id,@PathVariable(value = "status") String status) {
+	public String claimCompensationUpdateStatus(Model model,@PathVariable(value = "id") String id,@PathVariable(value = "status") String status, HttpSession session) {
 		
+		if (session.getAttribute("staff") == null && session.getAttribute("manager") == null) {
+			return "redirect:/login";
+		}
 		CompensationLeaveClaim claim=ccRepo.findById(Integer.valueOf(id)).get();
 		claim.setStatus(Status.valueOf(status));
 		ccRepo.save(claim);
@@ -133,6 +147,10 @@ public class CompensationClainController {
 				balance.setBalanceLeave(balance.getBalanceLeave()+claim.getNoOfHours());
 				lbRepo.save(balance);
 			}
+		}
+		
+		if (session.getAttribute("staff") == null){
+			return "redirect:/manager/compensationclaimlist";
 		}
 		return "redirect:/compensationclaimlist";
 	}
