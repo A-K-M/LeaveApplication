@@ -6,51 +6,61 @@
 <body>
 	<div class="container">
 		<div>
-			<h2>Monthly Leave List</h2>					
-<!-- 			<span><a th:href="${'/staff/edit/' + staff.id}"
-						class="btn btn-default">Edit</a></span> -->
-						
-			<h4>Annual Leave</h4>		
-			<table class="table table-striped">
-				<tr>
-					<th>Name</th>
-					<th>From Date</th>
-					<th>To Date</th>
-				</tr>
-				<tr th:each="a : ${aLeave}">
-					<td th:text="${a.staff.staffName}"></td>
-					<td th:text="${#temporals.format(a.fromDate, 'dd-MM-yyyy')}"></td>
-					<td th:text="${#temporals.format(a.toDate, 'dd-MM-yyyy')}"></td>
-				</tr>
-			</table>
-			
-			<h4>Medical Leave</h4>		
-			<table class="table table-striped">
-				<tr>
-					<th>Name</th>
-					<th>From Date</th>
-					<th>To Date</th>
-				</tr>
-				<tr th:each="a : ${mLeave}">
-					<td th:text="${a.staff.staffName}"></td>
-					<td th:text="${#temporals.format(a.fromDate, 'dd-MM-yyyy')}"></td>
-					<td th:text="${#temporals.format(a.toDate, 'dd-MM-yyyy')}"></td>
-				</tr>
-			</table>
-			
-			<h4>Compensastion Leave</h4>		
-			<table class="table table-striped">
-				<tr>
-					<th>Name</th>
-					<th>From Date</th>
-					<th>To Date</th>
-				</tr>
-				<tr th:each="a : ${cLeave}">
-					<td th:text="${a.staff.staffName}"></td>
-					<td th:text="${#temporals.format(a.fromDate, 'dd-MM-yyyy')}"></td>
-					<td th:text="${#temporals.format(a.toDate, 'dd-MM-yyyy')}"></td>
-				</tr>
-			</table>
+			<h2>Monthly Leave List</h2>
+
+			<form name='f' method='POST' th:object="${date}">
+				<table>
+					<tr>
+						<td>Select Month:</td>
+						<td><select th:field="*{month}">
+								<option th:value="1" th:text="January"></option>
+								<option th:value="2" th:text="Febuary"></option>
+								<option th:value="3" th:text="March"></option>
+								<option th:value="4" th:text="April"></option>
+								<option th:value="5" th:text="May"></option>
+								<option th:value="6" th:text="June"></option>
+								<option th:value="7" th:text="July"></option>
+								<option th:value="8" th:text="August"></option>
+								<option th:value="9" th:text="September"></option>
+								<option th:value="10" th:text="October"></option>
+								<option th:value="11" th:text="November"></option>
+								<option th:value="12" th:text="December"></option>
+						</select></td>
+					</tr>
+
+					<tr>
+						<td>Select Year:</td>
+						<td><select th:field="*{year}">
+								<option th:value="2019" th:text="2019"></option>
+						</select></td>
+					</tr>
+
+					<tr>
+						<td><input name="submit" type="submit" value="Submit" /></td>
+					</tr>
+				</table>
+			</form>
+
+			<div th:if="${#lists.isEmpty(aLeave)}">
+				<h3>No Approved Leaves to display for this month</h3>
+			</div>
+			<div th:if="${not #lists.isEmpty(aLeave)}">
+
+				<table class="table table-striped">
+					<tr>
+						<th>Name</th>
+						<th>From Date</th>
+						<th>To Date</th>
+						<th>Leave Type</th>
+					</tr>
+					<tr th:each="a : ${aLeave}">
+						<td th:text="${a.staff.staffName}"></td>
+						<td th:text="${#temporals.format(a.fromDate, 'dd-MM-yyyy')}"></td>
+						<td th:text="${#temporals.format(a.toDate, 'dd-MM-yyyy')}"></td>
+						<td th:text="${a.leaveType.leaveTypeName}">Leave</td>
+					</tr>
+				</table>
+			</div>
 		</div>
 	</div>
 </body>

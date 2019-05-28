@@ -19,17 +19,8 @@ public class RegisterMovementService {
 		this.ldRepo = ldRepo;
 	}
 	
-	public List<LeaveHistory> findAllAnnualByMonth(int month, int year) {
-		return ldRepo.findAllAnnualByMonth(month, year);
-	}
-	
-	public List<LeaveHistory> findAllMedicalByMonth(int month, int year) {
-		return ldRepo.findAllMedicalByMonth(month, year);
-	}
-	
-	public List<LeaveHistory> findAllCompensationByMonth(int month, int year) {
-		return ldRepo.findAllCompensationByMonth(month, year);
-	}
-	
+	public List<LeaveHistory> findAllByMonth(int month, int year) {
+		return ldRepo.findAllByMonth(month, year);
+	}	
 
 }
