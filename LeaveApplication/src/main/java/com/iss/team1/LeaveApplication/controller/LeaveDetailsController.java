@@ -113,19 +113,17 @@ public class LeaveDetailsController {
 		if (session.getAttribute("staff") == null && session.getAttribute("manager") == null) {
 			return "redirect:/login";
 		}
-		System.out.println("entered");
+		
 		LeaveHistory l=ldRepo.findById(Integer.valueOf(id)).orElseGet(null);
-		System.out.println("model:"+l.toString());
 		model.addAttribute("leavedetails", l);
-		System.out.println("model added");
-		model.addAttribute("leaveList", leaveHistoryService.findAllByStaffAndDateRange(l.getStaff().getId(),l.getFromDate(),l.getToDate()).stream().sorted(Comparator.comparing(LeaveHistory::getFromDate).reversed()).collect(Collectors.toList()));
-		System.out.println("get list");
+		model.addAttribute("leaveList", leaveHistoryService.findAllByStaffAndDateRange(l.getStaff().getId(),l.getFromDate(),l.getToDate()).stream().filter(x->x.getId()!=l.getId()).sorted(Comparator.comparing(LeaveHistory::getFromDate).reversed()).collect(Collectors.toList()));
+		
 		return "leavedetails";
 	}
 
 	//Employee and Manager
 	@PostMapping(path = "/leavehistory/detail")
-	public String viewLeaveDetailsMethodForm(LeaveHistory leavedetails, BindingResult bindingResult, Model model,  HttpSession session) {
+	public String viewLeaveDetailsMethodForm(@ModelAttribute("leavedetails") LeaveHistory leavedetails, BindingResult bindingResult, Model model,  HttpSession session) {
 		System.out.println("get list1");
 		if (session.getAttribute("staff") == null && session.getAttribute("manager") == null) {
 			return "redirect:/login";
@@ -142,7 +140,11 @@ public class LeaveDetailsController {
 			leave.setStatus(LeaveStatus.REJECTED);
 			leave.setmanagerComment(leavedetails.getmanagerComment());
 			this.ldRepo.save(leave);
-			return "leavedetails";
+
+			if(session.getAttribute("staff") == null) {
+				return "redirect:/manager/pending";
+			}
+			return "redirect:/employee/leavehistory";
 		}
 	}
 	
@@ -156,7 +158,19 @@ public class LeaveDetailsController {
 		LeaveHistory l=ldRepo.findById(Integer.valueOf(id)).get();
 		
 		LeaveBalance lb=lbRepo.findLeaveBalanceByStaffAndLeaveType(l.getStaff().getId(), l.getLeaveType().getId());
+		//check leave balance
+		Double currentBalance=lb.getBalanceLeave();
+		if (l.getLeaveType().getId()==3) {
+			currentBalance=currentBalance/8;
+		}
+		if (currentBalance<l.getNoOfDays()) {
+			model.addAttribute("leavedetails", l);
+			model.addAttribute("leaveList", leaveHistoryService.findAllByStaffAndDateRange(l.getStaff().getId(),l.getFromDate(),l.getToDate()).stream().filter(x->x.getId()!=l.getId()).sorted(Comparator.comparing(LeaveHistory::getFromDate).reversed()).collect(Collectors.toList()));
+			model.addAttribute("errMsg","There is no enough leave balance for this staff with this leave type.");
+			return "leavedetails";
+		}
 		double leaveleft=0;
+		
 		//-------check status change to update leave left
 		if (LeaveStatus.valueOf(status).equals(LeaveStatus.APPROVED)) {
 			leaveleft=-l.getNoOfDays();
