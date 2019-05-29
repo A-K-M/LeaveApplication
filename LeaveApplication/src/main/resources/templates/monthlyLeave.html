@@ -1,18 +1,17 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head lang="en">
-<title>Monthly Leave List</title>
-</head>
+<html xmlns:th="http://thymleaf.org"
+	th:replace="fragments/layout :: body_layout(~{::body},~{::h1})">
+<h1 class="font-weight-light">Monthly Leave List </h1>
 <body>
-	<div class="container">
-		<div>
-			<h2>Monthly Leave List</h2>
-
-			<form name='f' method='POST' th:object="${date}">
-				<table>
-					<tr>
-						<td>Select Month:</td>
-						<td><select th:field="*{month}">
+	<form class="form" th:object="${date}" method="post">
+		<div class="row">
+			<div class="col-12 form-group">
+				<div class="row">
+					<div class="col-3 form-group" style="padding-left: 27px;">
+						<label for="month">Select Month: : </label>
+					</div>
+					<div class="col-12" style="padding-left: 27px;">
+						<select class="form-control" th:field="*{month}" >
 								<option th:value="1" th:text="January"></option>
 								<option th:value="2" th:text="Febuary"></option>
 								<option th:value="3" th:text="March"></option>
@@ -25,43 +24,77 @@
 								<option th:value="10" th:text="October"></option>
 								<option th:value="11" th:text="November"></option>
 								<option th:value="12" th:text="December"></option>
-						</select></td>
-					</tr>
-
-					<tr>
-						<td>Select Year:</td>
-						<td><select th:field="*{year}">
-								<option th:value="2019" th:text="2019"></option>
-						</select></td>
-					</tr>
-
-					<tr>
-						<td><input name="submit" type="submit" value="Submit" /></td>
-					</tr>
-				</table>
-			</form>
-
-			<div th:if="${#lists.isEmpty(aLeave)}">
-				<h3>No Approved Leaves to display for this month</h3>
+						</select>
+					</div>
+				</div>
 			</div>
-			<div th:if="${not #lists.isEmpty(aLeave)}">
+			<div class="col-12 form-group">
+				<div class="row">
+					<div class="col-3 form-group" style="padding-left: 27px;">
+						<label for="month">Select Year : </label>
+					</div>
+					<div class="col-12" style="padding-left: 27px;">
+				
+						<select class="form-control" th:field="*{year}">
+								<option th:value="2019" th:text="2019"></option>
+						</select>
+					</div>
+				</div>
+			</div>
+			<div class="col-6">
+				<div class="row">
+					<div class="col-12 form-group">
+					</div>
+				</div>
+			</div>
+			<div class="col-2"></div>
+			<div class="col-7">
+				<div class="row">
+					<div class="col-12 form-group">
+						<input type="submit" value="save" class="btn btn-info float-right"/>
+					</div>
+				</div>
+			</div>
+		</div>
+	</form>
+	<div th:if="${#lists.isEmpty(aLeave)}">
+				<h3 class="font-weight-light">No Approved Leaves to display for this month</h3>
+			</div>
+	<div th:if="${not #lists.isEmpty(aLeave)}">
 
-				<table class="table table-striped">
-					<tr>
-						<th>Name</th>
+		<table id="table"
+		class="table table-striped table-bordered table-hover"
+		style="width: 100%">
+		<thead>
+			<tr class="font-weight-light">
+				<th>Name</th>
 						<th>From Date</th>
 						<th>To Date</th>
 						<th>Leave Type</th>
-					</tr>
-					<tr th:each="a : ${aLeave}">
+			</tr>
+		</thead>
+		<tbody>
+			<tr th:each="a : ${aLeave}">
 						<td th:text="${a.staff.staffName}"></td>
 						<td th:text="${#temporals.format(a.fromDate, 'dd-MM-yyyy')}"></td>
 						<td th:text="${#temporals.format(a.toDate, 'dd-MM-yyyy')}"></td>
 						<td th:text="${a.leaveType.leaveTypeName}">Leave</td>
 					</tr>
-				</table>
-			</div>
-		</div>
+		</tbody>
+	</table>
 	</div>
+
+	<script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.js"></script>
+	<script type="text/javascript" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+	<script type="text/javascript" src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
+
+	<script>
+   $(document).ready(function() {
+		$('#table').DataTable();
+		} );
+   </script>
+
+
+
 </body>
 </html>
